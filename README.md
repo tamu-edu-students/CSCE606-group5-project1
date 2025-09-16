@@ -108,7 +108,7 @@ CSCE606-group5-project1/
 	•	User Guide – how to use the calendar and LeetCode tracker
 	•	Architecture Diagram – models, controllers, DB schema
 
-⸻
+---
 
 ## 👥 Team
 
