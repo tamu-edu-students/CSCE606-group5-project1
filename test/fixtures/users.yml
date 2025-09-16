@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  netid: userone
+  email: userone@example.com
+  first_name: Alice
+  last_name: Smith
+  role: admin
+  last_login_at: 2025-09-15 23:57:04
+
+two:
+  netid: usertwo
+  email: usertwo@example.com
+  first_name: Bob
+  last_name: Jones
+  role: student
+  last_login_at: 2025-09-15 23:57:04
