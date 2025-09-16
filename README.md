@@ -3,7 +3,7 @@ This project is a group web application developed for a graduate level Software 
 
 📅 Core Features (Planned):
 
-Daily and weekly task planner
-Integration with LeetCode to schedule coding problems
-Progress tracking and productivity insights
-User-friendly dashboard tailored for students
+- Daily and weekly task planner
+- Integration with LeetCode to schedule coding problems
+- Progress tracking and productivity insights
+- User-friendly dashboard tailored for students
