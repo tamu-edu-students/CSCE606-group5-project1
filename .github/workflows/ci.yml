@@ -84,6 +84,9 @@ jobs:
           bundler-cache: true
 
       - name: Prepare test database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: |
           bin/rails db:drop db:create db:migrate RAILS_ENV=test
 
