@@ -1,4 +1,5 @@
 require "application_system_test_case"
+require "securerandom"
 
 class UsersTest < ApplicationSystemTestCase
   setup do
@@ -14,11 +15,11 @@ class UsersTest < ApplicationSystemTestCase
     visit users_url
     click_on "New user"
 
-    fill_in "Email", with: @user.email
+    fill_in "Email", with: "user_#{SecureRandom.hex(8)}@example.com"
+    fill_in "Netid", with: "netid_#{SecureRandom.hex(8)}"
     fill_in "First name", with: @user.first_name
     fill_in "Last login at", with: @user.last_login_at
     fill_in "Last name", with: @user.last_name
-    fill_in "Netid", with: @user.netid
     fill_in "Role", with: @user.role
     click_on "Create User"
 
