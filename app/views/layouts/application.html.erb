@@ -23,16 +23,17 @@
   </head>
 
   <body>
+  # <% if notice %><p style="color:green"><%= notice %></p><% end %>
+  <% if alert  %><p style="color:red"><%= alert  %></p><% end %>
+
   <p>
-  <% if session[:user_id] %>
-    <% user = User.find(session[:user_id]) %>
-    Logged in as <%= user.email %> |
-    <%= button_to "Logout", "/logout", method: :delete %>
-  <% else %>
-    <%= link_to "Sign in with Google (TAMU only)", "/login/google" %>
-  <% end %>
-</p>
-<hr>
-    <%= yield %>
-  </body>
+    <% if session[:user_id] && (current = User.find_by(id: session[:user_id])) %>
+      <%= button_to "Logout", "/logout", method: :delete %>
+    <% else %>
+      <%= link_to "Sign in with Google (TAMU only)", "/login/google", data: { turbo: false } %>
+    <% end %>
+  </p>
+  <hr>
+  <%= yield %>
+</body>
 </html>
