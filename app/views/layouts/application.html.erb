@@ -23,6 +23,16 @@
   </head>
 
   <body>
+  <p>
+  <% if session[:user_id] %>
+    <% user = User.find(session[:user_id]) %>
+    Logged in as <%= user.email %> |
+    <%= button_to "Logout", "/logout", method: :delete %>
+  <% else %>
+    <%= link_to "Sign in with Google (TAMU only)", "/login/google" %>
+  <% end %>
+</p>
+<hr>
     <%= yield %>
   </body>
 </html>
