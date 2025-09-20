@@ -12,8 +12,8 @@ class LeetCodeEntry < ApplicationRecord
     if response.success?
       data = response.parsed_response
       {
-        title: data['title'],
-        difficulty: data['difficulty'].downcase
+        title: data["title"],
+        difficulty: data["difficulty"].downcase
       }
     else
       nil
