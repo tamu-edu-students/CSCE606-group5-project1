@@ -16,7 +16,7 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  # Enable server timing.
+  # Enable server timing
   config.server_timing = true
 
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.

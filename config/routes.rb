@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :users
-  resources :leet_code_entries, only: [:index, :new, :create]
+  resources :leet_code_entries, only: [ :index, :new, :create ]
   root "leet_code_entries#index" unless defined?(root_path)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
