@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_16_050058) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_20_224757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "leet_code_entries", force: :cascade do |t|
+    t.string "problem_name", null: false
+    t.integer "difficulty", null: false
+    t.date "solved_on", default: -> { "CURRENT_DATE" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["problem_name"], name: "index_leet_code_entries_on_problem_name"
+    t.index ["solved_on"], name: "index_leet_code_entries_on_solved_on"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "netid"

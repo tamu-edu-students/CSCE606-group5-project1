@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  problem_name: MyString
+  difficulty: 1
+  solved_on: 2025-09-20
+
+two:
+  problem_name: MyString
+  difficulty: 1
+  solved_on: 2025-09-20
