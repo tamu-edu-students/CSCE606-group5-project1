@@ -15,12 +15,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_224757) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "leet_code_entries", force: :cascade do |t|
-    t.string "problem_name", null: false
+    t.integer "problem_number", null: false
+    t.string "problem_title"
     t.integer "difficulty", null: false
     t.date "solved_on", default: -> { "CURRENT_DATE" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["problem_name"], name: "index_leet_code_entries_on_problem_name"
+    t.index ["problem_number"], name: "index_leet_code_entries_on_problem_number"
     t.index ["solved_on"], name: "index_leet_code_entries_on_solved_on"
   end
 

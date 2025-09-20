@@ -6,8 +6,8 @@ Feature: Create LeetCode entry
   Scenario: Create a valid entry
     Given I am on the LeetCode entries page
     When I follow "Add Entry"
-    And I fill in "Problem Name*" with "Two Sum"
-    And I select "Easy" from "Difficulty*"
+    And I fill in "Problem Number*" with "1"
+    And I select "Easy" from "Difficulty (leave blank to auto-fetch from API)*"
     And I press "Create"
     Then I should see "LeetCode entry created!"
     And I should see "Two Sum"

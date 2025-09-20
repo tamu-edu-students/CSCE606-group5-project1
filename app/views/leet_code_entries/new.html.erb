@@ -4,13 +4,13 @@
 
 <%= form_with model: @entry, url: leet_code_entries_path, local: true do |f| %>
   <div>
-    <%= f.label :problem_name, "Problem Name*" %><br>
-    <%= f.text_field :problem_name, required: true, placeholder: "Two Sum" %>
+    <%= f.label :problem_number, "Problem Number*" %><br>
+    <%= f.number_field :problem_number, required: true, placeholder: "1" %>
   </div>
 
   <div>
-    <%= f.label :difficulty, "Difficulty*" %><br>
-    <%= f.select :difficulty, LeetCodeEntry.difficulties.keys.map { |k| [k.titleize, k] }, {}, required: true %>
+    <%= f.label :difficulty, "Difficulty (leave blank to auto-fetch from API)*" %><br>
+    <%= f.select :difficulty, LeetCodeEntry.difficulties.keys.map { |k| [k.titleize, k] }, { include_blank: true } %>
   </div>
 
   <div>

@@ -8,7 +8,8 @@
   <table>
     <thead>
       <tr>
-        <th>Problem</th>
+        <th>Problem Number</th>
+        <th>Problem Title</th>
         <th>Difficulty</th>
         <th>Date</th>
       </tr>
@@ -16,7 +17,8 @@
     <tbody>
       <% @entries.each do |e| %>
         <tr>
-          <td><%= e.problem_name %></td>
+          <td><%= e.problem_number %></td>
+          <td><%= e.problem_title %></td>
           <td><%= e.difficulty.titleize %></td>
           <td><%= e.solved_on %></td>
         </tr>
