@@ -23,7 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_050058) do
     t.datetime "last_login_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["netid"], name: "index_users_on_netid", unique: true
+    t.index [ "email" ], name: "index_users_on_email", unique: true
+    t.index [ "netid" ], name: "index_users_on_netid", unique: true
   end
 end
