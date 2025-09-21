@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_20_224757) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_21_001722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_224757) do
     t.index ["solved_on"], name: "index_leet_code_entries_on_solved_on"
   end
 
+  create_table "leet_code_problems", force: :cascade do |t|
+    t.string "leetcode_id", null: false
+    t.string "title"
+    t.string "difficulty"
+    t.string "url"
+    t.text "tags"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["leetcode_id"], name: "index_leet_code_problems_on_leetcode_id", unique: true
+  end
+
+  create_table "leet_code_session_problems", force: :cascade do |t|
+    t.bigint "leet_code_session_id", null: false
+    t.bigint "leet_code_problem_id", null: false
+    t.boolean "solved", default: false
+    t.datetime "solved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["leet_code_problem_id"], name: "index_leet_code_session_problems_on_leet_code_problem_id"
+    t.index ["leet_code_session_id"], name: "index_leet_code_session_problems_on_leet_code_session_id"
+  end
+
+  create_table "leet_code_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "scheduled_time"
+    t.integer "duration_minutes"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_leet_code_sessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "netid"
     t.string "email"
@@ -34,7 +66,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_20_224757) do
     t.datetime "last_login_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "current_streak"
+    t.integer "longest_streak"
+    t.text "preferred_topics"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["netid"], name: "index_users_on_netid", unique: true
   end
+
+  add_foreign_key "leet_code_session_problems", "leet_code_problems"
+  add_foreign_key "leet_code_session_problems", "leet_code_sessions"
+  add_foreign_key "leet_code_sessions", "users"
 end

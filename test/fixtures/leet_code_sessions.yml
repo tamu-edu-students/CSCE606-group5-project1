@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  scheduled_time: 2025-09-21 12:00:00
+  duration_minutes: 60
+  status: scheduled
+
+two:
+  user: two
+  scheduled_time: 2025-09-21 13:00:00
+  duration_minutes: 45
+  status: completed
