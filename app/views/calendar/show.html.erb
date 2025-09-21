@@ -1,0 +1,10 @@
+<!-- filepath: app/views/calendar/show.html.erb -->
+<h2>Your Upcoming Google Calendar Events</h2>
+<ul>
+  <% @events.each do |event| %>
+    <li>
+      <strong><%= event.summary %></strong>
+      (<%= event.start.date || event.start.date_time %>)
+    </li>
+  <% end %>
+</ul>
