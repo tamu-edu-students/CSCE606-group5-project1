@@ -3,12 +3,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            ENV['GOOGLE_CLIENT_ID'],
            ENV['GOOGLE_CLIENT_SECRET'],
            {
-             scope: 'userinfo.email,calendar,openid,profile',
+             scope: 'openid email profile https://www.googleapis.com/auth/calendar.events',
              prompt: 'select_account',
+             access_type: 'offline',
              image_aspect_ratio: 'square',
-             image_size: 200,
-             name: 'google_oauth2',
-             access_type: 'offline'
+             image_size: 50
            }
 end
 

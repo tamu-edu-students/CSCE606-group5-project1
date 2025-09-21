@@ -27,7 +27,12 @@ class SessionsController < ApplicationController
     user.save!
 
     session[:user_id] = user.id
-    redirect_to root_path, notice: "Signed in as #{email}"
+    session[:user_email] = auth['info']['email']
+    session[:google_token] = auth['credentials']['token']
+    session[:google_refresh_token] = auth['credentials']['refresh_token']
+    Rails.logger.info("Google token: #{session[:google_token]}")
+    Rails.logger.info("Google refresh token: #{session[:google_refresh_token]}")
+    redirect_to calendar_path, notice: "Signed in as #{email}"
     rescue => e
     Rails.logger.error("Google login error: #{e.class}: #{e.message}")
     redirect_to root_path, alert: 'Login failed.'
