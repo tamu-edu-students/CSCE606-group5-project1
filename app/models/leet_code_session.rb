@@ -1,5 +1,5 @@
 class LeetCodeSession < ApplicationRecord
-  enum :status, { scheduled: 'scheduled', completed: 'completed', skipped: 'skipped' }
+  enum :status, { scheduled: "scheduled", completed: "completed", skipped: "skipped" }
 
   belongs_to :user
   has_many :leet_code_session_problems, dependent: :destroy

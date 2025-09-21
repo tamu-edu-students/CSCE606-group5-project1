@@ -1,5 +1,5 @@
 class LeetCodeProblem < ApplicationRecord
-  enum :difficulty, { easy: 'easy', medium: 'medium', hard: 'hard' }
+  enum :difficulty, { easy: "easy", medium: "medium", hard: "hard" }
 
   validates :leetcode_id, presence: true, uniqueness: true
   validates :difficulty, presence: true
