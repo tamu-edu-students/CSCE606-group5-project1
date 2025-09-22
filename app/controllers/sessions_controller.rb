@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  skip_before_action :authenticate_user!
   def create
     auth = request.env["omniauth.auth"] || {}
     return redirect_to(root_path, alert: "No auth returned from Google") if auth.blank?
@@ -32,7 +33,7 @@ class SessionsController < ApplicationController
     session[:google_refresh_token] = auth["credentials"]["refresh_token"]
     Rails.logger.info("Google token: #{session[:google_token]}")
     Rails.logger.info("Google refresh token: #{session[:google_refresh_token]}")
-    redirect_to calendar_path, notice: "Signed in as #{email}"
+    redirect_to dashboard_path, notice: "Signed in as #{email}"
     rescue => e
     Rails.logger.error("Google login error: #{e.class}: #{e.message}")
     redirect_to root_path, alert: "Login failed."
@@ -44,6 +45,6 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to root_path, notice: "Signed out"
+    render json: { message: "Logged out" }, status: :ok
   end
 end

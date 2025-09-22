@@ -2,6 +2,7 @@ require "test_helper"
 
 class CalendarControllerTest < ActionDispatch::IntegrationTest
   test "should get show" do
+    skip("Calender UI is disabled")
     open_session do |sess|
       sess.get calendar_url
       sess.request.session[:google_token] = "fake_token"
