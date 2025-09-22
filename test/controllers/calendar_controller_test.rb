@@ -7,7 +7,7 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
       sess.request.session[:google_token] = "fake_token"
       sess.request.session[:google_refresh_token] = "fake_refresh"
       sess.get calendar_url
-      assert_includes [200, 302], sess.response.status
+      assert_includes [ 200, 302 ], sess.response.status
     end
   end
 end
