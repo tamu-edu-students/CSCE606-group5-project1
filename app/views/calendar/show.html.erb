@@ -1,0 +1,7 @@
+<ul>
+  <% @events.each do |event| %>
+    <li>
+      <%= event.summary %> (<%= event.start.date || event.start.date_time %>)
+    </li>
+  <% end %>
+</ul>
