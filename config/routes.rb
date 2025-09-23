@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :users
+  resources :leet_code_entries, only: [ :index, :new, :create ]
+
   get "/dashboard", to: "dashboard#index"
   get "home/index"
   get "sessions/create"

@@ -1,0 +1,30 @@
+<p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
+
+<h1>Today's LeetCode Entries (<%= Date.current %>)</h1>
+<p><%= link_to "Add Entry", new_leet_code_entry_path %></p>
+
+<% if @entries.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Problem Number</th>
+        <th>Problem Title</th>
+        <th>Difficulty</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @entries.each do |e| %>
+        <tr>
+          <td><%= e.problem_number %></td>
+          <td><%= e.problem_title %></td>
+          <td><%= e.difficulty.titleize %></td>
+          <td><%= e.solved_on %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No entries yet. <%= link_to "Create one", new_leet_code_entry_path %>.</p>
+<% end %>
