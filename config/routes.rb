@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   resources :users
   resources :leet_code_entries, only: [ :index, :new, :create ]
 
