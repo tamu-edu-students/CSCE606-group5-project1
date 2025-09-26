@@ -11,6 +11,9 @@ class User < ApplicationRecord
 
   has_many :leet_code_sessions, dependent: :destroy
 
+  scope :active, -> { where(active: true) }
+  scope :with_email, -> { where.not(email: nil) }
+
   def full_name
     "#{first_name} #{last_name}"
   end

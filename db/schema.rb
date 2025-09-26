@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_21_001722) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_26_230303) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_21_001722) do
     t.integer "current_streak"
     t.integer "longest_streak"
     t.text "preferred_topics"
+    t.boolean "active", default: true
+    t.index ["active"], name: "index_users_on_active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["netid"], name: "index_users_on_netid", unique: true
   end
