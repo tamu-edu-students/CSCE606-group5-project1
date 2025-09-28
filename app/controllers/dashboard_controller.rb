@@ -69,7 +69,7 @@ class DashboardController < ApplicationController
           hours = remaining_seconds / 3600
           minutes = (remaining_seconds % 3600) / 60
           seconds = remaining_seconds % 60
-          @time_remaining_hms = format('%02d:%02d:%02d', hours, minutes, seconds)
+          @time_remaining_hms = format("%02d:%02d:%02d", hours, minutes, seconds)
         end
       end
     rescue StandardError => e
