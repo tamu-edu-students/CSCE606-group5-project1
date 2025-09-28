@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback", to: "sessions#create"
   get "/auth/failure", to: "sessions#failure"
   delete "/logout", to: "sessions#destroy"
+  post 'sessions/create', to: 'sessions#create', as: 'sessions_create'
+  get 'sessions/failure', to: 'sessions#failure', as: 'sessions_failure'
 
   # --- User-Facing Pages & Resources ---
   resources :users
