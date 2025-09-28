@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :role, inclusion: { in: VALID_ROLES }, allow_nil: true
 
   has_many :leet_code_sessions, dependent: :destroy
+  has_many :events
 
   def full_name
     "#{first_name} #{last_name}"
