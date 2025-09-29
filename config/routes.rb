@@ -25,7 +25,11 @@ Rails.application.routes.draw do
   # --- API Routes ---
   namespace :api do
     get "current_user", to: "users#profile"
+    # Calendar CRUD
     get "calendar_events", to: "calendar#events"
+    post   "calendar_events",         to: "calendar#create"
+    patch  "calendar_events/:id",     to: "calendar#update"
+    delete "calendar_events/:id",     to: "calendar#destroy"
   end
 
   # --- Health Check ---

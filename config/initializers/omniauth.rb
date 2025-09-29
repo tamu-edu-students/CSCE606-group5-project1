@@ -5,6 +5,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            {
              scope: "openid email profile https://www.googleapis.com/auth/calendar.events",
              prompt: "select_account",
+             scope: "email,profile,https://www.googleapis.com/auth/calendar",
              access_type: "offline",
              image_aspect_ratio: "square",
              image_size: 50
