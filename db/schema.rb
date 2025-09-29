@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_152253) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_28_013946) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "events", force: :cascade do |t|
+    t.string "summary"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index [ "user_id" ], name: "index_events_on_user_id"
+  end
 
   create_table "leet_code_entries", force: :cascade do |t|
     t.integer "problem_number", null: false
@@ -21,8 +31,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_152253) do
     t.date "solved_on", default: -> { "CURRENT_DATE" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["problem_number"], name: "index_leet_code_entries_on_problem_number"
-    t.index ["solved_on"], name: "index_leet_code_entries_on_solved_on"
+    t.index [ "problem_number" ], name: "index_leet_code_entries_on_problem_number"
+    t.index [ "solved_on" ], name: "index_leet_code_entries_on_solved_on"
   end
 
   create_table "leet_code_problems", force: :cascade do |t|
@@ -45,8 +55,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_152253) do
     t.datetime "solved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["leet_code_problem_id"], name: "index_leet_code_session_problems_on_leet_code_problem_id"
-    t.index ["leet_code_session_id"], name: "index_leet_code_session_problems_on_leet_code_session_id"
+    t.index [ "leet_code_problem_id" ], name: "index_leet_code_session_problems_on_leet_code_problem_id"
+    t.index [ "leet_code_session_id" ], name: "index_leet_code_session_problems_on_leet_code_session_id"
   end
 
   create_table "leet_code_sessions", force: :cascade do |t|
@@ -56,7 +66,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_152253) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_leet_code_sessions_on_user_id"
+    t.index [ "user_id" ], name: "index_leet_code_sessions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -76,6 +86,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_152253) do
     t.index ["netid"], name: "index_users_on_netid", unique: true
   end
 
+  add_foreign_key "events", "users"
   add_foreign_key "leet_code_session_problems", "leet_code_problems"
   add_foreign_key "leet_code_session_problems", "leet_code_sessions"
   add_foreign_key "leet_code_sessions", "users"

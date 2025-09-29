@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Leet Planner</title>
+    <title>Leetcode Planner</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <meta name="csrf-token" content="<%= form_authenticity_token %>">
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <% if controller_name == "login" && action_name == "index" %>
-      <%= stylesheet_link_tag "login", media: "all", "data-turbo-track": "reload" %>
-    <% end %>
-    <% if controller_name == "dashboard" && action_name == "index" %>
-      <%= stylesheet_link_tag "dashboard", media: "all", "data-turbo-track": "reload" %>
-    <% end %>
 
     <%= javascript_importmap_tags %>
+    <script>document.documentElement.classList.add('js-enabled');</script>
   </head>
-
   <body>
-    <%= yield %>  <!-- Your views get injected here -->
+    <%= yield %>
   </body>
 </html>

@@ -1,0 +1,40 @@
+.event-card {
+  padding: 1rem;
+  border-left: 4px solid #007aff;
+  background: #f8f9ff;
+  margin-bottom: 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.event-card h3 {
+  color: #1d1d1f;
+  margin-bottom: 0.5rem;
+}
+
+.event-card p {
+  color: #86868b;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-banner {
+  background: linear-gradient(90deg, #f6fbff 0%, #ffffff 100%);
+  border-left: 4px solid #007aff;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 8px rgba(7, 15, 30, 0.04);
+}
+
+.event-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 0.25rem;
+}
+
+.event-time {
+  color: #6b6b70;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
