@@ -1,3 +1,4 @@
+Rails.application.routes.draw do
   # --- Root Page ---
   # Sets the application"s home page to the login screen.
   root "login#index"
