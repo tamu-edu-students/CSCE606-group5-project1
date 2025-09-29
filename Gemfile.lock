@@ -128,6 +128,9 @@ GEM
       cucumber (>= 7, < 11)
       railties (>= 6.1, < 9)
     cucumber-tag-expressions (6.1.2)
+    dartsass-rails (0.5.1)
+      railties (>= 6.0.0)
+      sass-embedded (~> 1.63)
     database_cleaner-active_record (2.2.2)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0)
@@ -162,6 +165,8 @@ GEM
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     ffi (1.17.2-x86_64-linux-musl)
+    foreman (0.90.0)
+      thor (~> 1.4)
     fugit (1.11.2)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -191,6 +196,27 @@ GEM
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
     google-logging-utils (0.2.0)
+    google-protobuf (4.32.1)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.1-aarch64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.1-aarch64-linux-musl)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.1-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.1-x86_64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.1-x86_64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.1-x86_64-linux-musl)
+      bigdecimal
+      rake (>= 13)
     googleauth (1.15.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
@@ -443,6 +469,22 @@ GEM
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
     rubyzip (3.1.0)
+    sass-embedded (1.93.2-aarch64-linux-gnu)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-aarch64-linux-musl)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-arm-linux-gnueabihf)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-arm-linux-musleabihf)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-arm64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-x86_64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-x86_64-linux-gnu)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.93.2-x86_64-linux-musl)
+      google-protobuf (~> 4.31)
     securerandom (0.4.1)
     selenium-webdriver (4.35.0)
       base64 (~> 0.2)
@@ -538,9 +580,11 @@ DEPENDENCIES
   brakeman
   capybara
   cucumber-rails
+  dartsass-rails
   database_cleaner-active_record
   debug
   dotenv-rails
+  foreman
   google-api-client (~> 0.53.0)
   httparty
   importmap-rails

@@ -29,6 +29,7 @@ class SessionsController < ApplicationController
 
     session[:user_id] = user.id
     session[:user_email] = auth["info"]["email"]
+    session[:user_first_name] = user.first_name
     session[:google_token] = auth["credentials"]["token"]
     session[:google_refresh_token] = auth["credentials"]["refresh_token"]
     Rails.logger.info("Google token: #{session[:google_token]}")
@@ -45,6 +46,9 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    render json: { message: "Logged out" }, status: :ok
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: "You have been signed out successfully." }
+      format.json { render json: { message: "Signed out successfully." }, status: :ok }
+    end
   end
 end

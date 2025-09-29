@@ -1,0 +1,34 @@
+<!-- Sidebar -->
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">Leet Planner</div>
+    </div>
+    
+    <div class="sidebar-nav">
+        <%# The link_to helper creates a standard <a> tag. %>
+        <%# current_page? is a Rails helper to conditionally add the 'active' class. %>
+        <%= link_to dashboard_path, class: "nav-item #{'active' if current_page?(dashboard_path)}" do %>
+            <span class="nav-icon" >⏱️</span>
+            Dashboard
+        <% end %>
+
+        <%= link_to calendar_path, class: "nav-item #{'active' if current_page?(calendar_path)}" do %>
+            <span class="nav-icon">📅</span>
+            Calendar
+        <% end %>
+    </div>
+
+    <div class="user-info">
+    <div class="user-info-header">
+        <div class="user-avatar" id="userAvatar">
+            <%# This safely gets the first letter of the first name, or 'U' as a fallback %>
+            <%= session[:user_first_name]&.first&.upcase || 'U' %>
+        </div>
+        <div class="user-name" id="userName">
+            <%# This gets the full first name from the session, or 'User' as a fallback %>
+            <%= session[:user_first_name] || 'User' %>
+        </div>
+    </div>
+    <%= button_to "Sign Out", logout_path, method: :delete, class: "logout-btn" %>
+    </div>
+</nav>
