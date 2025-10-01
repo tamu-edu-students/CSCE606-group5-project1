@@ -50,4 +50,59 @@ rails server
 Open your browser and navigate to:
 ```bash
 http://localhost:3000
+---
+
+## 📧 Weekly Progress Summary Email
+
+The application includes an automated weekly email feature that sends progress summaries to active students.
+
+### Running the Weekly Report Locally
+
+To manually trigger the weekly report email task:
+
+```bash
+bundle exec rake weekly_report:send
+```
+
+This will:
+- Identify all active users with registered email addresses
+- Compute their weekly statistics
+- Send personalized progress summary emails
+
+### Heroku Scheduler Setup
+
+For production deployment on Heroku, set up a scheduled job to run weekly:
+
+1. Install the Heroku Scheduler add-on:
+   ```bash
+   heroku addons:create scheduler:standard
+   ```
+
+2. Open the Heroku Scheduler dashboard:
+   ```bash
+   heroku addons:open scheduler
+   ```
+
+3. Create a new job with:
+   - **Task**: `rake weekly_report:send`
+   - **Frequency**: Weekly
+   - **Next Due**: Sunday at 23:55 (app timezone)
+
+### Email Content
+
+The weekly summary email includes:
+- Number of problems solved this week
+- Current consecutive practice streak (in days)
+- Total problems solved to date
+- Highlights (longest historical streak and hardest problem solved this week)
+
+### Demo Data
+
+To populate demo data for testing the weekly report:
+
+```bash
+rails db:seed
+```
+
+This creates sample users, problems, and solved problem records spanning multiple weeks.
 ```
