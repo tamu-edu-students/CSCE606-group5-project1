@@ -74,8 +74,12 @@ test:
 # URL environment variable explicitly:
 #
 production:
-  url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  primary:
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  queue:
+    url: <%= ENV["DATABASE_URL"] %> 
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 #
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
