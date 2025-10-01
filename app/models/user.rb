@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :role, inclusion: { in: VALID_ROLES }, allow_nil: true
 
   has_many :leet_code_sessions, dependent: :destroy
+  has_many :events
 
   scope :active, -> { where(active: true) }
   scope :with_email, -> { where.not(email: nil) }

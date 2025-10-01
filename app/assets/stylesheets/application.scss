@@ -8,3 +8,16 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+@import "base/base";
+
+@import "layout/sidebar";
+@import "layout/page";
+
+@import "components/buttons";
+@import "components/cards";
+@import "components/forms";
+
+@import "pages/login";
+@import "pages/dashboard";
+@import "pages/calendar";
