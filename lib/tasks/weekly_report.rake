@@ -2,7 +2,7 @@ namespace :weekly_report do
   desc "Send weekly progress summary emails to active users with email addresses"
   task send: :environment do
     # Only run on Mondays
-    if Date.today.wday != 1
+    if Date.today.wday != 1 && ENV["FORCE_SEND"] != "true"
       Rails.logger.info "Not Monday, skipping weekly report task"
       next
     end
