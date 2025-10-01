@@ -1,4 +1,3 @@
-# config/routes.rb
 Rails.application.routes.draw do
   # --- Root Page ---
   # Sets the application"s home page to the login screen.
@@ -15,7 +14,7 @@ Rails.application.routes.draw do
   # --- User-Facing Pages & Resources ---
   resources :users
   resources :leet_code_entries, only: [ :index, :new, :create ]
-  resource :statistics, only: [:show], controller: 'statistics'
+  resource :statistics, only: [ :show ], controller: "statistics"
 
   # --- Static Pages ---
   get "/dashboard", to: "dashboard#show"
