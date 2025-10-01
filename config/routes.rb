@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   # --- User-Facing Pages & Resources ---
   resources :users
   resources :leet_code_entries, only: [ :index, :new, :create ]
+  resource :statistics, only: [:show], controller: 'statistics'
 
   # --- Static Pages ---
   get "/dashboard", to: "dashboard#show"
