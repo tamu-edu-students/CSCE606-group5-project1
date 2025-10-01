@@ -22,6 +22,7 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
+  # NOTE: Heroku 文件系统是临时的，如需持久化请改用云存储。
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
@@ -46,26 +47,28 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
-  # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  config.cache_store = :memory_store
 
-  # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :inline
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+
+  config.solid_cable.connects_to = { database: { writing: :primary } }
+
+  # config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "leetrecorder-staging-9448a75c94bd.herokuapp.com" }
+  config.action_mailer.default_url_options = {
+    host: "leetrecorder-staging-9448a75c94bd.herokuapp.com"
+  }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   config.action_mailer.smtp_settings = {
     user_name: ENV["MAILGUN_SMTP_LOGIN"],
-    password: ENV["MAILGUN_SMTP_PASSWORD"],
-    address: "smtp.mailgun.org",
-    port: 587,
+    password:  ENV["MAILGUN_SMTP_PASSWORD"],
+    address:   "smtp.mailgun.org",
+    port:      587,
     authentication: :plain,
     enable_starttls_auto: true
   }
@@ -82,10 +85,8 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
+  #   "example.com",
+  #   /.*\.example\.com/
   # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
