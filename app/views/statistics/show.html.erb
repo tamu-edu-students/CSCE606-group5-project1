@@ -7,7 +7,7 @@
         <h1 class="page-title user-name">Weekly Statistics</h1>
         <p class="page-subtitle">Your performance overview for this week</p>
       </div>
-      
+      <% if @stats[:weekly_solved_count] > 0 %>
       <div class="content-area">
         <div class="stats-grid">
           <div class="stat-card">
@@ -30,53 +30,10 @@
             <p class="highlights-text"><%= @stats[:highlight] %></p>
           </div>
         <% end %>
+      <% else %>
+        <p>No LeetCode activity recorded this week. Keep going!</p>
+      <% end %>
       </div>
     </div>
   </main>
 </div>
-
-<%# Optional: Add some basic styling in your application.css or a dedicated stylesheet %>
-<style>
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  .stat-card {
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1.5rem;
-    text-align: center;
-  }
-  .stat-title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1rem;
-    color: #555;
-  }
-  .stat-value {
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #333;
-  }
-  .stat-unit {
-    font-size: 1rem;
-    font-weight: normal;
-    color: #777;
-  }
-  .highlights-container {
-    background-color: #f0f4f8;
-    border-left: 4px solid #4a90e2;
-    padding: 1rem 1.5rem;
-    margin-top: 2rem;
-  }
-  .highlights-title {
-    margin: 0 0 0.5rem 0;
-  }
-  .highlights-text {
-    margin: 0;
-    font-size: 1rem;
-  }
-</style>

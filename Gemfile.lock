@@ -151,6 +151,11 @@ GEM
     erubi (1.13.1)
     et-orbi (1.3.0)
       tzinfo
+    factory_bot (6.5.5)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.1)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     faraday (2.13.4)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -535,6 +540,7 @@ GEM
     thruster (0.1.15-arm64-darwin)
     thruster (0.1.15-x86_64-darwin)
     thruster (0.1.15-x86_64-linux)
+    timecop (0.9.10)
     timeout (0.4.3)
     trailblazer-option (0.1.2)
     turbo-rails (2.0.16)
@@ -584,6 +590,7 @@ DEPENDENCIES
   database_cleaner-active_record
   debug
   dotenv-rails
+  factory_bot_rails
   foreman
   google-api-client (~> 0.53.0)
   httparty
@@ -605,6 +612,7 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   thruster
+  timecop
   turbo-rails
   tzinfo-data
   web-console
