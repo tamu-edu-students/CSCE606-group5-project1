@@ -26,23 +26,6 @@ class ApplicationController < ActionController::Base
   def user_signed_in?
     current_user.present?
   end
-  # --- ADMIN GATE ---
-  def require_admin!
-    authenticate_user!          # reuse your existing login check
-    return if performed?        # if authenticate_user! already redirected/rendered
 
-    unless current_user&.role == "admin"
-      if request.xhr? || request.format.json?
-        render json: { error: "Not authorized" }, status: :forbidden
-      else
-        redirect_to root_path, alert: "Not authorized"
-      end
-    end
-  end
-
-  def admin?
-    current_user&.role == "admin"
-  end
-  helper_method :admin?
   helper_method :user_signed_in?
 end
