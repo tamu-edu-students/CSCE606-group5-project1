@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_30_215507) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_154016) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -84,6 +84,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_215507) do
     t.integer "longest_streak"
     t.text "preferred_topics"
     t.text "leetcode_username"
+    t.string "google_access_token"
+    t.string "google_refresh_token"
+    t.datetime "google_token_expires_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["netid"], name: "index_users_on_netid", unique: true
   end

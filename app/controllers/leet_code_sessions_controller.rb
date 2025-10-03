@@ -1,3 +1,5 @@
+require "googleauth"
+
 class LeetCodeSessionsController < ApplicationController
   before_action :authenticate_user!
 
@@ -27,32 +29,67 @@ class LeetCodeSessionsController < ApplicationController
 
   def update_google_calendar_event(session, problem)
     service = initialize_google_calendar_service_for(current_user)
-    return unless service
+    unless service
+      Rails.logger.error("Google Calendar service initialization failed for user #{current_user.id}")
+      return
+    end
 
-    calendar_id = 'primary'
+    calendar_id = "primary"
     event_id = session.google_event_id
 
-    event = service.get_event(calendar_id, event_id)
+    begin
+      event = service.get_event(calendar_id, event_id)
 
-    new_description = [event.description, "", "Leetcode problem added:", "- #{problem.title}", "- #{problem.url}"].compact.join("\n")
+      description = event.description.to_s # nil-safe
+      new_description = [
+        description,
+        "",
+        "Leetcode problem added:",
+        "- #{problem.title}",
+        "- #{problem.url}"
+      ].join("\n")
 
-    event.description = new_description
+      event.description = new_description
 
-    service.update_event(calendar_id, event_id, event)
-  rescue => e
-    Rails.logger.error("Failed to update Google Calendar event: #{e.message}")
+      service.update_event(calendar_id, event_id, event)
+      Rails.logger.info("Google Calendar event #{event_id} updated for user #{current_user.id}")
+    rescue Google::Apis::ClientError => e
+      Rails.logger.error("Google API client error while updating event: #{e.message}")
+    rescue => e
+      Rails.logger.error("Failed to update Google Calendar event: #{e.message}")
+    end
   end
 
   def initialize_google_calendar_service_for(user)
-    service = Google::Apis::CalendarV3::CalendarService.new
-    service.client_options.application_name = 'Leet Planner'
+    return nil unless user.google_access_token.present? && user.google_refresh_token.present?
 
-    if user.google_access_token.present?
-      service.authorization = Signet::OAuth2::Client.new(access_token: user.google_access_token)
-      service
-    else
-      Rails.logger.error("Google access token missing for user #{user.id}")
-      nil
+    service = Google::Apis::CalendarV3::CalendarService.new
+    service.client_options.application_name = "Leet Planner"
+
+    credentials = Signet::OAuth2::Client.new(
+      client_id: ENV["GOOGLE_CLIENT_ID"],
+      client_secret: ENV["GOOGLE_CLIENT_SECRET"],
+      access_token: user.google_access_token,
+      refresh_token: user.google_refresh_token,
+      token_credential_uri: "https://oauth2.googleapis.com/token"
+    )
+
+    # Refresh token if expired
+    if credentials.expired?
+      begin
+        credentials.refresh!
+        # Save updated tokens back to user if you want
+        user.update(
+          google_access_token: credentials.access_token,
+          google_refresh_token: credentials.refresh_token || user.google_refresh_token
+        )
+      rescue => e
+        Rails.logger.error("Failed to refresh Google token for user #{user.id}: #{e.message}")
+        return nil
+      end
     end
+
+    service.authorization = credentials
+    service
   end
 end

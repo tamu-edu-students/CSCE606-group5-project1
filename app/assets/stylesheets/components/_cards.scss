@@ -1,3 +1,14 @@
+:root {
+  --blue: #007aff;
+  --green: #6ece6e;
+  --red: #ee6e6b;
+  --tamu-red: #800000;
+  --gray-light: #f0f0f0;
+  --gray-lighter: #fafafa;
+  --gray-border: #ccc;
+  --text-dark: #333;
+}
+
 .event-card {
   padding: 1rem;
   border-left: 4px solid #007aff;
@@ -37,4 +48,40 @@
   color: #6b6b70;
   font-size: 0.95rem;
   margin-bottom: 0.75rem;
+}
+
+.btn{
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: 300;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+}
+
+.btn-primary {
+  background-color: var(--blue) !important;
+}
+
+.btn-secondary {
+  background-color: white;
+  border-color: var(--blue) !important;
+  color: var(--blue);
+}
+
+.btn-submit {
+  background-color: var(--green) !important;
+}
+
+.btn-danger {
+  background-color: var(--red) !important;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

@@ -78,4 +78,4 @@ end
 
 gem "httparty"
 
-gem 'kaminari'
+gem "kaminari"

@@ -11,17 +11,17 @@ Rails.application.routes.draw do
   get "sessions/create", to: "sessions#create", as: "sessions_create"
   get "sessions/failure", to: "sessions#failure", as: "sessions_failure"
 
-  post 'calendar/sync', to: 'calendar#sync', as: 'sync_calendar'
+  post "calendar/sync", to: "calendar#sync", as: "sync_calendar"
 
 
   # --- Users / Profile ---
-  resources :users, only: [:show, :update]
+  resources :users, only: [ :show, :update ]
 
   # --- Core LeetCode Resources (API-style, no views) ---
-  resources :leet_code_problems, except: [:new, :edit]
-  resources :leet_code_sessions, except: [:new, :edit]
-  resources :leet_code_session_problems, except: [:new, :edit]
-  resources :leet_code_entries, only: [:index, :new, :create] 
+  resources :leet_code_problems, except: [ :new, :edit ]
+  resources :leet_code_sessions, except: [ :new, :edit ]
+  resources :leet_code_session_problems, except: [ :new, :edit ]
+  resources :leet_code_entries, only: [ :index, :new, :create ]
 
   resources :leet_code_sessions do
     post :add_problem, on: :collection
