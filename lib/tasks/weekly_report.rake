@@ -1,12 +1,17 @@
 namespace :weekly_report do
   desc "Send weekly progress summary emails to active users with email addresses"
   task send: :environment do
+    # Only run on Mondays
+    if Date.today.wday != 1 && ENV["FORCE_SEND"] != "true"
+      Rails.logger.info "Not Monday, skipping weekly report task"
+      next
+    end
+
     Rails.logger.info "Starting weekly report email task"
 
     week_start = ENV["WEEK_START"] ? Time.zone.parse(ENV["WEEK_START"]) : nil
 
     users = User.active.with_email
-
     Rails.logger.info "Found #{users.count} eligible users"
 
     users.find_each do |user|

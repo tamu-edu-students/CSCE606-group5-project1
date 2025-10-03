@@ -25,13 +25,18 @@
 
     <div class="user-info">
     <div class="user-info-header">
-        <div class="user-avatar" id="userAvatar">
-            <%# This safely gets the first letter of the first name, or 'U' as a fallback %>
-            <%= session[:user_first_name]&.first&.upcase || 'U' %>
-        </div>
+        <%= link_to profile_path, class: "user-avatar-link" do %>
+            <div class="user-avatar" id="userAvatar">
+                <%# This safely gets the first letter of the first name, or 'U' as a fallback %>
+                <%= session[:user_first_name]&.first&.upcase || 'U' %>
+            </div>
+        <% end %>
         <div class="user-name" id="userName">
             <%# This gets the full first name from the session, or 'User' as a fallback %>
             <%= session[:user_first_name] || 'User' %>
+            <% if current_user&.leetcode_username.present? %>
+                (<%= current_user.leetcode_username %>)
+            <% end %>
         </div>
     </div>
     <%= button_to "Sign Out", logout_path, method: :delete, class: "logout-btn" %>

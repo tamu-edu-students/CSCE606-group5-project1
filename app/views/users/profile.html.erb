@@ -1,0 +1,47 @@
+<div class="app-container">
+    <%= render 'shared/navbar' %>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Profile Page -->
+      <div id="profilePage" class="page">
+        <div class="page-header">
+          <h1 class="page-title user-name">Profile</h1>
+          <p class="page-subtitle">Manage your account settings</p>
+        </div>
+
+        <% if notice %>
+          <div style="background: #d4edda; color: #155724; padding: 1rem; border: 1px solid #c3e6cb; border-radius: 8px; margin-bottom: 1.5rem;">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <div class="content-area">
+          <div class="profile-container">
+            <div class="profile-info" style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+              <h2 style="margin-bottom: 1rem; color: #333;"><%= current_user.full_name %></h2>
+              <p style="margin: 0.5rem 0; color: #666;"><strong>Email:</strong> <%= current_user.email %></p>
+              <p style="margin: 0.5rem 0; color: #666;">
+                <strong>LeetCode Username:</strong>
+                <% if current_user.leetcode_username.present? %>
+                  <%= current_user.leetcode_username %>
+                <% else %>
+                  <em style="color: #999;">Not set</em>
+                <% end %>
+              </p>
+            </div>
+
+            <div class="focus-time-container">
+              <p class="focus-time-label">Set your LeetCode username</p>
+              <div class="focus-time-controls">
+                <%= form_with model: current_user, url: profile_path, method: :patch do |form| %>
+                  <%= form.text_field :leetcode_username, class: "focus-time-input", placeholder: "Enter username" %>
+                  <%= form.submit "Update Profile", class: "timer-btn set" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+</div>
