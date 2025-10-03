@@ -1,39 +1,481 @@
-<div class="app-container">
+<div class="lc-app">
   <%= render 'shared/navbar' %>
 
-  <main class="main-content">
-    <div id="statisticsPage" class="page">
-      <div class="page-header">
-        <h1 class="page-title user-name">Weekly Statistics</h1>
-        <p class="page-subtitle">Your performance overview for this week</p>
+  <main class="lc-main">
+    <!-- Hero -->
+    <section class="lc-hero mb-4">
+      <div class="container">
+        <div class="d-flex flex-column flex-md-row align-items-md-end align-items-start gap-3">
+      <div class="lc-hero__title">
+        <h1 class="lc-hero__title-main mb-3">LeetCode Statistics</h1>
+        <p class="lc-hero__title-subtitle mb-0">Track your progress & highlights</p>
       </div>
-      <% if @stats[:weekly_solved_count] > 0 %>
-      <div class="content-area">
-        <div class="stats-grid" id="weekly-summary">
-          <div class="stat-card">
-            <h3 class="stat-title">Problems Solved This Week</h3>
-            <p class="stat-value"><%= @stats[:weekly_solved_count] %></p>
+          <div class="ms-md-auto">
+            <% if current_user&.leetcode_username.present? %>
+              <div class="lc-hero__username">
+                <i class="fas fa-user me-1"></i>
+                <%= current_user.leetcode_username %>
+              </div>
+            <% end %>
           </div>
-          <div class="stat-card">
-            <h3 class="stat-title">Current Streak</h3>
-            <p class="stat-value"><%= @stats[:current_streak_days] %> <span class="stat-unit">days</span></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <% if @error_message %>
+        <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i><%= @error_message %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
+
+      <% total = (@stats[:total] || 0).to_i
+         easy  = (@stats[:easy]  || 0).to_i
+         medium= (@stats[:medium]|| 0).to_i
+         hard  = (@stats[:hard]  || 0).to_i
+         e_pct = total.zero? ? 0 : ((easy.to_f  / total) * 100).round(1)
+         m_pct = total.zero? ? 0 : ((medium.to_f/ total) * 100).round(1)
+         h_pct = total.zero? ? 0 : ((hard.to_f  / total) * 100).round(1)
+      %>
+
+      <!-- KPI cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <div class="lc-card lc-kpi h-100">
+            <div class="lc-kpi__icon bg-gradient-primary-subtle">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <div class="lc-kpi__body">
+              <span class="lc-kpi__label">Total Solved</span>
+              <span class="lc-kpi__value"><%= total %></span>
+              <span class="lc-kpi__hint">problems completed</span>
+            </div>
           </div>
-          <div class="stat-card">
-            <h3 class="stat-title">Total Problems Solved</h3>
-            <p class="stat-value"><%= @stats[:total_solved_all_time] %></p>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="lc-card lc-kpi h-100">
+            <div class="lc-kpi__icon bg-gradient-info-subtle">
+              <i class="fas fa-calendar-week"></i>
+            </div>
+            <div class="lc-kpi__body">
+              <span class="lc-kpi__label">Last 7 Days</span>
+              <span class="lc-kpi__value"><%= @recent_stats[:week] %></span>
+              <span class="lc-kpi__hint">problems solved</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="lc-card lc-kpi h-100">
+            <div class="lc-kpi__icon bg-gradient-success-subtle">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="lc-kpi__body">
+              <span class="lc-kpi__label">Last 30 Days</span>
+              <span class="lc-kpi__value"><%= @recent_stats[:month] %></span>
+              <span class="lc-kpi__hint">problems solved</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Difficulty + Activity -->
+      <div class="row g-3">
+        <div class="col-12 col-lg-6">
+          <div class="lc-card h-100">
+            <div class="lc-card__header">
+              <i class="fas fa-chart-pie me-2"></i>Difficulty Breakdown
+            </div>
+
+            <% if total > 0 %>
+              <div class="lc-donut mb-3"
+                   style="--e:<%= e_pct %>; --m:<%= m_pct %>; --h:<%= h_pct %>">
+                <div class="lc-donut__center">
+                  <div class="fw-semibold">Total</div>
+                  <div class="fs-4"><%= total %></div>
+                </div>
+              </div>
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="lc-progress">
+                    <div class="lc-progress__bar lc-progress__bar--easy" style="width: <%= e_pct %>%"></div>
+                    <div class="lc-progress__bar lc-progress__bar--medium" style="width: <%= m_pct %>%"></div>
+                    <div class="lc-progress__bar lc-progress__bar--hard" style="width: <%= h_pct %>%"></div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-2 small text-muted">
+                    <span><span class="lc-dot lc-dot--easy"></span> Easy <strong class="text-body ms-1"><%= easy %></strong> (<%= e_pct %>%)</span>
+                    <span><span class="lc-dot lc-dot--medium"></span> Medium <strong class="text-body ms-1"><%= medium %></strong> (<%= m_pct %>%)</span>
+                    <span><span class="lc-dot lc-dot--hard"></span> Hard <strong class="text-body ms-1"><%= hard %></strong> (<%= h_pct %>%)</span>
+                  </div>
+                </div>
+              </div>
+            <% else %>
+              <div class="text-center text-muted py-5">
+                <i class="fas fa-chart-pie fa-2x mb-2"></i>
+                <p class="mb-0">No difficulty data yet</p>
+              </div>
+            <% end %>
           </div>
         </div>
 
-        <% if @stats[:highlight].present? %>
-          <div class="highlights-container">
-            <h2 class="highlights-title">Highlights</h2>
-            <p class="highlights-text"><%= @stats[:highlight] %></p>
+        <div class="col-12 col-lg-6">
+          <div class="lc-card h-100">
+            <div class="lc-card__header">
+              <i class="fas fa-bolt me-2"></i>Activity Summary
+            </div>
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="lc-mini h-100">
+                  <div class="lc-mini__icon text-info"><i class="fas fa-fire"></i></div>
+                  <div class="lc-mini__title">Weekly</div>
+                  <% if @recent_stats[:week] > 0 %>
+                    <div class="lc-mini__value text-info"><%= @recent_stats[:week] %></div>
+                    <div class="lc-mini__hint">Keep it up!</div>
+                  <% else %>
+                    <div class="lc-mini__value text-muted">0</div>
+                    <div class="lc-mini__hint text-muted">No activity</div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="lc-mini h-100">
+                  <div class="lc-mini__icon text-success"><i class="fas fa-rocket"></i></div>
+                  <div class="lc-mini__title">Monthly</div>
+                  <% if @recent_stats[:month] > 0 %>
+                    <div class="lc-mini__value text-success"><%= @recent_stats[:month] %></div>
+                    <div class="lc-mini__hint">Great progress</div>
+                  <% else %>
+                    <div class="lc-mini__value text-muted">0</div>
+                    <div class="lc-mini__hint text-muted">No activity</div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <%# 可选：最近通过题目列表（精简） %>
+            <% if defined?(@accepted) && @accepted.present? %>
+              <hr class="my-3">
+              <div class="small text-muted mb-2">Recent Accepted</div>
+              <ul class="list-unstyled mb-0 lc-list">
+                <% @accepted.first(6).each do |s| %>
+                  <li class="lc-list__item">
+                    <i class="far fa-check-circle me-2 text-success"></i>
+                    <span class="text-truncate"><%= s[:title] || s['title'] %></span>
+                    <% if (t = (s[:time] || s['timestamp'])) %>
+                      <span class="text-muted ms-auto"><%= Time.at(t).strftime("%b %d") rescue "" %></span>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
           </div>
-        <% end %>
-      <% else %>
-        <p>No LeetCode activity recorded this week. Keep going!</p>
-      <% end %>
+        </div>
       </div>
+
     </div>
   </main>
 </div>
+
+<style>
+/* ---------- Theme tokens ---------- */
+:root{
+  --lc-bg-hero: linear-gradient(135deg,#667eea 0%,#764ba2 45%,#f093fb 100%);
+  --lc-bg-pattern: radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                   radial-gradient(circle at 75% 75%, rgba(255, 177, 153, 0.1) 0%, transparent 50%);
+  --lc-card-bg: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  --lc-card-shadow: 0 20px 35px rgba(16,24,40,.08), 0 10px 20px rgba(16,24,40,.04);
+  --lc-radius: 20px;
+  --lc-border: 1px solid rgba(99, 102, 241, 0.1);
+
+  --easy:   #10b981;  /* emerald-500 */
+  --medium: #f59e0b;  /* amber-500 */
+  --hard:   #ef4444;  /* red-500 */
+  --easy-light: rgba(16, 185, 129, 0.15);
+  --medium-light: rgba(245, 158, 11, 0.15);
+  --hard-light: rgba(239, 68, 68, 0.15);
+}
+
+/* ---------- Layout ---------- */
+.lc-main{
+  padding-bottom: 48px; margin-left: 260px; padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lc-main > * {
+  animation: slideUp 0.6s ease-out backwards;
+}
+
+.lc-main > *:nth-child(1) { animation-delay: 0.1s; }
+.lc-main > *:nth-child(2) { animation-delay: 0.2s; }
+.lc-main > *:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lc-main{ margin-left: 0; padding: 1rem; }
+}
+.lc-hero{
+  background: var(--lc-bg-hero);
+  border-radius: 0 0 24px 24px;
+  padding: 28px 0 36px;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.15);
+  position: relative;
+  overflow: hidden;
+}
+.lc-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--lc-bg-pattern);
+  opacity: 0.3;
+}
+.lc-hero > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.lc-hero__title-main {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #f3e8ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0,0,0,.1), 0 4px 8px rgba(0,0,0,.05);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  animation: title-shine 3s ease-in-out infinite alternate;
+}
+
+.lc-hero__title-subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, rgba(255,255,255,.9) 0%, rgba(186,230,253,.8) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 2px rgba(0,0,0,.05);
+  opacity: 0.85;
+  letter-spacing: 0.01em;
+}
+
+@keyframes title-shine {
+  from {
+    filter: drop-shadow(0 0 5px rgba(255,255,255,.3));
+  }
+  to {
+    filter: drop-shadow(0 0 15px rgba(255,255,255,.6)) drop-shadow(0 0 30px rgba(102, 126, 234, .2));
+  }
+}
+
+.lc-hero__username {
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, rgba(255,255,255,.95) 0%, rgba(186,230,253,.85) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 2px rgba(0,0,0,.05);
+  opacity: 0.9;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+/* Responsive hero title */
+@media (max-width: 768px) {
+  .lc-hero__title-main {
+    font-size: 2.5rem;
+  }
+  .lc-hero__title-subtitle {
+    font-size: 1.1rem;
+  }
+}
+
+/* ---------- Cards ---------- */
+.lc-card{
+  background: var(--lc-card-bg);
+  border: var(--lc-border);
+  border-radius: var(--lc-radius);
+  box-shadow: var(--lc-card-shadow);
+  padding: 20px;
+  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.lc-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity .25s ease;
+  border-radius: inherit;
+}
+.lc-card:hover::before { opacity: 1; }
+.lc-card:hover{
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 25px 50px rgba(16,24,40,.12), 0 15px 25px rgba(16,24,40,.06);
+}
+
+.lc-card__header{
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  color: #1f2937;
+}
+
+/* ---------- KPI ---------- */
+.lc-kpi{
+  display:flex; gap:16px; align-items:center; padding:20px;
+  border-radius: var(--lc-radius);
+  transition: all .25s ease;
+}
+.lc-kpi:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.8));
+}
+.lc-kpi__icon{
+  width:64px; height:64px; border-radius:16px;
+  display:grid; place-items:center; font-size:24px;
+  transition: transform .25s ease;
+  box-shadow: 0 8px 16px rgba(0,0,0,.1);
+}
+.lc-kpi:hover .lc-kpi__icon {
+  transform: scale(1.1) rotate(5deg);
+}
+.bg-gradient-primary-subtle{ background: linear-gradient(135deg,#e8eeff,#edf0ff); color:#4f46e5; }
+.bg-gradient-info-subtle{    background: linear-gradient(135deg,#e6f6ff,#eaf7ff); color:#0ea5e9; }
+.bg-gradient-success-subtle{ background: linear-gradient(135deg,#e8fff1,#effef5); color:#22c55e; }
+
+.lc-kpi__body{ display:flex; flex-direction:column; }
+.lc-kpi__label{
+  font-size:.9rem; color:#6b7280; font-weight:500;
+  transition: color .25s ease;
+}
+.lc-kpi:hover .lc-kpi__label { color: #374151; }
+.lc-kpi__value{
+  font-size:2rem; line-height:1.1; font-weight:800; color:#1f2937;
+  transition: all .25s ease;
+}
+.lc-kpi:hover .lc-kpi__value { transform: scale(1.05); }
+.lc-kpi__hint{ font-size:.8rem; color:#9ca3af; }
+
+/* ---------- Donut (pure CSS, no JS) ---------- */
+.lc-donut{
+  --e: 0; --m: 0; --h: 0;
+  --e2: calc(var(--e) * 1%);                 /* easy end */
+  --m2: calc((var(--e) + var(--m)) * 1%);     /* medium end */
+  width: 180px; height: 180px; border-radius: 50%;
+  margin: 8px auto 10px;
+  background:
+    conic-gradient(var(--easy) 0 var(--e2),
+                   var(--medium) var(--e2) var(--m2),
+                   var(--hard) var(--m2) 100%);
+  position: relative;
+  box-shadow: inset 0 0 0 12px rgba(255,255,255,.1), 0 8px 24px rgba(0,0,0,.1);
+  animation: donut-glow 2s ease-in-out infinite alternate;
+}
+@keyframes donut-glow {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.1); }
+}
+.lc-donut__center{
+  position:absolute; inset: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 50%;
+  display:grid; place-items:center; text-align:center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* ---------- Stacked progress (E/M/H) ---------- */
+.lc-progress{
+  display:flex; height:12px; border-radius: 999px; overflow:hidden;
+  background: linear-gradient(90deg, #eef2ff 0%, #f3f4f6 100%);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.04);
+  transition: all .3s ease;
+}
+.lc-progress:hover {
+  height: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.lc-progress__bar{
+  height:100%;
+  transition: width .8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.lc-progress__bar--easy{   background: linear-gradient(90deg, var(--easy) 0%, #059669 100%); }
+.lc-progress__bar--medium{ background: linear-gradient(90deg, var(--medium) 0%, #d97706 100%); }
+.lc-progress__bar--hard{   background: linear-gradient(90deg, var(--hard) 0%, #dc2626 100%); }
+
+.lc-dot{
+  display:inline-block; width:12px; height:12px; border-radius:999px; margin-right:8px; vertical-align:middle;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+.lc-dot--easy{ background: var(--easy); }
+.lc-dot--medium{ background: var(--medium); }
+.lc-dot--hard{ background: var(--hard); }
+
+/* ---------- Mini tiles ---------- */
+.lc-mini{
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border-radius:16px; padding:18px;
+  border:1px solid rgba(17,24,39,.08);
+  transition: all .25s ease;
+  box-shadow: 0 4px 12px rgba(17,24,39,.04);
+}
+.lc-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(17,24,39,.08);
+}
+.lc-mini__icon{
+  font-size:20px;
+  transition: transform .25s ease;
+}
+.lc-mini:hover .lc-mini__icon {
+  transform: scale(1.1);
+}
+.lc-mini__title{ font-size:.9rem; color:#6b7280; margin-top:8px; font-weight:500; }
+.lc-mini__value{
+  font-size:1.8rem; font-weight:800; line-height:1; margin:4px 0;
+  transition: transform .25s ease;
+}
+.lc-mini:hover .lc-mini__value { transform: scale(1.05); }
+.lc-mini__hint{ font-size:.75rem; color:#9ca3af; font-weight:500; }
+
+/* ---------- List ---------- */
+.lc-list{ margin:0; padding:0; }
+.lc-list__item{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 0; border-bottom:1px dashed rgba(17,24,39,.06);
+  transition: all .2s ease;
+}
+.lc-list__item:hover {
+  background: rgba(99, 102, 241, 0.02);
+  border-radius: 8px;
+  margin: 0 -8px;
+  padding: 12px 8px;
+}
+.lc-list__item:last-child{ border-bottom:0; }
+.text-truncate{
+  max-width: 70%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+  transition: max-width .25s ease;
+}
+.lc-list__item:hover .text-truncate { max-width: 85%; }
+</style>
