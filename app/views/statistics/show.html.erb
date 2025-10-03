@@ -2,115 +2,125 @@
   <%= render 'shared/navbar' %>
 
   <main class="main-content">
-    <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">LeetCode Statistics</h1>
-        <p class="page-subtitle">Track your coding progress</p>
+    <div class="container my-4">
+      <div class="row">
+        <div class="col">
+          <h1 class="display-6 fw-bold mb-3">LeetCode Statistics</h1>
+          <p class="text-muted">Track your coding progress</p>
+        </div>
       </div>
 
       <% if @error_message %>
-        <div style="background: #f8d7da; color: #721c24; padding: 1rem; border: 1px solid #f5c6cb; border-radius: 8px; margin-bottom: 1.5rem;">
+        <div class="alert alert-danger">
           <%= @error_message %>
         </div>
       <% end %>
 
-      <div class="content-area">
-        <!-- Statistics Overview -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
-            <div style="font-size: 2rem; color: #007bff; margin-bottom: 0.5rem;">🏆</div>
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #333;"><%= @stats[:total] %></h3>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Total Solved</p>
-          </div>
-
-          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
-            <div style="font-size: 2rem; color: #17a2b8; margin-bottom: 0.5rem;">📅</div>
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #333;"><%= @recent_stats[:week] %></h3>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Last 7 Days</p>
-          </div>
-
-          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
-            <div style="font-size: 2rem; color: #28a745; margin-bottom: 0.5rem;">📈</div>
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #333;"><%= @recent_stats[:month] %></h3>
-            <p style="margin: 0; color: #666; font-size: 0.9rem;">Last 30 Days</p>
+      <!-- Statistics Overview -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <div class="display-6 text-primary mb-2">🏆</div>
+              <div class="display-4 fw-bold"><%= @stats[:total] %></div>
+              <p class="text-muted">Total Solved</p>
+            </div>
           </div>
         </div>
 
-        <!-- Difficulty Breakdown -->
-        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem;">
-          <h3 style="margin-bottom: 1.5rem; color: #333; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem;">📊 Difficulty Breakdown</h3>
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <div class="display-6 text-info mb-2">📅</div>
+              <div class="display-4 fw-bold"><%= @recent_stats[:week] %></div>
+              <p class="text-muted">Last 7 Days</p>
+            </div>
+          </div>
+        </div>
 
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <div class="display-6 text-success mb-2">📈</div>
+              <div class="display-4 fw-bold"><%= @recent_stats[:month] %></div>
+              <p class="text-muted">Last 30 Days</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Difficulty Breakdown -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header">
+          <h3 class="card-title mb-0">📊 Difficulty Breakdown</h3>
+        </div>
+        <div class="card-body">
           <% if @stats[:total] > 0 %>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-              <!-- Easy -->
-              <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
-                <div style="font-size: 1.5rem; color: #28a745; margin-bottom: 0.5rem;">🟢</div>
-                <h4 style="margin: 0 0 0.5rem 0; color: #28a745;"><%= @stats[:easy] %></h4>
-                <p style="margin: 0; color: #666; font-size: 0.9rem;">Easy</p>
-                <small style="color: #999;"><%= ((@stats[:easy].to_f / @stats[:total]) * 100).round(1) %>%</small>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold">Easy</span>
+                <span class="badge bg-success"><%= @stats[:easy] %></span>
               </div>
-
-              <!-- Medium -->
-              <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
-                <div style="font-size: 1.5rem; color: #ffc107; margin-bottom: 0.5rem;">🟡</div>
-                <h4 style="margin: 0 0 0.5rem 0; color: #ffc107;"><%= @stats[:medium] %></h4>
-                <p style="margin: 0; color: #666; font-size: 0.9rem;">Medium</p>
-                <small style="color: #999;"><%= ((@stats[:medium].to_f / @stats[:total]) * 100).round(1) %>%</small>
+              <div class="progress mb-3">
+                <div class="progress-bar bg-success" style="width: <%= ((@stats[:easy].to_f / @stats[:total]) * 100).round(1) %>%"></div>
               </div>
+            </div>
 
-              <!-- Hard -->
-              <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
-                <div style="font-size: 1.5rem; color: #dc3545; margin-bottom: 0.5rem;">🔴</div>
-                <h4 style="margin: 0 0 0.5rem 0; color: #dc3545;"><%= @stats[:hard] %></h4>
-                <p style="margin: 0; color: #666; font-size: 0.9rem;">Hard</p>
-                <small style="color: #999;"><%= ((@stats[:hard].to_f / @stats[:total]) * 100).round(1) %>%</small>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold">Medium</span>
+                <span class="badge bg-warning"><%= @stats[:medium] %></span>
+              </div>
+              <div class="progress mb-3">
+                <div class="progress-bar bg-warning" style="width: <%= ((@stats[:medium].to_f / @stats[:total]) * 100).round(1) %>%"></div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold">Hard</span>
+                <span class="badge bg-danger"><%= @stats[:hard] %></span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-danger" style="width: <%= ((@stats[:hard].to_f / @stats[:total]) * 100).round(1) %>%"></div>
               </div>
             </div>
           <% else %>
-            <div style="text-align: center; padding: 3rem; color: #666;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
-              <p>No difficulty data available</p>
-            </div>
+            <p class="text-muted text-center py-4">No difficulty data available</p>
           <% end %>
         </div>
+      </div>
 
-        <!-- Activity Summary -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h4 style="margin-bottom: 1rem; color: #333;">🔥 Weekly Activity</h4>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="font-size: 2rem; color: #17a2b8;">📅</div>
-              <div>
-                <div style="font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 0.25rem;">
-                  <%= @recent_stats[:week] %> problems
-                </div>
-                <small style="color: #666;">
-                  <% if @recent_stats[:week] > 0 %>
-                    Keep up the momentum!
-                  <% else %>
-                    No activity this week
-                  <% end %>
-                </small>
-              </div>
+      <!-- Activity Summary -->
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h4 class="card-title">🔥 Weekly Activity</h4>
+              <div class="display-6 fw-bold mb-2"><%= @recent_stats[:week] %> problems</div>
+              <p class="text-muted mb-0">
+                <% if @recent_stats[:week] > 0 %>
+                  Keep up the momentum!
+                <% else %>
+                  No activity this week
+                <% end %>
+              </p>
             </div>
           </div>
+        </div>
 
-          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h4 style="margin-bottom: 1rem; color: #333;">🚀 Monthly Progress</h4>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="font-size: 2rem; color: #28a745;">📈</div>
-              <div>
-                <div style="font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 0.25rem;">
-                  <%= @recent_stats[:month] %> problems
-                </div>
-                <small style="color: #666;">
-                  <% if @recent_stats[:month] > 0 %>
-                    Great progress this month!
-                  <% else %>
-                    No activity this month
-                  <% end %>
-                </small>
-              </div>
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h4 class="card-title">🚀 Monthly Progress</h4>
+              <div class="display-6 fw-bold mb-2"><%= @recent_stats[:month] %> problems</div>
+              <p class="text-muted mb-0">
+                <% if @recent_stats[:month] > 0 %>
+                  Great progress this month!
+                <% else %>
+                  No activity this month
+                <% end %>
+              </p>
             </div>
           </div>
         </div>
@@ -119,305 +129,3 @@
   </main>
 </div>
 
-<style>
-/* ---------- Theme tokens ---------- */
-:root{
-  --lc-bg-hero: linear-gradient(135deg,#667eea 0%,#764ba2 45%,#f093fb 100%);
-  --lc-bg-pattern: radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                   radial-gradient(circle at 75% 75%, rgba(255, 177, 153, 0.1) 0%, transparent 50%);
-  --lc-card-bg: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-  --lc-card-shadow: 0 20px 35px rgba(16,24,40,.08), 0 10px 20px rgba(16,24,40,.04);
-  --lc-radius: 20px;
-  --lc-border: 1px solid rgba(99, 102, 241, 0.1);
-
-  --easy:   #10b981;  /* emerald-500 */
-  --medium: #f59e0b;  /* amber-500 */
-  --hard:   #ef4444;  /* red-500 */
-  --easy-light: rgba(16, 185, 129, 0.15);
-  --medium-light: rgba(245, 158, 11, 0.15);
-  --hard-light: rgba(239, 68, 68, 0.15);
-}
-
-/* ---------- Layout ---------- */
-.lc-main{
-  padding-bottom: 48px; margin-left: 260px; padding: 2rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  animation: fadeIn 0.8s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.lc-main > * {
-  animation: slideUp 0.6s ease-out backwards;
-}
-
-.lc-main > *:nth-child(1) { animation-delay: 0.1s; }
-.lc-main > *:nth-child(2) { animation-delay: 0.2s; }
-.lc-main > *:nth-child(3) { animation-delay: 0.3s; }
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .lc-main{ margin-left: 0; padding: 1rem; }
-}
-.lc-hero{
-  background: var(--lc-bg-hero);
-  border-radius: 0 0 24px 24px;
-  padding: 28px 0 36px;
-  box-shadow: inset 0 -1px 0 rgba(255,255,255,.15);
-  position: relative;
-  overflow: hidden;
-}
-.lc-hero::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--lc-bg-pattern);
-  opacity: 0.3;
-}
-.lc-hero > .container {
-  position: relative;
-  z-index: 1;
-}
-
-.lc-hero__title-main {
-  font-size: 3rem;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #f3e8ff 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 4px rgba(0,0,0,.1), 0 4px 8px rgba(0,0,0,.05);
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
-  animation: title-shine 3s ease-in-out infinite alternate;
-}
-
-.lc-hero__title-subtitle {
-  font-size: 1.25rem;
-  font-weight: 500;
-  background: linear-gradient(135deg, rgba(255,255,255,.9) 0%, rgba(186,230,253,.8) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 2px rgba(0,0,0,.05);
-  opacity: 0.85;
-  letter-spacing: 0.01em;
-}
-
-@keyframes title-shine {
-  from {
-    filter: drop-shadow(0 0 5px rgba(255,255,255,.3));
-  }
-  to {
-    filter: drop-shadow(0 0 15px rgba(255,255,255,.6)) drop-shadow(0 0 30px rgba(102, 126, 234, .2));
-  }
-}
-
-.lc-hero__username {
-  font-size: 1.1rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, rgba(255,255,255,.95) 0%, rgba(186,230,253,.85) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 2px rgba(0,0,0,.05);
-  opacity: 0.9;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 50px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,.2);
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-}
-
-/* Responsive hero title */
-@media (max-width: 768px) {
-  .lc-hero__title-main {
-    font-size: 2.5rem;
-  }
-  .lc-hero__title-subtitle {
-    font-size: 1.1rem;
-  }
-}
-
-/* ---------- Cards ---------- */
-.lc-card{
-  background: var(--lc-card-bg);
-  border: var(--lc-border);
-  border-radius: var(--lc-radius);
-  box-shadow: var(--lc-card-shadow);
-  padding: 20px;
-  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-.lc-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-  opacity: 0;
-  transition: opacity .25s ease;
-  border-radius: inherit;
-}
-.lc-card:hover::before { opacity: 1; }
-.lc-card:hover{
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 25px 50px rgba(16,24,40,.12), 0 15px 25px rgba(16,24,40,.06);
-}
-
-.lc-card__header{
-  font-weight: 600;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  color: #1f2937;
-}
-
-/* ---------- KPI ---------- */
-.lc-kpi{
-  display:flex; gap:16px; align-items:center; padding:20px;
-  border-radius: var(--lc-radius);
-  transition: all .25s ease;
-}
-.lc-kpi:hover {
-  background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.8));
-}
-.lc-kpi__icon{
-  width:64px; height:64px; border-radius:16px;
-  display:grid; place-items:center; font-size:24px;
-  transition: transform .25s ease;
-  box-shadow: 0 8px 16px rgba(0,0,0,.1);
-}
-.lc-kpi:hover .lc-kpi__icon {
-  transform: scale(1.1) rotate(5deg);
-}
-.bg-gradient-primary-subtle{ background: linear-gradient(135deg,#e8eeff,#edf0ff); color:#4f46e5; }
-.bg-gradient-info-subtle{    background: linear-gradient(135deg,#e6f6ff,#eaf7ff); color:#0ea5e9; }
-.bg-gradient-success-subtle{ background: linear-gradient(135deg,#e8fff1,#effef5); color:#22c55e; }
-
-.lc-kpi__body{ display:flex; flex-direction:column; }
-.lc-kpi__label{
-  font-size:.9rem; color:#6b7280; font-weight:500;
-  transition: color .25s ease;
-}
-.lc-kpi:hover .lc-kpi__label { color: #374151; }
-.lc-kpi__value{
-  font-size:2rem; line-height:1.1; font-weight:800; color:#1f2937;
-  transition: all .25s ease;
-}
-.lc-kpi:hover .lc-kpi__value { transform: scale(1.05); }
-.lc-kpi__hint{ font-size:.8rem; color:#9ca3af; }
-
-/* ---------- Donut (pure CSS, no JS) ---------- */
-.lc-donut{
-  --e: 0; --m: 0; --h: 0;
-  --e2: calc(var(--e) * 1%);                 /* easy end */
-  --m2: calc((var(--e) + var(--m)) * 1%);     /* medium end */
-  width: 180px; height: 180px; border-radius: 50%;
-  margin: 8px auto 10px;
-  background:
-    conic-gradient(var(--easy) 0 var(--e2),
-                   var(--medium) var(--e2) var(--m2),
-                   var(--hard) var(--m2) 100%);
-  position: relative;
-  box-shadow: inset 0 0 0 12px rgba(255,255,255,.1), 0 8px 24px rgba(0,0,0,.1);
-  animation: donut-glow 2s ease-in-out infinite alternate;
-}
-@keyframes donut-glow {
-  from { filter: brightness(1); }
-  to { filter: brightness(1.1); }
-}
-.lc-donut__center{
-  position:absolute; inset: 24px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border-radius: 50%;
-  display:grid; place-items:center; text-align:center;
-  box-shadow: 0 4px 16px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.5);
-}
-
-/* ---------- Stacked progress (E/M/H) ---------- */
-.lc-progress{
-  display:flex; height:12px; border-radius: 999px; overflow:hidden;
-  background: linear-gradient(90deg, #eef2ff 0%, #f3f4f6 100%);
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.04);
-  transition: all .3s ease;
-}
-.lc-progress:hover {
-  height: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
-}
-.lc-progress__bar{
-  height:100%;
-  transition: width .8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.lc-progress__bar--easy{   background: linear-gradient(90deg, var(--easy) 0%, #059669 100%); }
-.lc-progress__bar--medium{ background: linear-gradient(90deg, var(--medium) 0%, #d97706 100%); }
-.lc-progress__bar--hard{   background: linear-gradient(90deg, var(--hard) 0%, #dc2626 100%); }
-
-.lc-dot{
-  display:inline-block; width:12px; height:12px; border-radius:999px; margin-right:8px; vertical-align:middle;
-  box-shadow: 0 2px 4px rgba(0,0,0,.1);
-}
-.lc-dot--easy{ background: var(--easy); }
-.lc-dot--medium{ background: var(--medium); }
-.lc-dot--hard{ background: var(--hard); }
-
-/* ---------- Mini tiles ---------- */
-.lc-mini{
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  border-radius:16px; padding:18px;
-  border:1px solid rgba(17,24,39,.08);
-  transition: all .25s ease;
-  box-shadow: 0 4px 12px rgba(17,24,39,.04);
-}
-.lc-mini:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(17,24,39,.08);
-}
-.lc-mini__icon{
-  font-size:20px;
-  transition: transform .25s ease;
-}
-.lc-mini:hover .lc-mini__icon {
-  transform: scale(1.1);
-}
-.lc-mini__title{ font-size:.9rem; color:#6b7280; margin-top:8px; font-weight:500; }
-.lc-mini__value{
-  font-size:1.8rem; font-weight:800; line-height:1; margin:4px 0;
-  transition: transform .25s ease;
-}
-.lc-mini:hover .lc-mini__value { transform: scale(1.05); }
-.lc-mini__hint{ font-size:.75rem; color:#9ca3af; font-weight:500; }
-
-/* ---------- List ---------- */
-.lc-list{ margin:0; padding:0; }
-.lc-list__item{
-  display:flex; align-items:center; gap:10px;
-  padding:12px 0; border-bottom:1px dashed rgba(17,24,39,.06);
-  transition: all .2s ease;
-}
-.lc-list__item:hover {
-  background: rgba(99, 102, 241, 0.02);
-  border-radius: 8px;
-  margin: 0 -8px;
-  padding: 12px 8px;
-}
-.lc-list__item:last-child{ border-bottom:0; }
-.text-truncate{
-  max-width: 70%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
-  transition: max-width .25s ease;
-}
-.lc-list__item:hover .text-truncate { max-width: 85%; }
-</style>
