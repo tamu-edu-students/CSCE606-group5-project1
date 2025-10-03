@@ -9,7 +9,7 @@
       </div>
       <% if @stats[:weekly_solved_count] > 0 %>
       <div class="content-area">
-        <div class="stats-grid">
+        <div class="stats-grid" id="weekly-summary">
           <div class="stat-card">
             <h3 class="stat-title">Problems Solved This Week</h3>
             <p class="stat-value"><%= @stats[:weekly_solved_count] %></p>

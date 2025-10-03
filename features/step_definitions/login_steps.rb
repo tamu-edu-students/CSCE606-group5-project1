@@ -1,19 +1,34 @@
-# Creates a User record in the test database.
-Given('a registered student with the email {string} and password {string} exists') do |email, _password|
+# This step prepares the OmniAuth mock. It ensures that when the "Sign in" button
+# is clicked, the application will receive a successful callback for this user.
+Given('a student with the email {string} can be authenticated by Google') do |email|
+  # This ensures a user record exists to be found or updated by the SessionsController.
   User.create!(
     email: email,
     first_name: 'Test',
     last_name: 'User',
     netid: email.split('@').first
   )
+
+  # This mocks the data that Google would send back to your application after a successful login.
+  OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
+    provider: 'google_oauth2',
+    uid: '123545',
+    info: {
+      email: email,
+      first_name: 'Test',
+      last_name: 'User'
+    },
+    credentials: {
+      token: 'mock_token',
+      refresh_token: 'mock_refresh_token'
+    }
+  })
 end
 
-# Navigates to the root path, which is handled by the LoginController.
 Given('I am on the login page') do
   visit root_path
 end
 
-# After a successful login, the SessionsController redirects to the dashboard.
 Then('I should be redirected to the dashboard') do
   expect(page).to have_current_path(dashboard_path)
 end

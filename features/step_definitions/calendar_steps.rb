@@ -2,10 +2,6 @@ Given('I am on the new event page') do
   visit new_event_path # TODO: This path needs to be created in routes.rb
 end
 
-When('I click the {string} button') do |button_text|
-  click_button button_text
-end
-
 # This step assumes a successful creation redirects and shows a flash notice.
 Then('I should see a confirmation message {string}') do |message|
   expect(page).to have_content(message)
