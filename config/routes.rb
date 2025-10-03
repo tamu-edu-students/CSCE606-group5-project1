@@ -1,4 +1,3 @@
-# config/routes.rb
 Rails.application.routes.draw do
   # --- Root Page ---
   # Sets the application"s home page to the login screen.
@@ -17,6 +16,7 @@ Rails.application.routes.draw do
   resources :users
   get "/profile", to: "users#profile", as: :profile
   resources :leet_code_entries, only: [ :index, :new, :create ]
+  resource :statistics, only: [ :show ], controller: "statistics"
 
   # --- Static Pages ---
   get "/dashboard", to: "dashboard#show"
@@ -38,4 +38,5 @@ Rails.application.routes.draw do
 
   # --- Health Check ---
   get "up" => "rails/health#show", as: :rails_health_check
+  get "favicon.ico", to: proc { [ 204, {}, [] ] }
 end
