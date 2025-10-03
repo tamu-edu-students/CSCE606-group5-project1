@@ -1,178 +1,120 @@
-<div class="lc-app">
+<div class="app-container">
   <%= render 'shared/navbar' %>
 
-  <main class="lc-main">
-    <!-- Hero -->
-    <section class="lc-hero mb-4">
-      <div class="container">
-        <div class="d-flex flex-column flex-md-row align-items-md-end align-items-start gap-3">
-      <div class="lc-hero__title">
-        <h1 class="lc-hero__title-main mb-3">LeetCode Statistics</h1>
-        <p class="lc-hero__title-subtitle mb-0">Track your progress & highlights</p>
+  <main class="main-content">
+    <div class="page">
+      <div class="page-header">
+        <h1 class="page-title">LeetCode Statistics</h1>
+        <p class="page-subtitle">Track your coding progress</p>
       </div>
-          <div class="ms-md-auto">
-            <% if current_user&.leetcode_username.present? %>
-              <div class="lc-hero__username">
-                <i class="fas fa-user me-1"></i>
-                <%= current_user.leetcode_username %>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="container">
 
       <% if @error_message %>
-        <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
-          <i class="fas fa-exclamation-triangle me-2"></i><%= @error_message %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div style="background: #f8d7da; color: #721c24; padding: 1rem; border: 1px solid #f5c6cb; border-radius: 8px; margin-bottom: 1.5rem;">
+          <%= @error_message %>
         </div>
       <% end %>
 
-      <% total = (@stats[:total] || 0).to_i
-         easy  = (@stats[:easy]  || 0).to_i
-         medium= (@stats[:medium]|| 0).to_i
-         hard  = (@stats[:hard]  || 0).to_i
-         e_pct = total.zero? ? 0 : ((easy.to_f  / total) * 100).round(1)
-         m_pct = total.zero? ? 0 : ((medium.to_f/ total) * 100).round(1)
-         h_pct = total.zero? ? 0 : ((hard.to_f  / total) * 100).round(1)
-      %>
+      <div class="content-area">
+        <!-- Statistics Overview -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+            <div style="font-size: 2rem; color: #007bff; margin-bottom: 0.5rem;">🏆</div>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #333;"><%= @stats[:total] %></h3>
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Total Solved</p>
+          </div>
 
-      <!-- KPI cards -->
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-md-4">
-          <div class="lc-card lc-kpi h-100">
-            <div class="lc-kpi__icon bg-gradient-primary-subtle">
-              <i class="fas fa-trophy"></i>
-            </div>
-            <div class="lc-kpi__body">
-              <span class="lc-kpi__label">Total Solved</span>
-              <span class="lc-kpi__value"><%= total %></span>
-              <span class="lc-kpi__hint">problems completed</span>
-            </div>
+          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+            <div style="font-size: 2rem; color: #17a2b8; margin-bottom: 0.5rem;">📅</div>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #333;"><%= @recent_stats[:week] %></h3>
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Last 7 Days</p>
+          </div>
+
+          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+            <div style="font-size: 2rem; color: #28a745; margin-bottom: 0.5rem;">📈</div>
+            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #333;"><%= @recent_stats[:month] %></h3>
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">Last 30 Days</p>
           </div>
         </div>
-        <div class="col-12 col-md-4">
-          <div class="lc-card lc-kpi h-100">
-            <div class="lc-kpi__icon bg-gradient-info-subtle">
-              <i class="fas fa-calendar-week"></i>
-            </div>
-            <div class="lc-kpi__body">
-              <span class="lc-kpi__label">Last 7 Days</span>
-              <span class="lc-kpi__value"><%= @recent_stats[:week] %></span>
-              <span class="lc-kpi__hint">problems solved</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="lc-card lc-kpi h-100">
-            <div class="lc-kpi__icon bg-gradient-success-subtle">
-              <i class="fas fa-calendar-alt"></i>
-            </div>
-            <div class="lc-kpi__body">
-              <span class="lc-kpi__label">Last 30 Days</span>
-              <span class="lc-kpi__value"><%= @recent_stats[:month] %></span>
-              <span class="lc-kpi__hint">problems solved</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Difficulty + Activity -->
-      <div class="row g-3">
-        <div class="col-12 col-lg-6">
-          <div class="lc-card h-100">
-            <div class="lc-card__header">
-              <i class="fas fa-chart-pie me-2"></i>Difficulty Breakdown
-            </div>
+        <!-- Difficulty Breakdown -->
+        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+          <h3 style="margin-bottom: 1.5rem; color: #333; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem;">📊 Difficulty Breakdown</h3>
 
-            <% if total > 0 %>
-              <div class="lc-donut mb-3"
-                   style="--e:<%= e_pct %>; --m:<%= m_pct %>; --h:<%= h_pct %>">
-                <div class="lc-donut__center">
-                  <div class="fw-semibold">Total</div>
-                  <div class="fs-4"><%= total %></div>
+          <% if @stats[:total] > 0 %>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+              <!-- Easy -->
+              <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                <div style="font-size: 1.5rem; color: #28a745; margin-bottom: 0.5rem;">🟢</div>
+                <h4 style="margin: 0 0 0.5rem 0; color: #28a745;"><%= @stats[:easy] %></h4>
+                <p style="margin: 0; color: #666; font-size: 0.9rem;">Easy</p>
+                <small style="color: #999;"><%= ((@stats[:easy].to_f / @stats[:total]) * 100).round(1) %>%</small>
+              </div>
+
+              <!-- Medium -->
+              <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                <div style="font-size: 1.5rem; color: #ffc107; margin-bottom: 0.5rem;">🟡</div>
+                <h4 style="margin: 0 0 0.5rem 0; color: #ffc107;"><%= @stats[:medium] %></h4>
+                <p style="margin: 0; color: #666; font-size: 0.9rem;">Medium</p>
+                <small style="color: #999;"><%= ((@stats[:medium].to_f / @stats[:total]) * 100).round(1) %>%</small>
+              </div>
+
+              <!-- Hard -->
+              <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                <div style="font-size: 1.5rem; color: #dc3545; margin-bottom: 0.5rem;">🔴</div>
+                <h4 style="margin: 0 0 0.5rem 0; color: #dc3545;"><%= @stats[:hard] %></h4>
+                <p style="margin: 0; color: #666; font-size: 0.9rem;">Hard</p>
+                <small style="color: #999;"><%= ((@stats[:hard].to_f / @stats[:total]) * 100).round(1) %>%</small>
+              </div>
+            </div>
+          <% else %>
+            <div style="text-align: center; padding: 3rem; color: #666;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+              <p>No difficulty data available</p>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Activity Summary -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h4 style="margin-bottom: 1rem; color: #333;">🔥 Weekly Activity</h4>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="font-size: 2rem; color: #17a2b8;">📅</div>
+              <div>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 0.25rem;">
+                  <%= @recent_stats[:week] %> problems
                 </div>
-              </div>
-              <div class="row g-3">
-                <div class="col-12">
-                  <div class="lc-progress">
-                    <div class="lc-progress__bar lc-progress__bar--easy" style="width: <%= e_pct %>%"></div>
-                    <div class="lc-progress__bar lc-progress__bar--medium" style="width: <%= m_pct %>%"></div>
-                    <div class="lc-progress__bar lc-progress__bar--hard" style="width: <%= h_pct %>%"></div>
-                  </div>
-                  <div class="d-flex justify-content-between mt-2 small text-muted">
-                    <span><span class="lc-dot lc-dot--easy"></span> Easy <strong class="text-body ms-1"><%= easy %></strong> (<%= e_pct %>%)</span>
-                    <span><span class="lc-dot lc-dot--medium"></span> Medium <strong class="text-body ms-1"><%= medium %></strong> (<%= m_pct %>%)</span>
-                    <span><span class="lc-dot lc-dot--hard"></span> Hard <strong class="text-body ms-1"><%= hard %></strong> (<%= h_pct %>%)</span>
-                  </div>
-                </div>
-              </div>
-            <% else %>
-              <div class="text-center text-muted py-5">
-                <i class="fas fa-chart-pie fa-2x mb-2"></i>
-                <p class="mb-0">No difficulty data yet</p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-6">
-          <div class="lc-card h-100">
-            <div class="lc-card__header">
-              <i class="fas fa-bolt me-2"></i>Activity Summary
-            </div>
-            <div class="row g-3">
-              <div class="col-6">
-                <div class="lc-mini h-100">
-                  <div class="lc-mini__icon text-info"><i class="fas fa-fire"></i></div>
-                  <div class="lc-mini__title">Weekly</div>
+                <small style="color: #666;">
                   <% if @recent_stats[:week] > 0 %>
-                    <div class="lc-mini__value text-info"><%= @recent_stats[:week] %></div>
-                    <div class="lc-mini__hint">Keep it up!</div>
+                    Keep up the momentum!
                   <% else %>
-                    <div class="lc-mini__value text-muted">0</div>
-                    <div class="lc-mini__hint text-muted">No activity</div>
+                    No activity this week
                   <% end %>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="lc-mini h-100">
-                  <div class="lc-mini__icon text-success"><i class="fas fa-rocket"></i></div>
-                  <div class="lc-mini__title">Monthly</div>
-                  <% if @recent_stats[:month] > 0 %>
-                    <div class="lc-mini__value text-success"><%= @recent_stats[:month] %></div>
-                    <div class="lc-mini__hint">Great progress</div>
-                  <% else %>
-                    <div class="lc-mini__value text-muted">0</div>
-                    <div class="lc-mini__hint text-muted">No activity</div>
-                  <% end %>
-                </div>
+                </small>
               </div>
             </div>
+          </div>
 
-            <%# 可选：最近通过题目列表（精简） %>
-            <% if defined?(@accepted) && @accepted.present? %>
-              <hr class="my-3">
-              <div class="small text-muted mb-2">Recent Accepted</div>
-              <ul class="list-unstyled mb-0 lc-list">
-                <% @accepted.first(6).each do |s| %>
-                  <li class="lc-list__item">
-                    <i class="far fa-check-circle me-2 text-success"></i>
-                    <span class="text-truncate"><%= s[:title] || s['title'] %></span>
-                    <% if (t = (s[:time] || s['timestamp'])) %>
-                      <span class="text-muted ms-auto"><%= Time.at(t).strftime("%b %d") rescue "" %></span>
-                    <% end %>
-                  </li>
-                <% end %>
-              </ul>
-            <% end %>
+          <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h4 style="margin-bottom: 1rem; color: #333;">🚀 Monthly Progress</h4>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="font-size: 2rem; color: #28a745;">📈</div>
+              <div>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 0.25rem;">
+                  <%= @recent_stats[:month] %> problems
+                </div>
+                <small style="color: #666;">
+                  <% if @recent_stats[:month] > 0 %>
+                    Great progress this month!
+                  <% else %>
+                    No activity this month
+                  <% end %>
+                </small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </main>
 </div>
