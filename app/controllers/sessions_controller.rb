@@ -1,5 +1,8 @@
 class SessionsController < ApplicationController
   skip_before_action :authenticate_user!
+  def debug
+  render plain: session.to_hash.inspect
+  end
   def create
     auth = request.env["omniauth.auth"] || {}
     return redirect_to(root_path, alert: "No auth returned from Google") if auth.blank?
@@ -30,8 +33,13 @@ class SessionsController < ApplicationController
     session[:user_id] = user.id
     session[:user_email] = auth["info"]["email"]
     session[:user_first_name] = user.first_name
+
     session[:google_token] = auth["credentials"]["token"]
+    if auth["credentials"]["refresh_token"].present?
     session[:google_refresh_token] = auth["credentials"]["refresh_token"]
+    end
+    session[:google_token_expires_at] = Time.at(auth["credentials"]["expires_at"]) if auth["credentials"]["expires_at"]
+
     Rails.logger.info("Google token: #{session[:google_token]}")
     Rails.logger.info("Google refresh token: #{session[:google_refresh_token]}")
     redirect_to dashboard_path, notice: "Signed in as #{email}"
