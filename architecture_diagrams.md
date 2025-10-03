@@ -27,7 +27,6 @@ flowchart TD
 
 ```mermaid
 erDiagram
-    users ||--o{ events : "has many"
     users ||--o{ leet_code_sessions : "has many"
     leet_code_sessions ||--o{ leet_code_session_problems : "has many"
     leet_code_problems ||--o{ leet_code_session_problems : "has many"
@@ -47,26 +46,9 @@ erDiagram
         text preferred_topics
         boolean active
         string leetcode_username
-    }
-
-    events {
-        bigint id PK
-        string summary
-        datetime start_time
-        datetime end_time
-        bigint user_id FK
-        datetime created_at
-        datetime updated_at
-    }
-
-    leet_code_entries {
-        bigint id PK
-        integer problem_number
-        string problem_title
-        integer difficulty
-        date solved_on
-        datetime created_at
-        datetime updated_at
+        string google_access_token
+        string google_refresh_token
+        datetime google_token_expires_at 
     }
 
     leet_code_problems {
