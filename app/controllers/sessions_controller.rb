@@ -39,7 +39,7 @@ class SessionsController < ApplicationController
     session[:google_refresh_token] = auth["credentials"]["refresh_token"]
     end
     session[:google_token_expires_at] = Time.at(auth["credentials"]["expires_at"]) if auth["credentials"]["expires_at"]
-    
+
     Rails.logger.info("Google token: #{session[:google_token]}")
     Rails.logger.info("Google refresh token: #{session[:google_refresh_token]}")
     redirect_to dashboard_path, notice: "Signed in as #{email}"

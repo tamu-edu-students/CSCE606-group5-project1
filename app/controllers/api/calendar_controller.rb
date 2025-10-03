@@ -48,11 +48,11 @@ module Api
     # ---------- CREATE ----------
     def create
       service = calendar_service_or_unauthorized or return
-      all_day = ActiveModel::Type::Boolean.new.cast(params.dig(:event,:all_day))
+      all_day = ActiveModel::Type::Boolean.new.cast(params.dig(:event, :all_day))
 
       # Set timezone
-      Time.zone = 'America/Chicago'
-      
+      Time.zone = "America/Chicago"
+
       # Default to current date/time if not provided
       current_time = Time.current
       current_date = current_time.to_date.to_s  # Always get current date
@@ -62,28 +62,28 @@ module Api
       if all_day
         start_et = Google::Apis::CalendarV3::EventDateTime.new(
           date: start_date,
-          time_zone: 'America/Chicago'
+          time_zone: "America/Chicago"
         )
         end_et = Google::Apis::CalendarV3::EventDateTime.new(
           date: Date.parse(start_date).next_day.to_s,
-          time_zone: 'America/Chicago'
+          time_zone: "America/Chicago"
         )
       else
         start_datetime = Time.zone.parse("#{start_date} #{start_time}").iso8601
         start_et = Google::Apis::CalendarV3::EventDateTime.new(
           date_time: start_datetime,
-          time_zone: 'America/Chicago'
+          time_zone: "America/Chicago"
         )
 
         end_time = params.dig(:event, :end_time)
         end_datetime = if end_time.present?
                         Time.zone.parse("#{start_date} #{end_time}").iso8601
-                      else
+        else
                         (Time.zone.parse(start_datetime) + 30.minutes).iso8601
-                      end
+        end
         end_et = Google::Apis::CalendarV3::EventDateTime.new(
           date_time: end_datetime,
-          time_zone: 'America/Chicago'
+          time_zone: "America/Chicago"
         )
       end
       ev = Google::Apis::CalendarV3::Event.new(
@@ -95,7 +95,7 @@ module Api
       )
 
       begin
-        created = service.insert_event('primary', ev)
+        created = service.insert_event("primary", ev)
         respond_to do |format|
           format.html { redirect_to calendar_path, notice: "Event successfully created." }
           format.json { render json: serialize_event(created), status: :created }
@@ -116,61 +116,61 @@ module Api
       all_day = ActiveModel::Type::Boolean.new.cast(params[:all_day])
 
       # Get existing event first
-      event = service.get_event('primary', params[:id])
-      
+      event = service.get_event("primary", params[:id])
+
       # Create patch object with only the fields that are being updated
       patch = Google::Apis::CalendarV3::Event.new
-      
+
       # Update basic fields if they are present in params
       patch.summary = params[:summary] if params[:summary].present?
       patch.description = params[:description] if params[:description].present?
       patch.location = params[:location] if params[:location].present?
-      
+
       # Handle start and end times based on all_day flag
       if params[:start_time].present? || params[:start_date].present?
-        Time.zone = 'America/Chicago'
-        
+        Time.zone = "America/Chicago"
+
         if all_day
           start_date = params[:start_date].presence || params[:start_time]
           patch.start = Google::Apis::CalendarV3::EventDateTime.new(
             date: Date.parse(start_date).to_s,
-            time_zone: 'America/Chicago'
+            time_zone: "America/Chicago"
           )
           patch.end = Google::Apis::CalendarV3::EventDateTime.new(
             date: Date.parse(start_date).next_day.to_s,
-            time_zone: 'America/Chicago'
+            time_zone: "America/Chicago"
           )
         else
           datetime = if params[:start_date].present? && params[:start_time].present?
                       Time.zone.parse("#{params[:start_date]} #{params[:start_time]}")
-                    elsif params[:start_time].present?
+          elsif params[:start_time].present?
                       Time.zone.parse(params[:start_time])
-                    else
+          else
                       Time.zone.parse(params[:start_date])
-                    end
-          
+          end
+
           patch.start = Google::Apis::CalendarV3::EventDateTime.new(
             date_time: datetime.iso8601,
-            time_zone: 'America/Chicago'
+            time_zone: "America/Chicago"
           )
-          
+
           if params[:end_time].present?
             end_datetime = Time.zone.parse("#{params[:start_date] || datetime.to_date} #{params[:end_time]}")
             patch.end = Google::Apis::CalendarV3::EventDateTime.new(
               date_time: end_datetime.iso8601,
-              time_zone: 'America/Chicago'
+              time_zone: "America/Chicago"
             )
           else
             # Default to 30 minutes later if no end time specified
             patch.end = Google::Apis::CalendarV3::EventDateTime.new(
               date_time: (datetime + 30.minutes).iso8601,
-              time_zone: 'America/Chicago'
+              time_zone: "America/Chicago"
             )
           end
         end
       end
 
-      updated = service.update_event('primary', params[:id], patch)
+      updated = service.update_event("primary", params[:id], patch)
       respond_to do |format|
         format.html { redirect_to calendar_path, notice: "Event successfully updated." }
         format.json { render json: serialize_event(updated) }

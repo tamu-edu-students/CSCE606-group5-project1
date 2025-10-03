@@ -53,7 +53,7 @@ class CalendarController < ApplicationController
           end_time   = event.end.date_time
         end
 
-        { 
+        {
           id: event.id,
           summary: event.summary,
           start: start_time,
@@ -69,7 +69,7 @@ class CalendarController < ApplicationController
   end
   def edit
     service = calendar_service_or_unauthorized or return
-    
+
     begin
       event = service.get_event("primary", params[:id])
       @event = {
@@ -112,7 +112,7 @@ class CalendarController < ApplicationController
       rescue Signet::AuthorizationError => e
         Rails.logger.error("Token refresh failed: #{e.message}")
         reset_session
-        redirect_to login_google_path, alert: "Authentication expired, please log in again." 
+        redirect_to login_google_path, alert: "Authentication expired, please log in again."
         return
       end
 
@@ -123,5 +123,4 @@ class CalendarController < ApplicationController
       service.authorization = client
       service
     end
-
 end

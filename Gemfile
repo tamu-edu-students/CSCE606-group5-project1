@@ -59,8 +59,8 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   # Load .env for local env variables
   gem "dotenv-rails"
-  gem 'rspec-rails'
-  gem 'shoulda-matchers'
+  gem "rspec-rails"
+  gem "shoulda-matchers"
 end
 
 group :development do
@@ -80,5 +80,5 @@ end
 
 gem "httparty"
 
-gem "webmock", "~> 3.25", groups: [:test, :development]
-gem "vcr", "~> 6.3", groups: [:test, :development]
+gem "webmock", "~> 3.25", groups: [ :test, :development ]
+gem "vcr", "~> 6.3", groups: [ :test, :development ]
