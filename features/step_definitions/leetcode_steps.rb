@@ -4,10 +4,6 @@ When('I follow {string}') do |string|
   click_link string
 end
 
-When('I fill in {string} with {string}') do |field, value|
-  fill_in field, with: value
-end
-
 When('I select {string} from {string}') do |option, field|
   select option, from: field
 end

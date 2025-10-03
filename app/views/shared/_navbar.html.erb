@@ -8,13 +8,18 @@
         <%# The link_to helper creates a standard <a> tag. %>
         <%# current_page? is a Rails helper to conditionally add the 'active' class. %>
         <%= link_to dashboard_path, class: "nav-item #{'active' if current_page?(dashboard_path)}" do %>
-            <span class="nav-icon" >⏱️</span>
+            <span class="nav-icon">⏱️</span>
             Dashboard
         <% end %>
 
         <%= link_to calendar_path, class: "nav-item #{'active' if current_page?(calendar_path)}" do %>
             <span class="nav-icon">📅</span>
             Calendar
+        <% end %>
+
+        <%= link_to statistics_path, class: "nav-item #{'active' if current_page?(statistics_path)}" do %>
+            <span class="nav-icon">📊</span>
+            Statistics
         <% end %>
     </div>
 

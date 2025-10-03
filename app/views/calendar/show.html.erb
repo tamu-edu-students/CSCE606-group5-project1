@@ -1,26 +1,69 @@
 <div class="app-container">
     <%= render 'shared/navbar' %>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Calendar Page -->
         <div id="calendarPage" class="page">
-
             <div class="page-header">
                 <h1 class="page-title">Calendar</h1>
                 <p class="page-subtitle">Your Google Calendar events</p>
             </div>
 
             <div class="content-area">
-                <% if flash[:alert] %>
-                    <div class="alert-banner"><%= flash[:alert] %></div>
+                <% if flash[:success] || flash[:notice] %>
+                    <div class="flash-success"><%= flash[:success] || flash[:notice] %></div>
                 <% end %>
+                <% if flash[:alert] || flash[:error] %>
+                    <div class="flash-alert"><%= flash[:alert] || flash[:error] %></div>
+                <% end %>
+
+                <div class="event-form">
+                    <h2>Add Event</h2>
+                    <%= form_with url: api_calendar_events_path, scope: :event, method: :post, local: true do |f| %>
+                        <div>
+                            <%= f.label :summary, "Title" %><br>
+                            <%= f.text_field :summary, required: true %>
+                        </div>
+                        
+                        <div>
+                            <%= f.label :start_date, "Date" %><br>
+                            <%= f.date_field :start_date, required: true %>
+                        </div>
+
+                        <div>
+                            <%= f.label :all_day, "All Day Event" %>
+                            <%= f.check_box :all_day %>
+                        </div>
+
+                        <div class="time-fields" <%= 'hidden' if params.dig(:event, :all_day) == '1' %>>
+                            <div>
+                                <%= f.label :start_time, "Start Time" %><br>
+                                <%= f.time_field :start_time %>
+                            </div>
+
+                            <div>
+                                <%= f.label :end_time, "End Time (optional)" %><br>
+                                <%= f.time_field :end_time %>
+                            </div>
+                        </div>
+
+                        <div>
+                            <%= f.label :location %><br>
+                            <%= f.text_field :location %>
+                        </div>
+
+                        <div>
+                            <%= f.label :description %><br>
+                            <%= f.text_area :description, rows: 2 %>
+                        </div>
+
+                        <%= f.submit "Create Event", class: "button" %>
+                    <% end %>
+                </div>
 
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <div class="calendar-month"><%= @current_date.strftime("%B %Y") %></div>
                         <div class="calendar-nav">
-                            <%# Add .to_s to convert the Date object to a String for the URL %>
                             <%= link_to "← Previous", calendar_path(date: @current_date.prev_month.to_s) %>
                             <%= link_to "Next →", calendar_path(date: @current_date.next_month.to_s) %>
                             <%= link_to "Refresh", calendar_path %>
@@ -29,19 +72,29 @@
                     
                     <div class="calendar-content">
                         <% if @events.any? %>
-                            <%# Loop through the @events array from the controller %>
                             <% @events.each do |event| %>
-                                <%# This is the same HTML structure, now built with ERB %>
                                 <div class="event-card">
                                     <h3><%= event[:summary].presence || 'Untitled Event' %></h3>
                                     <p>
                                         📅 <%= event[:start].strftime("%d %B %Y") %>
                                         <% unless event[:is_all_day] %>
-                                        ⏰ <%= event[:start].strftime("%l:%M %p") %> - <%= event[:end].strftime("%l:%M %p") %>
+                                            ⏰ <%= event[:start].strftime("%l:%M %p") %> - <%= event[:end].strftime("%l:%M %p") %>
                                         <% else %>
-                                        (All day)
+                                            (All day)
                                         <% end %>
                                     </p>
+
+                                    <%= link_to "Edit", edit_calendar_event_path(event[:id]), class: "edit-button" %>
+                                    
+                                    <%= button_to "Delete", 
+                                        api_calendar_event_path(event[:id]), 
+                                        method: :delete,
+                                        form: { 
+                                            data: { 
+                                                confirm: 'Are you sure you want to delete this event?' 
+                                            } 
+                                        },
+                                        class: "delete-button" %>
                                 </div>
                             <% end %>
                         <% else %>
