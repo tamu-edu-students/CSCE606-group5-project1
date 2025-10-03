@@ -12,14 +12,6 @@ When('I select {string} from {string}') do |option, field|
   select option, from: field
 end
 
-When('I press {string}') do |button|
-  click_button button
-end
-
-Then('I should see {string}') do |text|
-  expect(page).to have_content(text)
-end
-
 Given("the following users exist:") do |table|
   table.hashes.each do |user_attrs|
     User.create!(user_attrs.merge(netid: user_attrs["netid"] || SecureRandom.hex(4)))
