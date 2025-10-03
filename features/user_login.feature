@@ -19,8 +19,6 @@ And I click the "Log In" button
 Then I should see an error message "Invalid email or password."
 And I should still be on the login page
 
-# This scenario covers the full session lifecycle: login, confirm access, logout, confirm logged out state.
-# It directly tests the acceptance criteria for session management.
 @javascript
 Scenario: User logs out successfully
 Given I am logged in as a student
