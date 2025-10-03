@@ -2,6 +2,10 @@ class SessionsController < ApplicationController
   skip_before_action :authenticate_user!
   include GoogleCalendarAutoSync
 
+  def debug
+  render plain: session.to_hash.inspect
+  end
+
   def create
     auth = request.env["omniauth.auth"] || {}
     return redirect_to(root_path, alert: "No auth returned from Google") if auth.blank?
@@ -50,6 +54,7 @@ class SessionsController < ApplicationController
     session[:user_first_name] = user.first_name
     session[:google_token] = user.google_access_token
     session[:google_refresh_token] = user.google_refresh_token
+    session[:google_token_expires_at] = user.google_token_expires_at
 
     Rails.logger.info("Google access token saved for user #{user.id}")
     Rails.logger.info("Google refresh token saved for user #{user.id}")

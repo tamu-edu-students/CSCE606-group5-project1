@@ -18,7 +18,7 @@ class CalendarController < ApplicationController
       refresh_token: session[:google_refresh_token],
       client_id: ENV["GOOGLE_CLIENT_ID"],
       client_secret: ENV["GOOGLE_CLIENT_SECRET"],
-      token_credential_uri: "https://accounts.google.com/o/oauth2/token",
+      token_credential_uri: "https://oauth2.googleapis.com/token",
       expires_at: session[:google_token_expires_at]
     )
 
@@ -59,6 +59,7 @@ class CalendarController < ApplicationController
         end
 
         {
+          id: event.id,
           summary: event.summary,
           start: start_time,
           end: end_time,
@@ -71,6 +72,7 @@ class CalendarController < ApplicationController
       @events = []
     end
   end
+<<<<<<< HEAD
 
   def sync
     result = GoogleCalendarSync.sync_for_user(current_user, session)
@@ -98,6 +100,27 @@ class CalendarController < ApplicationController
     redirect_back(fallback_location: calendar_path)
   end
 
+  def edit
+    service = calendar_service_or_unauthorized or return
+
+    begin
+      event = service.get_event("primary", params[:id])
+      @event = {
+        id: event.id,
+        summary: event.summary,
+        description: event.description,
+        location: event.location,
+        start: event.start.date_time || event.start.date,
+        end: event.end.date_time || event.end.date,
+        is_all_day: event.start.date_time.nil?
+      }
+    rescue Google::Apis::ClientError => e
+      error_message = e.respond_to?(:message) ? e.message : "Failed to load event"
+      Rails.logger.error("Failed to fetch event: #{error_message}")
+      redirect_to calendar_path, alert: error_message
+    end
+  end
+
   private
 
   def session_data
@@ -107,4 +130,40 @@ class CalendarController < ApplicationController
       "google_token_expires_at" => session[:google_token_expires_at]
     }
   end
+
+  def calendar_service_or_unauthorized
+      unless session[:google_token].present?
+        redirect_to login_google_path, alert: "Please log in with Google to continue."
+        return nil
+      end
+
+      client = Signet::OAuth2::Client.new(
+        access_token:         session[:google_token],
+        refresh_token:        session[:google_refresh_token],
+        client_id:            ENV["GOOGLE_CLIENT_ID"],
+        client_secret:        ENV["GOOGLE_CLIENT_SECRET"],
+        token_credential_uri: "https://oauth2.googleapis.com/token"
+      )
+
+      # Refresh if expired / near expiry (2 minutes)
+      begin
+        if client.respond_to?(:expires_at)
+          client.refresh! if client.expired? || client.expires_at.to_i <= (Time.now + 120).to_i
+        else
+          client.refresh! if client.expired?
+        end
+      rescue Signet::AuthorizationError => e
+        Rails.logger.error("Token refresh failed: #{e.message}")
+        reset_session
+        redirect_to login_google_path, alert: "Authentication expired, please log in again."
+        return
+      end
+
+      session[:google_token]          = client.access_token
+      session[:google_refresh_token] ||= client.refresh_token
+
+      service = Google::Apis::CalendarV3::CalendarService.new
+      service.authorization = client
+      service
+    end
 end

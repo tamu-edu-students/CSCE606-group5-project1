@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   # --- Root Page ---
   # Sets the application"s home page to the login screen.
   root "login#index"
-
+  # Add debug session route
+  get "/debug/session", to: "sessions#debug"
   # --- Authentication / Session Management ---
   get "/login/google", to: redirect("/auth/google_oauth2")
   get "/auth/:provider/callback", to: "sessions#create"
@@ -21,7 +22,11 @@ Rails.application.routes.draw do
   resources :leet_code_problems, except: [ :new, :edit ]
   resources :leet_code_sessions, except: [ :new, :edit ]
   resources :leet_code_session_problems, except: [ :new, :edit ]
+
+  get "/profile", to: "users#profile", as: :profile
+
   resources :leet_code_entries, only: [ :index, :new, :create ]
+  resource :statistics, only: [ :show ], controller: "statistics"
 
   resources :leet_code_sessions do
     post :add_problem, on: :collection
@@ -32,15 +37,24 @@ Rails.application.routes.draw do
   get "/dashboard", to: "dashboard#show"
   get "/calendar", to: "calendar#show"
   get "/leetcode", to: "leet_code_problems#show"
+
+  get "/calendar/:id/edit", to: "calendar#edit", as: "edit_calendar_event"
+
   get "/timer", to: "timer#show"
   post "create_timer", to: "dashboard#create_timer"
 
   # --- API Routes ---
   namespace :api do
+    # resources :calendar_events, only: [:index, :create, :update, :destroy]
     get "current_user", to: "users#profile"
-    get "calendar_events", to: "calendar#events"
+    # Calendar CRUD
+    get "calendar_events", to: "calendar#events", as: "calendar_events"
+    post   "calendar_events",         to: "calendar#create"
+    patch  "calendar_events/:id",     to: "calendar#update", as: "calendar_event"
+    delete "calendar_events/:id",     to: "calendar#destroy"
   end
 
   # --- Health Check ---
   get "up" => "rails/health#show", as: :rails_health_check
+  get "favicon.ico", to: proc { [ 204, {}, [] ] }
 end

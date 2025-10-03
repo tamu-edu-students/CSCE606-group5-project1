@@ -1,0 +1,39 @@
+<div class="app-container">
+  <%= render 'shared/navbar' %>
+
+  <main class="main-content">
+    <div id="statisticsPage" class="page">
+      <div class="page-header">
+        <h1 class="page-title user-name">Weekly Statistics</h1>
+        <p class="page-subtitle">Your performance overview for this week</p>
+      </div>
+      <% if @stats[:weekly_solved_count] > 0 %>
+      <div class="content-area">
+        <div class="stats-grid" id="weekly-summary">
+          <div class="stat-card">
+            <h3 class="stat-title">Problems Solved This Week</h3>
+            <p class="stat-value"><%= @stats[:weekly_solved_count] %></p>
+          </div>
+          <div class="stat-card">
+            <h3 class="stat-title">Current Streak</h3>
+            <p class="stat-value"><%= @stats[:current_streak_days] %> <span class="stat-unit">days</span></p>
+          </div>
+          <div class="stat-card">
+            <h3 class="stat-title">Total Problems Solved</h3>
+            <p class="stat-value"><%= @stats[:total_solved_all_time] %></p>
+          </div>
+        </div>
+
+        <% if @stats[:highlight].present? %>
+          <div class="highlights-container">
+            <h2 class="highlights-title">Highlights</h2>
+            <p class="highlights-text"><%= @stats[:highlight] %></p>
+          </div>
+        <% end %>
+      <% else %>
+        <p>No LeetCode activity recorded this week. Keep going!</p>
+      <% end %>
+      </div>
+    </div>
+  </main>
+</div>

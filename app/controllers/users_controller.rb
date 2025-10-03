@@ -10,6 +10,17 @@ class UsersController < ApplicationController
   def show
   end
 
+  # GET /profile
+  def profile
+    if request.patch?
+      if current_user.update(user_params)
+        redirect_to profile_path, notice: "Profile updated successfully"
+      else
+        render :profile
+      end
+    end
+  end
+
   # GET /users/new
   def new
     @user = User.new
@@ -65,6 +76,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :netid, :email, :first_name, :last_name, :role, :last_login_at ])
+      params.expect(user: [ :netid, :email, :first_name, :last_name, :role, :last_login_at, :leetcode_username ])
     end
 end

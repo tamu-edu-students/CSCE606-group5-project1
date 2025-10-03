@@ -8,7 +8,7 @@
         <%# The link_to helper creates a standard <a> tag. %>
         <%# current_page? is a Rails helper to conditionally add the 'active' class. %>
         <%= link_to dashboard_path, class: "nav-item #{'active' if current_page?(dashboard_path)}" do %>
-            <span class="nav-icon" >⏱️</span>
+            <span class="nav-icon">⏱️</span>
             Dashboard
         <% end %>
 
@@ -21,17 +21,27 @@
             <span class="nav-icon">📅</span>
             Leetcode
         <% end %>
+
+        <%= link_to statistics_path, class: "nav-item #{'active' if current_page?(statistics_path)}" do %>
+            <span class="nav-icon">📊</span>
+            Statistics
+        <% end %>
     </div>
 
     <div class="user-info">
     <div class="user-info-header">
-        <div class="user-avatar" id="userAvatar">
-            <%# This safely gets the first letter of the first name, or 'U' as a fallback %>
-            <%= session[:user_first_name]&.first&.upcase || 'U' %>
-        </div>
+        <%= link_to profile_path, class: "user-avatar-link" do %>
+            <div class="user-avatar" id="userAvatar">
+                <%# This safely gets the first letter of the first name, or 'U' as a fallback %>
+                <%= session[:user_first_name]&.first&.upcase || 'U' %>
+            </div>
+        <% end %>
         <div class="user-name" id="userName">
             <%# This gets the full first name from the session, or 'User' as a fallback %>
             <%= session[:user_first_name] || 'User' %>
+            <% if current_user&.leetcode_username.present? %>
+                (<%= current_user.leetcode_username %>)
+            <% end %>
         </div>
     </div>
     <%= button_to "Sign Out", logout_path, method: :delete, class: "logout-btn" %>

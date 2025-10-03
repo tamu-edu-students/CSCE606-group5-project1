@@ -10,9 +10,9 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+# Hotwire"s SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+# Hotwire"s modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
@@ -59,6 +59,8 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   # Load .env for local env variables
   gem "dotenv-rails"
+  gem "rspec-rails"
+  gem "shoulda-matchers"
 end
 
 group :development do
@@ -74,8 +76,13 @@ group :test do
   gem "rspec-rails"
   gem "cucumber-rails", require: false
   gem "database_cleaner-active_record"
+  gem "factory_bot_rails"
+  gem "timecop"
+  gem "launchy"
 end
 
 gem "httparty"
 
 gem "kaminari"
+gem "webmock", "~> 3.25", groups: [ :test, :development ]
+gem "vcr", "~> 6.3", groups: [ :test, :development ]

@@ -83,10 +83,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_154016) do
     t.integer "current_streak"
     t.integer "longest_streak"
     t.text "preferred_topics"
-    t.text "leetcode_username"
     t.string "google_access_token"
     t.string "google_refresh_token"
     t.datetime "google_token_expires_at"
+    t.boolean "active", default: true
+    t.string "leetcode_username"
+    t.index ["active"], name: "index_users_on_active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["netid"], name: "index_users_on_netid", unique: true
   end
