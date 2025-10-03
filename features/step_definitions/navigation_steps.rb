@@ -17,7 +17,7 @@ end
 World(NavigationHelpers)
 
 
-# This step mocks the full Google OmniAuth login flow.
+# Mocking the full Google OmniAuth login flow.
 Given('I am a logged-in user') do
   @current_user ||= User.create!(
     email: 'testuser@tamu.edu',
@@ -34,11 +34,6 @@ Given('I am a logged-in user') do
   })
 
   visit '/auth/google_oauth2/callback'
-end
-
-# Alias for convenience
-Given('I am logged in as a student') do
-  step 'I am a logged-in user'
 end
 
 Given('I am on the dashboard page') do
@@ -83,4 +78,12 @@ end
 
 Then('I should not see a {string} link') do |link_text|
   expect(page).not_to have_link(link_text)
+end
+
+When('I click the {string} link') do |link_text|
+  click_link(link_text)
+end
+
+Then('I should be redirected to the login page') do
+  expect(page).to have_current_path(root_path)
 end
