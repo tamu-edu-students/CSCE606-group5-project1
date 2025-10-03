@@ -16,6 +16,11 @@
             <span class="nav-icon">📅</span>
             Calendar
         <% end %>
+
+        <%= link_to leetcode_path, class: "nav-item #{'active' if current_page?(leetcode_path)}" do %>
+            <span class="nav-icon">📅</span>
+            Leetcode
+        <% end %>
     </div>
 
     <div class="user-info">

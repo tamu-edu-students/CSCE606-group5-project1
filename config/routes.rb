@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   get "sessions/create", to: "sessions#create", as: "sessions_create"
   get "sessions/failure", to: "sessions#failure", as: "sessions_failure"
 
+  post 'calendar/sync', to: 'calendar#sync', as: 'sync_calendar'
+
+
   # --- Users / Profile ---
   resources :users, only: [:show, :update]
 
@@ -20,9 +23,15 @@ Rails.application.routes.draw do
   resources :leet_code_session_problems, except: [:new, :edit]
   resources :leet_code_entries, only: [:index, :new, :create] 
 
+  resources :leet_code_sessions do
+    post :add_problem, on: :collection
+  end
+
+
   # --- Static Pages ---
   get "/dashboard", to: "dashboard#show"
   get "/calendar", to: "calendar#show"
+  get "/leetcode", to: "leet_code_problems#show"
   get "/timer", to: "timer#show"
   post "create_timer", to: "dashboard#create_timer"
 

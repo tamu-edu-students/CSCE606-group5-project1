@@ -1,2 +1,111 @@
-<h1>LeetCodeProblems#show</h1>
-<p>Find me in app/views/leet_code_problems/show.html.erb</p>
+<div class="app-container">
+    <%= render 'shared/navbar' %>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Leetcode Page -->
+        <div id="leetcodePage" class="page">
+
+            <div class="page-header">
+                <h1 class="page-title">Leetcode</h1>
+                <p class="page-subtitle">Find Leetcode problems</p>
+                <% if session[:google_token] %>
+                    <div class="calendar-sync-section mb-4">
+                        <%= button_to "Sync Calendar", 
+                                    sync_calendar_path, 
+                                    method: :post,
+                                    class: "btn btn-primary",
+                                    data: { 
+                                        confirm: "This will sync your Google Calendar events. Continue?",
+                                        disable_with: "Syncing..." 
+                                    } %>
+                        
+                        <% if session[:last_calendar_sync] %>
+                        <small class="text-muted">
+                            Last synced: <%= time_ago_in_words(Time.at(session[:last_calendar_sync])) %> ago
+                        </small>
+                        <% end %>
+                    </div>
+                <% end %>
+
+            </div>
+
+            <div class="content-area">
+                <% if flash[:alert] %>
+                    <div class="alert-banner"><%= flash[:alert] %></div>
+                <% end %>
+
+                <div class="leet-container">
+                    <div class="leet-header">
+                        <div class="leet-filters">
+                            <%= form_with url: leetcode_path, method: :get, local: true, html: { class: "filters-form" } do %>
+
+                                <div class="filter-item">
+                                    <label for="solved">Solved</label>
+                                    <%= select_tag :solved, options_for_select([['All', ''], ['Solved', 'true'], ['Unsolved', 'false']], params[:solved]), id: 'solved' %>
+                                </div>
+
+                                <div class="filter-item">
+                                    <label for="difficulty">Difficulty</label>
+                                    <%= select_tag :difficulty, options_for_select([['All', ''], 'Easy', 'Medium', 'Hard'], params[:difficulty]), id: 'difficulty' %>
+                                </div>
+
+                                <div class="filter-item">
+                                    <label for="tags">Tags (Hold <kbd>Ctrl</kbd> (or  <kbd>Cmd</kbd> on Mac) to select multiple)</label>
+                                    <%= select_tag :tags, options_for_select(@available_tags, params[:tags]&.is_a?(Array) ? params[:tags] : params[:tags]&.split(',')), multiple: true, id: 'tags', size: 2 %>
+                                </div>
+
+                                <div class="filter-item">
+                                    <%= submit_tag 'Apply Filters', class: 'filter-button' %>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                    
+                    <div class="leet-content">
+                        <% if @events.any? %>
+                            <% @events.each do |event| %>
+                            <div class="event-card">
+                                <h3><%= event.title %></h3>
+                                <p>Difficulty: <%= event.difficulty %></p>
+                                <p><strong>Tags:</strong> <%= event.tags %></p>
+                                <a href="<%= event.url %>" target="_blank">View on Leetcode</a>
+                                <%= form_with url: add_problem_leet_code_sessions_path, method: :post, local: true do |f| %>
+                                    <div>
+                                        <label for="session_id">Add to session:</label>
+                                        <%= select_tag :session_id,
+                                            options_from_collection_for_select(
+                                                current_user.leet_code_sessions.order(:scheduled_time),
+                                                :id,
+                                                ->(session) { session.scheduled_time.strftime("%b %d, %Y %H:%M") }
+                                            ),
+                                            prompt: "Select session",
+                                            required: true %>
+                                    </div>
+
+                                    <%= hidden_field_tag :problem_id, event.id %>
+
+                                    <div>
+                                        <%= f.submit "Add" %>
+                                    </div>
+                                <% end %>
+
+                            </div>
+                            <% end %>
+                            <div class="pagination-container">
+                                <%= paginate @events, params: {
+                                    solved: params[:solved],
+                                    difficulty: params[:difficulty],
+                                    tags: params[:tags]
+                                } %>
+                            </div>
+                        <% else %>
+                            <p>No problems found.</p>
+                        <% end %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
