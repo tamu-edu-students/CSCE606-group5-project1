@@ -26,9 +26,9 @@ class StatisticsController < ApplicationController
   private
 
   def calculate_recent_stats(calendar_data)
-    return { week: 0, month: 0 } unless calendar_data && calendar_data['submissionCalendar']
+    return { week: 0, month: 0 } unless calendar_data && calendar_data["submissionCalendar"]
 
-    submissions = calendar_data['submissionCalendar']
+    submissions = calendar_data["submissionCalendar"]
     now = Time.current
 
     # Calculate last 7 days

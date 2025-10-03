@@ -13,8 +13,8 @@ module Leetcode
     def calendar(username)
       data = fetch_json("#{username}/calendar")
       # submissionCalendar is a JSON string, need to parse it
-      if data['submissionCalendar'].is_a?(String)
-        data['submissionCalendar'] = JSON.parse(data['submissionCalendar'])
+      if data["submissionCalendar"].is_a?(String)
+        data["submissionCalendar"] = JSON.parse(data["submissionCalendar"])
       end
       data
     end
@@ -42,7 +42,7 @@ module Leetcode
     private
 
     def fetch_json(path)
-      Rails.cache.fetch(["lc", path], expires_in: 10.minutes) do
+      Rails.cache.fetch([ "lc", path ], expires_in: 10.minutes) do
         uri = URI.join(BASE, path)
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 2, read_timeout: 3) do |http|
           http.request(Net::HTTP::Get.new(uri))
