@@ -1,6 +1,6 @@
 .event-card {
   padding: 1rem;
-  border-left: 4px solid #007aff;
+  border-left: 4px solid var(--tamu-red);
   background: #f8f9ff;
   margin-bottom: 1rem;
   border-radius: 0 8px 8px 0;
@@ -19,7 +19,7 @@
 
 .event-banner {
   background: linear-gradient(90deg, #f6fbff 0%, #ffffff 100%);
-  border-left: 4px solid #007aff;
+  border-left: 4px solid var(--tamu-red);
   padding: 1rem 1.25rem;
   border-radius: 10px;
   margin-bottom: 1.25rem;
@@ -39,8 +39,14 @@
   margin-bottom: 0.75rem;
 }
 
+.align {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .flash-success {
-  background-color: #4CAF50;
+  background-color: var(--tamu-red);
   color: white;
   padding: 15px;
   border-radius: 4px;
@@ -48,7 +54,7 @@
 }
 
 .flash-alert {
-  background-color: #f44336;
+  background-color: grey;
   color: white;
   padding: 15px;
   border-radius: 4px;

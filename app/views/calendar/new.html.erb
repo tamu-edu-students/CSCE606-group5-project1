@@ -1,0 +1,22 @@
+<div class="app-container">
+  <%= render 'shared/navbar' %>
+
+  <main class="main-content">
+    <div class="page">
+        <div class="page-header">
+            <h1 class="page-title">Add Event</h1>
+            <p class="page-subtitle">Add your Google Calendar event</p>
+        </div>
+
+        <div class="content-area">
+            <%= render partial: "form", locals: {
+            event: {},
+            form_url: api_calendar_events_path,
+            form_method: :post,
+            submit_text: "Add Event",
+            action: "add",
+            } %>
+        </div>
+    </div>
+  </main>
+</div>

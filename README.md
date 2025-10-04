@@ -38,14 +38,14 @@ bundle install
 ### 4. Setup the database and run migrations
 Create and migrate the database with:
 ```bash
-rails db:create
-rails db:migrate
+bin/rails db:create
+bin/rails db:migrate
 ```
 
 ### 5. Start the Rails server
 Run the Rails server locally:
 ```bash
-rails server
+bin/dev
 ```
 Open your browser and navigate to:
 ```bash
@@ -101,11 +101,17 @@ The weekly summary email includes:
 To populate demo data for testing the weekly report:
 
 ```bash
-rails db:seed
+bin/rails db:seed
 ```
 
 This creates sample users, problems, and solved problem records spanning multiple weeks.
 
+### Seed Leetcode Problems
+
+To populate leetcode problems from API
+
+```bash
+bin/rails leet_code:seed
 ---
 
 ## 📊 LeetCode Statistics

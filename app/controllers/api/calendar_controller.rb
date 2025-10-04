@@ -113,7 +113,10 @@ module Api
     # ---------- UPDATE ----------
     def update
       service = calendar_service_or_unauthorized or return
-      all_day = ActiveModel::Type::Boolean.new.cast(params[:all_day])
+
+      event_params = params.require(:event).permit(:summary, :start_date, :start_time, :end_time, :location, :description, :all_day)
+
+      all_day = ActiveModel::Type::Boolean.new.cast(event_params[:all_day])
 
       # Get existing event first
       event = service.get_event("primary", params[:id])
@@ -122,31 +125,30 @@ module Api
       patch = Google::Apis::CalendarV3::Event.new
 
       # Update basic fields if they are present in params
-      patch.summary = params[:summary] if params[:summary].present?
-      patch.description = params[:description] if params[:description].present?
-      patch.location = params[:location] if params[:location].present?
+      patch.summary = event_params[:summary] if event_params[:summary].present?
+      patch.description = event_params[:description] if event_params[:description].present?
+      patch.location = event_params[:location] if event_params[:location].present?
+
 
       # Handle start and end times based on all_day flag
-      if params[:start_time].present? || params[:start_date].present?
+      if event_params[:start_time].present? || event_params[:start_date].present?
         Time.zone = "America/Chicago"
 
         if all_day
-          start_date = params[:start_date].presence || params[:start_time]
+          start_date = event_params[:start_date].presence || event_params[:start_time]
           patch.start = Google::Apis::CalendarV3::EventDateTime.new(
-            date: Date.parse(start_date).to_s,
-            time_zone: "America/Chicago"
+            date: Date.parse(start_date).to_s
           )
           patch.end = Google::Apis::CalendarV3::EventDateTime.new(
-            date: Date.parse(start_date).next_day.to_s,
-            time_zone: "America/Chicago"
+            date: Date.parse(start_date).next_day.to_s
           )
         else
-          datetime = if params[:start_date].present? && params[:start_time].present?
-                      Time.zone.parse("#{params[:start_date]} #{params[:start_time]}")
-          elsif params[:start_time].present?
-                      Time.zone.parse(params[:start_time])
+          datetime = if event_params[:start_date].present? && event_params[:start_time].present?
+                Time.zone.parse("#{event_params[:start_date]} #{event_params[:start_time]}")
+          elsif event_params[:start_time].present?
+                Time.zone.parse(event_params[:start_time])
           else
-                      Time.zone.parse(params[:start_date])
+                Time.zone.parse(event_params[:start_date])
           end
 
           patch.start = Google::Apis::CalendarV3::EventDateTime.new(
@@ -154,14 +156,13 @@ module Api
             time_zone: "America/Chicago"
           )
 
-          if params[:end_time].present?
-            end_datetime = Time.zone.parse("#{params[:start_date] || datetime.to_date} #{params[:end_time]}")
+          if event_params[:end_time].present?
+            end_datetime = Time.zone.parse("#{event_params[:start_date] || datetime.to_date} #{event_params[:end_time]}")
             patch.end = Google::Apis::CalendarV3::EventDateTime.new(
               date_time: end_datetime.iso8601,
               time_zone: "America/Chicago"
             )
           else
-            # Default to 30 minutes later if no end time specified
             patch.end = Google::Apis::CalendarV3::EventDateTime.new(
               date_time: (datetime + 30.minutes).iso8601,
               time_zone: "America/Chicago"
@@ -211,7 +212,7 @@ module Api
         refresh_token:        session[:google_refresh_token],
         client_id:            ENV["GOOGLE_CLIENT_ID"],
         client_secret:        ENV["GOOGLE_CLIENT_SECRET"],
-        token_credential_uri: "https://oauth2.googleapis.com/token"
+        token_credential_uri: ENV["GOOGLE_OAUTH_URI"]
       )
 
       # Refresh if expired / near expiry (5 minutes)

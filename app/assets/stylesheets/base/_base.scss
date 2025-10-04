@@ -4,6 +4,20 @@
     box-sizing: border-box;
 }
 
+:root {
+  --green: #6ece6e;
+  --red: #ee6e6b;
+  --tamu-red: #4c0000;
+  --gray-light: #f0f0f0;
+  --gray-lighter: #fafafa;
+  --gray-border: #ccc;
+  --text-dark: #333;
+}
+
+a {
+  color: var(--tamu-red);
+}
+
 .js-only {
   display: none !important;
 }

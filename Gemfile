@@ -73,7 +73,6 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  gem "rspec-rails"
   gem "cucumber-rails", require: false
   gem "database_cleaner-active_record"
   gem "factory_bot_rails"
@@ -83,5 +82,6 @@ end
 
 gem "httparty"
 
+gem "kaminari"
 gem "webmock", "~> 3.25", groups: [ :test, :development ]
 gem "vcr", "~> 6.3", groups: [ :test, :development ]

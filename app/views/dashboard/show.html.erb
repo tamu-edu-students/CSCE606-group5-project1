@@ -43,7 +43,7 @@
                   class="focus-time-input"
                   data-timer-target="input"
                   />
-              <button class="timer-btn set js-only" data-action="click->timer#setCustom">Set Timer</button>
+              <button class="btn set js-only" data-action="click->timer#setCustom">Start</button>
               </div>
               <noscript>
                 <%= form_with url: create_timer_path, method: :post, class: "focus-time-controls" do |form| %>
@@ -54,13 +54,13 @@
                                         class: "focus-time-input",
                                         required: true %>
 
-                  <%= form.submit "Set Timer", class: "timer-btn set" %>
+                  <%= form.submit "Start", class: "btn set" %>
                 <% end %>
               </noscript>
               <div class="timer-controls">
-                <button class="timer-btn start js-only" data-action="click->timer#start" data-timer-target="startBtn">Start</button>
-                <button class="timer-btn pause js-only" data-action="click->timer#pause" data-timer-target="pauseBtn" style="display: none;">Pause</button>
-                <button class="timer-btn reset js-only" data-action="click->timer#reset">Reset</button>
+                <button class="btn start js-only" data-action="click->timer#start" data-timer-target="startBtn">Start</button>
+                <button class="btn pause js-only" data-action="click->timer#pause" data-timer-target="pauseBtn" style="display: none;">Pause</button>
+                <button class="btn reset js-only" data-action="click->timer#reset">Reset</button>
               </div>    
             </div>
           <% end %>
@@ -68,7 +68,7 @@
             <%= @time_remaining_hms || '00:00:00' %>
           <div class="timer-controls">
             <noscript>
-              <%= link_to "Refresh Timer", dashboard_path, class: "timer-btn start" %>
+              <%= link_to "Refresh Timer", dashboard_path, class: "btn start" %>
             </noscript>
           </div>
         </div>

@@ -10,30 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_02_004237) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_184434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-
-  create_table "events", force: :cascade do |t|
-    t.string "summary"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index [ "user_id" ], name: "index_events_on_user_id"
-  end
-
-  create_table "leet_code_entries", force: :cascade do |t|
-    t.integer "problem_number", null: false
-    t.string "problem_title"
-    t.integer "difficulty", null: false
-    t.date "solved_on", default: -> { "CURRENT_DATE" }, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index [ "problem_number" ], name: "index_leet_code_entries_on_problem_number"
-    t.index [ "solved_on" ], name: "index_leet_code_entries_on_solved_on"
-  end
 
   create_table "leet_code_problems", force: :cascade do |t|
     t.string "leetcode_id", null: false
@@ -43,7 +22,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_004237) do
     t.text "tags"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "leetcode_id" ], name: "index_leet_code_problems_on_leetcode_id", unique: true
+    t.text "title_slug"
+    t.text "description"
+    t.index ["leetcode_id"], name: "index_leet_code_problems_on_leetcode_id", unique: true
   end
 
   create_table "leet_code_session_problems", force: :cascade do |t|
@@ -53,8 +34,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_004237) do
     t.datetime "solved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "leet_code_problem_id" ], name: "index_leet_code_session_problems_on_leet_code_problem_id"
-    t.index [ "leet_code_session_id" ], name: "index_leet_code_session_problems_on_leet_code_session_id"
+    t.index ["leet_code_problem_id"], name: "index_leet_code_session_problems_on_leet_code_problem_id"
+    t.index ["leet_code_session_id"], name: "index_leet_code_session_problems_on_leet_code_session_id"
   end
 
   create_table "leet_code_sessions", force: :cascade do |t|
@@ -64,7 +45,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_004237) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "user_id" ], name: "index_leet_code_sessions_on_user_id"
+    t.string "google_event_id"
+    t.text "description"
+    t.string "title"
+    t.index ["user_id"], name: "index_leet_code_sessions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -79,6 +63,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_004237) do
     t.integer "current_streak"
     t.integer "longest_streak"
     t.text "preferred_topics"
+    t.string "google_access_token"
+    t.string "google_refresh_token"
+    t.datetime "google_token_expires_at"
     t.boolean "active", default: true
     t.string "leetcode_username"
     t.index ["active"], name: "index_users_on_active"
@@ -86,7 +73,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_004237) do
     t.index ["netid"], name: "index_users_on_netid", unique: true
   end
 
-  add_foreign_key "events", "users"
   add_foreign_key "leet_code_session_problems", "leet_code_problems"
   add_foreign_key "leet_code_session_problems", "leet_code_sessions"
   add_foreign_key "leet_code_sessions", "users"
