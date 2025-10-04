@@ -31,7 +31,7 @@ Then('I should see the solved problems statistics') do
   expect(page).to have_content('20')
 end
 
-Then('I should see zero statistics') do
-  expect(page).to have_content('Total Solved')
-  expect(page).to have_content('0')
+Then("I should see zero statistics") do
+  expect(page).to have_text("No LeetCode activity recorded. Solve a problem to see your stats!")
+  expect(page).not_to have_text("Total Solved")
 end

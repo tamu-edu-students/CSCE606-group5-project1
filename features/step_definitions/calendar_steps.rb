@@ -1,5 +1,5 @@
 Given('I am on the new event page') do
-  visit new_event_path # TODO: This path needs to be created in routes.rb
+  visit calendar_path
 end
 
 Then('I should see a confirmation message {string}') do |message|

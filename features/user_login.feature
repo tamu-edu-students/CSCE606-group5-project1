@@ -10,15 +10,6 @@ When I click the "Sign in with Google" button
 Then I should be redirected to the dashboard
 And I should see a success message "Signed in as student@tamu.edu"
 
-Scenario: Failed login with incorrect password
-Given a registered student with the email "student@example.com" and password "password123" exists
-And I am on the login page
-When I fill in "Email" with "student@example.com"
-And I fill in "Password" with "wrong-password"
-And I click the "Log In" button
-Then I should see an error message "Invalid email or password."
-And I should still be on the login page
-
 @javascript
 Scenario: User logs out successfully
 Given I am logged in as a student

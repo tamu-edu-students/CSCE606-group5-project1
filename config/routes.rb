@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # -------------------------------
   # Dashboard, Calendar, Timer
   # -------------------------------
-  get "/dashboard",             to: "dashboard#show"
+  get "dashboard", to: "dashboard#show", as: "dashboard"
   get "/calendar",              to: "calendar#show"
   post "/calendar/sync",        to: "calendar#sync", as: "sync_calendar"
   get "/calendar/add",          to: "calendar#new", as: "add_calendar_event"

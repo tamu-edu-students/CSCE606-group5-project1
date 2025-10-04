@@ -9,6 +9,8 @@
   text-decoration: none;
   display: inline-block;
   color: white;
+  min-width: 120px;
+  text-align: center;
 }
 
 .btn-primary {
@@ -19,7 +21,6 @@
   border: 1px solid var(--tamu-red);
   color: var(--tamu-red);
   background-color: transparent;
-  padding: 6px 12px;
 }
 
 .btn-danger {
@@ -34,10 +35,17 @@
     font-size: 0.8rem;
 }
 
-.start { background: var(--tamu-red); color: white; }
-.pause { background: grey; color: white; }
-.reset { background: grey; color: white; }
-.set  { background: var(--tamu-red); color: white; }
+.start, .set { 
+  @extend .btn;
+  background: var(--tamu-red); 
+  color: white; 
+}
+
+.pause, .reset { 
+  @extend .btn;
+  background: grey; 
+  color: white; 
+}
 
 .calendar-nav button {
     background: var(--tamu-red);
@@ -46,4 +54,10 @@
     padding: 0.5rem 1rem;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.event-card form .btn {
+  min-width: 120px;
+  text-align: center;
+  box-sizing: border-box;
 }

@@ -5,7 +5,7 @@ So that I can easily move between the main sections of the application
 
 Background:
 Given I am a logged-in user
-
+And I am successfully authenticated with Google
 Scenario Outline: Navigation bar is visible on all main pages
 Given I am on the <page_name> page
 Then I should see the main navigation bar

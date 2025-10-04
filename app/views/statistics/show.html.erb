@@ -2,12 +2,10 @@
   <%= render 'shared/navbar' %>
 
   <main class="main-content">
-    <div class="container my-4">
-      <div class="row">
-        <div class="col">
-          <h1 class="display-6 fw-bold mb-3">LeetCode Statistics</h1>
-          <p class="text-muted">Track your coding progress</p>
-        </div>
+    <div id="statisticsPage" class="page">
+      <div class="page-header">
+        <h1 class="page-title">LeetCode Statistics</h1>
+        <p class="page-subtitle">Track your coding progress</p>
       </div>
 
       <% if @error_message %>
@@ -16,116 +14,81 @@
         </div>
       <% end %>
 
-      <!-- Statistics Overview -->
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <div class="display-6 text-primary mb-2">🏆</div>
-              <div class="display-4 fw-bold"><%= @stats[:total] %></div>
-              <p class="text-muted">Total Solved</p>
+      <div class="content-area">
+        <% if @stats && @stats[:total].to_i > 0 %>
+
+          <div class="stats-grid" id="overview-summary">
+            <div class="stat-card">
+              <h3 class="stat-title">Total Solved</h3>
+              <p class="stat-value"><%= @stats[:total] %></p>
+            </div>
+            <div class="stat-card">
+              <h3 class="stat-title">Last 7 Days</h3>
+              <p class="stat-value"><%= @recent_stats[:week] %></p>
+            </div>
+            <div class="stat-card">
+              <h3 class="stat-title">Last 30 Days</h3>
+              <p class="stat-value"><%= @recent_stats[:month] %></p>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <div class="display-6 text-info mb-2">📅</div>
-              <div class="display-4 fw-bold"><%= @recent_stats[:week] %></div>
-              <p class="text-muted">Last 7 Days</p>
+          <div class="highlights-container">
+            <h2 class="highlights-title">Difficulty Breakdown</h2>
+            
+            <div class="progress-container">
+              <span class="progress-label">Easy</span>
+              <span class="progress-value"><%= @stats[:easy] %></span>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar easy" style="width: <%= ((@stats[:easy].to_f / @stats[:total]) * 100).round(1) %>%"></div>
+              </div>
+            </div>
+
+            <div class="progress-container">
+              <span class="progress-label">Medium</span>
+              <span class="progress-value"><%= @stats[:medium] %></span>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar medium" style="width: <%= ((@stats[:medium].to_f / @stats[:total]) * 100).round(1) %>%"></div>
+              </div>
+            </div>
+            
+            <div class="progress-container">
+              <span class="progress-label">Hard</span>
+              <span class="progress-value"><%= @stats[:hard] %></span>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar hard" style="width: <%= ((@stats[:hard].to_f / @stats[:total]) * 100).round(1) %>%"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <div class="display-6 text-success mb-2">📈</div>
-              <div class="display-4 fw-bold"><%= @recent_stats[:month] %></div>
-              <p class="text-muted">Last 30 Days</p>
-            </div>
+          <div class="stats-grid" id="activity-summary">
+              <div class="stat-card">
+                <h3 class="stat-title">Weekly Activity</h3>
+                <p class="stat-value"><%= @recent_stats[:week] %> <span class="stat-unit">problems</span></p>
+                <p class="stat-description">
+                  <% if @recent_stats[:week] > 0 %>
+                    Keep up the momentum!
+                  <% else %>
+                    No activity this week
+                  <% end %>
+                </p>
+              </div>
+              <div class="stat-card">
+                <h3 class="stat-title">Monthly Progress</h3>
+                <p class="stat-value"><%= @recent_stats[:month] %> <span class="stat-unit">problems</span></p>
+                <p class="stat-description">
+                  <% if @recent_stats[:month] > 0 %>
+                    Great progress this month!
+                  <% else %>
+                    No activity this month
+                  <% end %>
+                </p>
+              </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Difficulty Breakdown -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header">
-          <h3 class="card-title mb-0">📊 Difficulty Breakdown</h3>
-        </div>
-        <div class="card-body">
-          <% if @stats[:total] > 0 %>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold">Easy</span>
-                <span class="badge bg-success"><%= @stats[:easy] %></span>
-              </div>
-              <div class="progress mb-3">
-                <div class="progress-bar bg-success" style="width: <%= ((@stats[:easy].to_f / @stats[:total]) * 100).round(1) %>%"></div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold">Medium</span>
-                <span class="badge bg-warning"><%= @stats[:medium] %></span>
-              </div>
-              <div class="progress mb-3">
-                <div class="progress-bar bg-warning" style="width: <%= ((@stats[:medium].to_f / @stats[:total]) * 100).round(1) %>%"></div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold">Hard</span>
-                <span class="badge bg-danger"><%= @stats[:hard] %></span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-danger" style="width: <%= ((@stats[:hard].to_f / @stats[:total]) * 100).round(1) %>%"></div>
-              </div>
-            </div>
-          <% else %>
-            <p class="text-muted text-center py-4">No difficulty data available</p>
-          <% end %>
-        </div>
-      </div>
-
-      <!-- Activity Summary -->
-      <div class="row g-4">
-        <div class="col-md-6">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h4 class="card-title">🔥 Weekly Activity</h4>
-              <div class="display-6 fw-bold mb-2"><%= @recent_stats[:week] %> problems</div>
-              <p class="text-muted mb-0">
-                <% if @recent_stats[:week] > 0 %>
-                  Keep up the momentum!
-                <% else %>
-                  No activity this week
-                <% end %>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h4 class="card-title">🚀 Monthly Progress</h4>
-              <div class="display-6 fw-bold mb-2"><%= @recent_stats[:month] %> problems</div>
-              <p class="text-muted mb-0">
-                <% if @recent_stats[:month] > 0 %>
-                  Great progress this month!
-                <% else %>
-                  No activity this month
-                <% end %>
-              </p>
-            </div>
-          </div>
-        </div>
+        <% else %>
+          <p>No LeetCode activity recorded. Solve a problem to see your stats!</p>
+        <% end %>
       </div>
     </div>
   </main>
 </div>
-
