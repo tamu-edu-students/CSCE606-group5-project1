@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   # Profile / User
   # -------------------------------
   get "/profile",               to: "users#profile", as: :profile
+  patch "/profile",             to: "users#profile"
   resources :users, only: [ :show, :update ]
 
   # -------------------------------

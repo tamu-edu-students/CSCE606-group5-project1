@@ -1,3 +1,4 @@
+@javascript
 Feature: User Profile Management
   As a user
   I want to access my profile and set my LeetCode username

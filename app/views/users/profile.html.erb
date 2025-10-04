@@ -26,17 +26,28 @@
                 <% if current_user.leetcode_username.present? %>
                   <%= current_user.leetcode_username %>
                 <% else %>
-                  <em style="color: #999;">Not set</em>
+                  No LeetCode username set.
                 <% end %>
               </p>
             </div>
 
             <div class="focus-time-container">
-              <p class="focus-time-label">Set your LeetCode username</p>
+              <p class="focus-time-label">Update your profile information</p>
               <div class="focus-time-controls">
                 <%= form_with model: current_user, url: profile_path, method: :patch do |form| %>
-                  <%= form.text_field :leetcode_username, class: "focus-time-input", placeholder: "Enter username" %>
-                  <%= form.submit "Update Profile", class: "btn set" %>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :first_name, "First Name" %>
+                    <%= form.text_field :first_name, class: "focus-time-input", placeholder: "Enter first name" %>
+                  </div>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :last_name, "Last Name" %>
+                    <%= form.text_field :last_name, class: "focus-time-input", placeholder: "Enter last name" %>
+                  </div>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :leetcode_username, "LeetCode Username" %>
+                    <%= form.text_field :leetcode_username, class: "focus-time-input", placeholder: "Enter username" %>
+                  </div>
+                  <%= form.submit "Update Profile", class: "timer-btn set" %>
                 <% end %>
               </div>
             </div>
