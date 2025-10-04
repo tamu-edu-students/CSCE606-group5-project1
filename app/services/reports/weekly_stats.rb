@@ -50,7 +50,7 @@ module Reports
       (1...dates.length).each do |i|
         if dates[i] == dates[i-1] + 1
           current_streak += 1
-          max_streak = [max_streak, current_streak].max
+          max_streak = [ max_streak, current_streak ].max
         else
           current_streak = 1
         end
