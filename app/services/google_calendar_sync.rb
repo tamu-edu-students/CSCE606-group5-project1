@@ -63,7 +63,7 @@ class GoogleCalendarSync
       refresh_token: @session[:google_refresh_token],
       client_id: ENV["GOOGLE_CLIENT_ID"],
       client_secret: ENV["GOOGLE_CLIENT_SECRET"],
-      token_credential_uri: "https://accounts.google.com/o/oauth2/token",
+      token_credential_uri: ENV["GOOGLE_OAUTH_URI"],
       expires_at: @session[:google_token_expires_at]
     )
   end
@@ -118,39 +118,56 @@ class GoogleCalendarSync
     end_time = event.end.date_time
     duration = calculate_duration(start_time, end_time)
 
-    # Find or initialize the session
+    # Find or initialize the session by google_event_id and user_id
     session = LeetCodeSession.find_or_initialize_by(
       user_id: @user.id,
       google_event_id: event.id
     )
 
+    # Use event.summary as the title, fallback to "Untitled Session"
+    title = event.summary.presence || "Untitled Session"
+    description = event.description.presence || title
+
     # Check if anything changed
     changed = session.new_record? ||
               session.scheduled_time != start_time ||
               session.duration_minutes != duration ||
-              session.description != event.description
+              session.title != title ||
+              session.description != description
 
     if changed
       session.assign_attributes(
         scheduled_time: start_time,
         duration_minutes: duration,
-        description: event.description || event.summary,
+        title: title,
+        description: description,
         status: determine_status(start_time, end_time)
       )
-
       session.save!
       session.previously_new_record? ? :created : :updated
     else
       :skipped
     end
+
   rescue StandardError => e
     Rails.logger.error("Failed to sync event #{event.id}: #{e.message}")
     :skipped
   end
 
+
   def calculate_duration(start_time, end_time)
-    ((end_time - start_time) / 60).to_i # Duration in minutes
+    start_time = start_time.to_time if start_time.respond_to?(:to_time)
+    end_time = end_time.to_time if end_time.respond_to?(:to_time)
+
+    duration_seconds = end_time - start_time
+    duration_minutes = (duration_seconds / 60).to_i
+
+    # In case duration less than 1 minute but positive, force it to 1 minute
+    duration_minutes = 1 if duration_seconds > 0 && duration_minutes == 0
+
+    duration_minutes
   end
+
 
   def determine_status(start_time, end_time)
     now = Time.current

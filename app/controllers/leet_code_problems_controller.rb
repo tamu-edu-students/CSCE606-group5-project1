@@ -8,15 +8,6 @@ class LeetCodeProblemsController < ApplicationController
                               .sort
       @events = LeetCodeProblem.all
 
-      # Filter by solved status
-      # if params[:solved].present?
-      #   if params[:solved] == 'true'
-      #     @events = @events.where.not(description: [nil, '']) # Dummy logic: if description exists, consider it solved
-      #   elsif params[:solved] == 'false'
-      #     @events = @events.where(description: [nil, ''])
-      #   end
-      # end
-
       # Filter by difficulty
       if params[:difficulty].present?
         @events = @events.where("LOWER(difficulty) = ?", params[:difficulty].downcase)

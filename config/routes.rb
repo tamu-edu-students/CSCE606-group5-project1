@@ -1,60 +1,64 @@
 Rails.application.routes.draw do
-  # --- Root Page ---
-  # Sets the application"s home page to the login screen.
+  # Root page
   root "login#index"
-  # Add debug session route
-  get "/debug/session", to: "sessions#debug"
-  # --- Authentication / Session Management ---
-  get "/login/google", to: redirect("/auth/google_oauth2")
+
+  # -------------------------------
+  # Authentication / Sessions
+  # -------------------------------
+  get "/login/google",          to: redirect("/auth/google_oauth2")
   get "/auth/:provider/callback", to: "sessions#create"
-  get "/auth/failure", to: "sessions#failure"
-  delete "/logout", to: "sessions#destroy"
-  get "sessions/create", to: "sessions#create", as: "sessions_create"
-  get "sessions/failure", to: "sessions#failure", as: "sessions_failure"
+  get "/auth/failure",          to: "sessions#failure"
+  delete "/logout",             to: "sessions#destroy"
+  get "/debug/session",         to: "sessions#debug"
 
-  post "calendar/sync", to: "calendar#sync", as: "sync_calendar"
+  # -------------------------------
+  # Dashboard, Calendar, Timer
+  # -------------------------------
+  get "/dashboard",             to: "dashboard#show"
+  get "/calendar",              to: "calendar#show"
+  post "/calendar/sync",        to: "calendar#sync", as: "sync_calendar"
+  get "/calendar/add",          to: "calendar#new", as: "add_calendar_event"
+  get "/calendar/:id/edit",     to: "calendar#edit", as: "edit_calendar_event"
 
+  get "/timer",                 to: "timer#show"
+  post "/create_timer",         to: "dashboard#create_timer"
 
-  # --- Users / Profile ---
+  # -------------------------------
+  # Profile / User
+  # -------------------------------
+  get "/profile",               to: "users#profile", as: :profile
   resources :users, only: [ :show, :update ]
 
-  # --- Core LeetCode Resources (API-style, no views) ---
+  # -------------------------------
+  # LeetCode Features
+  # -------------------------------
+  get "/leetcode",              to: "leet_code_problems#show"
+
   resources :leet_code_problems, except: [ :new, :edit ]
-  resources :leet_code_sessions, except: [ :new, :edit ]
-  resources :leet_code_session_problems, except: [ :new, :edit ]
-
-  get "/profile", to: "users#profile", as: :profile
-
-  resources :leet_code_entries, only: [ :index, :new, :create ]
-  resource :statistics, only: [ :show ], controller: "statistics"
-
-  resources :leet_code_sessions do
+  resources :leet_code_sessions, except: [ :new, :edit ] do
     post :add_problem, on: :collection
   end
+  resources :leet_code_session_problems, except: [ :new, :edit ]
+  resources :leet_code_entries, only: [ :index, :new, :create ]
 
+  resource  :statistics, only: [ :show ], controller: "statistics"
 
-  # --- Static Pages ---
-  get "/dashboard", to: "dashboard#show"
-  get "/calendar", to: "calendar#show"
-  get "/leetcode", to: "leet_code_problems#show"
-
-  get "/calendar/:id/edit", to: "calendar#edit", as: "edit_calendar_event"
-
-  get "/timer", to: "timer#show"
-  post "create_timer", to: "dashboard#create_timer"
-
-  # --- API Routes ---
+  # -------------------------------
+  # API Namespace
+  # -------------------------------
   namespace :api do
-    # resources :calendar_events, only: [:index, :create, :update, :destroy]
     get "current_user", to: "users#profile"
-    # Calendar CRUD
-    get "calendar_events", to: "calendar#events", as: "calendar_events"
-    post   "calendar_events",         to: "calendar#create"
-    patch  "calendar_events/:id",     to: "calendar#update", as: "calendar_event"
-    delete "calendar_events/:id",     to: "calendar#destroy"
+
+    # Calendar Events CRUD
+    get    "calendar_events",     to: "calendar#events",   as: "calendar_events"
+    post   "calendar_events",     to: "calendar#create"
+    patch  "calendar_events/:id", to: "calendar#update",   as: "calendar_event"
+    delete "calendar_events/:id", to: "calendar#destroy"
   end
 
-  # --- Health Check ---
-  get "up" => "rails/health#show", as: :rails_health_check
+  # -------------------------------
+  # Health Check & Favicon
+  # -------------------------------
+  get "up", to: "rails/health#show", as: :rails_health_check
   get "favicon.ico", to: proc { [ 204, {}, [] ] }
 end

@@ -71,6 +71,14 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    # Clear OAuth tokens
+    current_user&.update(
+      google_access_token: nil,
+      google_refresh_token: nil,
+      google_token_expires_at: nil
+    )
+
+    # Reset session
     reset_session
     respond_to do |format|
       format.html { redirect_to root_path, notice: "You have been signed out successfully." }

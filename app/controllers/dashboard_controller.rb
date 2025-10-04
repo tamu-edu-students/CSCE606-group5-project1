@@ -20,7 +20,7 @@ class DashboardController < ApplicationController
         refresh_token: session[:google_refresh_token],
         client_id: ENV["GOOGLE_CLIENT_ID"],
         client_secret: ENV["GOOGLE_CLIENT_SECRET"],
-        token_credential_uri: "https://accounts.google.com/o/oauth2/token"
+        token_credential_uri: ENV["GOOGLE_OAUTH_URI"]
       )
 
       # fetch a short window of events including current/ongoing ones

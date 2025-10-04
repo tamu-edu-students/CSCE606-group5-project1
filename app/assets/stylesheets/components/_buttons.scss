@@ -1,37 +1,46 @@
-.logout-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
+.btn{
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+}
+
+.btn-primary {
+  background-color: var(--tamu-red) !important;
+}
+
+.btn-secondary {
+  border: 1px solid var(--tamu-red);
+  color: var(--tamu-red);
+  background-color: transparent;
+  padding: 6px 12px;
+}
+
+.btn-danger {
+  background-color: var(--tamu-red) !important;
+}
+
+.btn-logout {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    width: 100% !important;
+    background: transparent;
     font-size: 0.8rem;
-    transition: all 0.3s ease;
-    width: 100%;
 }
 
-.logout-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.timer-btn {
-    padding: 0.75rem 2rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.timer-btn.start { background: #007aff; color: white; }
-.timer-btn.pause { background: #ff7f50; color: white; }
-.timer-btn.reset { background: #ff4040; color: white; }
-.timer-btn.set  { padding: 0.6rem; background: #007bff; color: white; }
+.start { background: var(--tamu-red); color: white; }
+.pause { background: grey; color: white; }
+.reset { background: grey; color: white; }
+.set  { background: var(--tamu-red); color: white; }
 
 .calendar-nav button {
-    background: #007aff;
+    background: var(--tamu-red);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
