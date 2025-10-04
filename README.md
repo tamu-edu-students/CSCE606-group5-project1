@@ -105,4 +105,25 @@ rails db:seed
 ```
 
 This creates sample users, problems, and solved problem records spanning multiple weeks.
+
+---
+
+## 📊 LeetCode Statistics
+
+The Statistics page displays LeetCode solved problem counts for users who have set their LeetCode username in their profile.
+
+### Configuration
+
+Set the `LEETCODE_API_BASE` environment variable to the API base URL (default: `https://alfa-leetcode-api.onrender.com`).
+
+### Features
+
+- Fetches solved problem counts (total, easy, medium, hard) from the alfa-leetcode-api
+- Displays stats in a clean grid layout using existing CSS
+- Caches API responses for 10 minutes
+- Shows zero counts if no username is set or API fails
+
+### API Endpoint Used
+
+- `GET /:username/solved` - Returns problem counts by difficulty
 ```

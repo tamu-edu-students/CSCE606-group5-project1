@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   # --- User-Facing Pages & Resources ---
   resources :users
   get "/profile", to: "users#profile", as: :profile
+  patch "/profile", to: "users#profile"
   resources :leet_code_entries, only: [ :index, :new, :create ]
   resource :statistics, only: [ :show ], controller: "statistics"
 
