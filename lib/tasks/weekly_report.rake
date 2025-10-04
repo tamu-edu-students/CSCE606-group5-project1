@@ -17,13 +17,17 @@ namespace :weekly_report do
     users.find_each do |user|
       begin
         stats = Reports::WeeklyStats.new(user, week_start: week_start).call
-        mail = WeeklyReportMailer.summary(user, stats)
-        if Rails.env.production?
-          mail.deliver_later
+        if stats[:weekly_solved_count] > 0
+          mail = WeeklyReportMailer.summary(user, stats)
+          if Rails.env.production?
+            mail.deliver_later
+          else
+            mail.deliver_now
+          end
+          Rails.logger.info "Sent weekly report to #{user.email}"
         else
-          mail.deliver_now
+          Rails.logger.info "Skipped weekly report for #{user.email} (no solves this week)"
         end
-        Rails.logger.info "Sent weekly report to #{user.email}"
       rescue => e
         Rails.logger.error "Failed to send weekly report to #{user.email}: #{e.message}"
       end

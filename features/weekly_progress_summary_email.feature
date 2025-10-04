@@ -34,7 +34,6 @@ Feature: Weekly Progress Summary Email
       | 2          | 2023-09-16 12:00:00  |
       | 1          | 2023-09-17 12:00:00  |
       | 2          | 2023-09-18 12:00:00  |
-      | 3          | 2023-09-19 12:00:00  |
 
   Scenario: Student receives weekly progress summary email
     When the weekly report email task is run for week starting "2023-09-24"
