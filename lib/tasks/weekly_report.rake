@@ -1,5 +1,5 @@
 namespace :weekly_report do
-  desc "Send weekly progress summary emails to active users with email addresses"
+  desc "Send weekly progress summary emails to active users with personal email addresses"
   task send: :environment do
     # Only run on Mondays
     if Date.today.wday != 1 && ENV["FORCE_SEND"] != "true"
@@ -11,7 +11,7 @@ namespace :weekly_report do
 
     week_start = ENV["WEEK_START"] ? Time.zone.parse(ENV["WEEK_START"]) : nil
 
-    users = User.active.with_email
+    users = User.active.where.not(personal_email: nil)
     Rails.logger.info "Found #{users.count} eligible users"
 
     users.find_each do |user|
@@ -24,12 +24,12 @@ namespace :weekly_report do
           else
             mail.deliver_now
           end
-          Rails.logger.info "Sent weekly report to #{user.email}"
+          Rails.logger.info "Sent weekly report to #{user.personal_email}"
         else
-          Rails.logger.info "Skipped weekly report for #{user.email} (no solves this week)"
+          Rails.logger.info "Skipped weekly report for #{user.personal_email} (no solves this week)"
         end
       rescue => e
-        Rails.logger.error "Failed to send weekly report to #{user.email}: #{e.message}"
+        Rails.logger.error "Failed to send weekly report to #{user.personal_email}: #{e.message}"
       end
     end
 

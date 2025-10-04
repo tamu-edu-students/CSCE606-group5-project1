@@ -5,6 +5,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :personal_email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
 
   VALID_ROLES = %w[student admin].freeze
   validates :role, inclusion: { in: VALID_ROLES }, allow_nil: true

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe WeeklyReportMailer, type: :mailer do
-  let(:user) { User.create!(netid: "john", first_name: "John", last_name: "Doe", email: "john@example.com") }
+  let(:user) { User.create!(netid: "john", first_name: "John", last_name: "Doe", email: "john@example.com", personal_email: "john@example.com") }
   let(:stats) do
     {
       weekly_solved_count: 5,
@@ -15,8 +15,8 @@ RSpec.describe WeeklyReportMailer, type: :mailer do
     let(:mail) { described_class.summary(user, stats) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your Weekly LeetCode Progress Summary")
-      expect(mail.to).to eq([ user.email ])
+      expect(mail.subject).to eq("🌟 Weekly LeetCode Report — John's Progress Summary")
+      expect(mail.to).to eq([ user.personal_email ])
       # Note: from address depends on MAIL_FROM env var, but we test the core functionality
     end
 

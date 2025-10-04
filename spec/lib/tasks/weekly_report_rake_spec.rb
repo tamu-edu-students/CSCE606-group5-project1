@@ -27,7 +27,7 @@ RSpec.describe "weekly_report:send", type: :task do
         solved_at: Time.zone.now.beginning_of_week(:sunday) + 1.day
       )
     end
-    let!(:active_user) { User.create!(netid: "active", active: true, email: "active@example.com", first_name: "Active", last_name: "User") }
+    let!(:active_user) { User.create!(netid: "active", active: true, email: "active@example.com", first_name: "Active", last_name: "User", personal_email: "active@example.com") }
     let!(:inactive_user) { User.create!(netid: "inactive", active: false, email: "inactive@example.com", first_name: "Inactive", last_name: "User") }
 
     it "sends emails only to active users with emails who have weekly solves" do

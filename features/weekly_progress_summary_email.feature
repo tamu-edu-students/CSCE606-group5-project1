@@ -5,9 +5,9 @@ Feature: Weekly Progress Summary Email
 
   Background:
     Given the following users exist:
-      | netid    | email             | first_name | last_name | active |
-      | student1 | student1@test.com | John       | Doe      | true   |
-      | student2 | student2@test.com | Jane       | Smith    | true   |
+      | netid    | email             | first_name | last_name | active | personal_email     |
+      | student1 | student1@test.com | John       | Doe      | true   | student1@test.com  |
+      | student2 | student2@test.com | Jane       | Smith    | true   |                    |
     And the following LeetCode problems exist:
       | leetcode_id | title      | difficulty |
       | 1           | Two Sum    | easy       |
@@ -37,7 +37,7 @@ Feature: Weekly Progress Summary Email
 
   Scenario: Student receives weekly progress summary email
     When the weekly report email task is run for week starting "2023-09-24"
-    Then "student1@test.com" should receive an email with subject "Your Weekly LeetCode Progress Summary"
+    Then "student1@test.com" should receive an email with subject "🌟 Weekly LeetCode Report — John's Progress Summary"
     And the email should contain:
       | content                          |
       | Problems Solved This Week: 4     |
