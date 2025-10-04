@@ -39,7 +39,6 @@ Rails.application.routes.draw do
     post :add_problem, on: :collection
   end
   resources :leet_code_session_problems, except: [ :new, :edit ]
-  resources :leet_code_entries, only: [ :index, :new, :create ]
 
   resource  :statistics, only: [ :show ], controller: "statistics"
 
