@@ -56,10 +56,13 @@ Given("the following solved problems exist for user {string} before week startin
 end
 
 When("the weekly report email task is run for week starting {string}") do |week_start|
+  Rails.application.load_tasks
   ENV['WEEK_START'] = week_start
+  ENV['FORCE_SEND'] = 'true'  # Force send even if not Monday
   Rake::Task["weekly_report:send"].reenable
   Rake::Task["weekly_report:send"].invoke
   ENV.delete('WEEK_START')
+  ENV.delete('FORCE_SEND')
 end
 
 Then("{string} should receive an email with subject {string}") do |email, subject|

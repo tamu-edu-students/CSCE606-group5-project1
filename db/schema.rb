@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_184434) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_225611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -68,9 +68,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_184434) do
     t.string "google_access_token"
     t.string "google_refresh_token"
     t.datetime "google_token_expires_at"
-    t.index [ "active" ], name: "index_users_on_active"
-    t.index [ "email" ], name: "index_users_on_email", unique: true
-    t.index [ "netid" ], name: "index_users_on_netid", unique: true
+    t.string "personal_email"
+    t.index ["active"], name: "index_users_on_active"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["netid"], name: "index_users_on_netid", unique: true
   end
 
   add_foreign_key "leet_code_session_problems", "leet_code_problems"

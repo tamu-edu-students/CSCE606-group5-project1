@@ -14,13 +14,6 @@
             </div>
 
             <div class="content-area">
-                <% if flash[:success] || flash[:notice] %>
-                    <div class="flash-success"><%= flash[:success] || flash[:notice] %></div>
-                <% end %>
-                <% if flash[:alert] || flash[:error] %>
-                    <div class="flash-alert"><%= flash[:alert] || flash[:error] %></div>
-                <% end %>
-
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <div class="calendar-month"><%= @current_date.strftime("%B %Y") %></div>

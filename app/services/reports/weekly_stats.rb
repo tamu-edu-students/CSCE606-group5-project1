@@ -1,6 +1,6 @@
 module Reports
   class WeeklyStats
-    DIFFICULTY_ORDER = { "hard" => 3, "medium" => 2, "easy" => 1 }.freeze
+    DIFFICULTY_ORDER = { "Hard" => 3, "Medium" => 2, "Easy" => 1 }.freeze
 
     def initialize(user, week_start: nil)
       @user = user
@@ -39,19 +39,24 @@ module Reports
     end
 
     def current_streak_days
-      # Calculate consecutive days with at least one solved problem, ending today or yesterday
-      streak = 0
-      date = Time.zone.today
+      # Calculate the longest consecutive days with at least one solved problem in the week
+      dates = weekly_solved_problems.map { |sp| sp.solved_at.to_date }.uniq.sort
 
-      loop do
-        daily_solves = solved_problems.where(solved_at: date.beginning_of_day..date.end_of_day).count
-        break if daily_solves.zero?
+      return 0 if dates.empty?
 
-        streak += 1
-        date -= 1.day
+      max_streak = 1
+      current_streak = 1
+
+      (1...dates.length).each do |i|
+        if dates[i] == dates[i-1] + 1
+          current_streak += 1
+          max_streak = [ max_streak, current_streak ].max
+        else
+          current_streak = 1
+        end
       end
 
-      streak
+      max_streak
     end
 
     def highlight
@@ -68,7 +73,7 @@ module Reports
         .max_by { |p| DIFFICULTY_ORDER[p.difficulty] || 0 }
 
       if hardest_this_week
-        highlights << "Hardest problem this week: #{hardest_this_week.title} (#{hardest_this_week.difficulty})"
+        highlights << "Hardest problem this week: #{hardest_this_week.title} (#{hardest_this_week.difficulty.downcase})"
       end
 
       highlights.join("; ")

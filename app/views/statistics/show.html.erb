@@ -2,93 +2,56 @@
   <%= render 'shared/navbar' %>
 
   <main class="main-content">
-    <div id="statisticsPage" class="page">
-      <div class="page-header">
-        <h1 class="page-title">LeetCode Statistics</h1>
-        <p class="page-subtitle">Track your coding progress</p>
+    <div style="font-family:Segoe UI, Helvetica, Arial, sans-serif; max-width:800px; margin:auto; padding:20px; background:#f9fafc; border-radius:12px; border:1px solid #e5e7eb;">
+      <h2 style="color:#2563eb; text-align:center;">🚀 LeetRecorder Statistics</h2>
+      <p style="text-align:center; color:#6b7280; font-size:14px;">User: <strong><%= current_user.first_name %></strong></p>
+
+      <div style="background:white; border-radius:8px; padding:16px; margin-top:12px;">
+        <table style="width:100%; border-collapse:collapse; text-align:center; font-size:15px;">
+          <thead>
+            <tr style="background:#f3f4f6;">
+              <th style="padding:8px; border-bottom:1px solid #e5e7eb;">📅 Metric</th>
+              <th style="padding:8px; border-bottom:1px solid #e5e7eb;">🔥 This Week</th>
+              <th style="padding:8px; border-bottom:1px solid #e5e7eb;">📈 Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:8px;">Problems Solved</td>
+              <td style="padding:8px; color:#16a34a;"><strong><%= @weekly_stats[:weekly_solved_count] %></strong></td>
+              <td style="padding:8px;"><%= @weekly_stats[:total_solved_all_time] %></td>
+            </tr>
+            <tr style="background:#f9fafb;">
+              <td style="padding:8px;">Current Streak</td>
+              <td style="padding:8px; color:#16a34a;"><strong><%= @weekly_stats[:current_streak_days] %> days</strong></td>
+              <td style="padding:8px;">Longest: 12 days</td>
+            </tr>
+            <tr>
+              <td style="padding:8px;">Hardest Problem</td>
+              <td colspan="2" style="padding:8px; color:#2563eb;">
+                <% if @weekly_stats[:highlight].present? && @weekly_stats[:highlight].include?("Hardest problem this week:") %>
+                  🏆 <%= @weekly_stats[:highlight].gsub("Hardest problem this week: ", "").gsub("; Longest streak: 12 days", "") %>
+                <% else %>
+                  🏆 No hardest problem this week
+                <% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <% if @error_message %>
-        <div class="alert alert-danger">
-          <%= @error_message %>
-        </div>
-      <% end %>
-
-      <div class="content-area">
-        <% if @stats && @stats[:total].to_i > 0 %>
-
-          <div class="stats-grid" id="overview-summary">
-            <div class="stat-card">
-              <h3 class="stat-title">Total Solved</h3>
-              <p class="stat-value"><%= @stats[:total] %></p>
-            </div>
-            <div class="stat-card">
-              <h3 class="stat-title">Last 7 Days</h3>
-              <p class="stat-value"><%= @recent_stats[:week] %></p>
-            </div>
-            <div class="stat-card">
-              <h3 class="stat-title">Last 30 Days</h3>
-              <p class="stat-value"><%= @recent_stats[:month] %></p>
-            </div>
-          </div>
-
-          <div class="highlights-container">
-            <h2 class="highlights-title">Difficulty Breakdown</h2>
-            
-            <div class="progress-container">
-              <span class="progress-label">Easy</span>
-              <span class="progress-value"><%= @stats[:easy] %></span>
-              <div class="progress-bar-wrapper">
-                <div class="progress-bar easy" style="width: <%= ((@stats[:easy].to_f / @stats[:total]) * 100).round(1) %>%"></div>
-              </div>
-            </div>
-
-            <div class="progress-container">
-              <span class="progress-label">Medium</span>
-              <span class="progress-value"><%= @stats[:medium] %></span>
-              <div class="progress-bar-wrapper">
-                <div class="progress-bar medium" style="width: <%= ((@stats[:medium].to_f / @stats[:total]) * 100).round(1) %>%"></div>
-              </div>
-            </div>
-            
-            <div class="progress-container">
-              <span class="progress-label">Hard</span>
-              <span class="progress-value"><%= @stats[:hard] %></span>
-              <div class="progress-bar-wrapper">
-                <div class="progress-bar hard" style="width: <%= ((@stats[:hard].to_f / @stats[:total]) * 100).round(1) %>%"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="stats-grid" id="activity-summary">
-              <div class="stat-card">
-                <h3 class="stat-title">Weekly Activity</h3>
-                <p class="stat-value"><%= @recent_stats[:week] %> <span class="stat-unit">problems</span></p>
-                <p class="stat-description">
-                  <% if @recent_stats[:week] > 0 %>
-                    Keep up the momentum!
-                  <% else %>
-                    No activity this week
-                  <% end %>
-                </p>
-              </div>
-              <div class="stat-card">
-                <h3 class="stat-title">Monthly Progress</h3>
-                <p class="stat-value"><%= @recent_stats[:month] %> <span class="stat-unit">problems</span></p>
-                <p class="stat-description">
-                  <% if @recent_stats[:month] > 0 %>
-                    Great progress this month!
-                  <% else %>
-                    No activity this month
-                  <% end %>
-                </p>
-              </div>
-          </div>
-
-        <% else %>
-          <p>No LeetCode activity recorded. Solve a problem to see your stats!</p>
+      <div style="margin-top:20px; text-align:center;">
+        <p style="font-size:14px; color:#6b7280;">Keep up the great work! Every problem you solve brings you closer to mastery 💪</p>
+        <% if current_user.leetcode_username.present? %>
+          <a href="https://leetcode.com/<%= current_user.leetcode_username %>" style="display:inline-block; background:#2563eb; color:white; padding:10px 20px; border-radius:6px; text-decoration:none; font-weight:600;">View My LeetCode Profile</a>
         <% end %>
       </div>
+
+      <hr style="margin-top:24px; border:none; border-top:1px solid #e5e7eb;">
+      <p style="font-size:12px; color:#9ca3af; text-align:center;">
+        Powered by <strong>LeetRecorder</strong><br>
+        © 2025 LeetRecorder Team
+      </p>
     </div>
   </main>
 </div>
