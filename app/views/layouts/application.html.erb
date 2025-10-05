@@ -12,6 +12,9 @@
     <script>document.documentElement.classList.add('js-enabled');</script>
   </head>
   <body>
-    <%= yield %>
+   <%= render "shared/flash" %>
+    <main>
+      <%= yield %> <%# This renders the specific page content %>
+    </main>
   </body>
 </html>

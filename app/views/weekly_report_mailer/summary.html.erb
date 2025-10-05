@@ -1,0 +1,49 @@
+<div style="font-family:Segoe UI, Helvetica, Arial, sans-serif; max-width:600px; margin:auto; padding:20px; background:#f9fafc; border-radius:12px; border:1px solid #e5e7eb;">
+  <h2 style="color:#2563eb; text-align:center;">🚀 LeetRecorder Weekly Report</h2>
+  <p style="text-align:center; color:#6b7280; font-size:14px;">User: <strong><%= @user.first_name %></strong></p>
+
+  <div style="background:white; border-radius:8px; padding:16px; margin-top:12px;">
+    <table style="width:100%; border-collapse:collapse; text-align:center; font-size:15px;">
+      <thead>
+        <tr style="background:#f3f4f6;">
+          <th style="padding:8px; border-bottom:1px solid #e5e7eb;">📅 Metric</th>
+          <th style="padding:8px; border-bottom:1px solid #e5e7eb;">🔥 This Week</th>
+          <th style="padding:8px; border-bottom:1px solid #e5e7eb;">📈 Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:8px;">Problems Solved</td>
+          <td style="padding:8px; color:#16a34a;"><strong><%= @stats[:weekly_solved_count] %></strong></td>
+          <td style="padding:8px;"><%= @stats[:total_solved_all_time] %></td>
+        </tr>
+        <tr style="background:#f9fafb;">
+          <td style="padding:8px;">Current Streak</td>
+          <td style="padding:8px; color:#16a34a;"><strong><%= @stats[:current_streak_days] %> days</strong></td>
+          <td style="padding:8px;">Longest: 12 days</td>
+        </tr>
+        <tr>
+          <td style="padding:8px;">Hardest Problem</td>
+          <td colspan="2" style="padding:8px; color:#2563eb;">
+            <% if @stats[:highlight].present? && @stats[:highlight].include?("Hardest problem this week:") %>
+              🏆 <%= @stats[:highlight].gsub("Hardest problem this week: ", "").gsub("; Longest streak: 12 days", "") %>
+            <% else %>
+              🏆 Median of Two Sorted Arrays
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:20px; text-align:center;">
+    <p style="font-size:14px; color:#6b7280;">Keep up the great work! Every problem you solve brings you closer to mastery 💪</p>
+    <a href="https://leetcode.com/<%= @user.leetcode_username %>" style="display:inline-block; background:#2563eb; color:white; padding:10px 20px; border-radius:6px; text-decoration:none; font-weight:600;">View My LeetCode Profile</a>
+  </div>
+
+  <hr style="margin-top:24px; border:none; border-top:1px solid #e5e7eb;">
+  <p style="font-size:12px; color:#9ca3af; text-align:center;">
+    Sent via <strong>LeetRecorder</strong> • Powered by Mailgun Sandbox<br>
+    © 2025 LeetRecorder Team
+  </p>
+</div>

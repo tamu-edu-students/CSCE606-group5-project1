@@ -1,0 +1,70 @@
+<div class="app-container">
+    <%= render 'shared/navbar' %>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Profile Page -->
+      <div id="profilePage" class="page">
+        <div class="page-header">
+          <h1 class="page-title user-name">Profile</h1>
+          <p class="page-subtitle">Manage your account settings</p>
+        </div>
+
+        <% if notice %>
+          <div style="background: #d4edda; color: #155724; padding: 1rem; border: 1px solid #c3e6cb; border-radius: 8px; margin-bottom: 1.5rem;">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <div class="content-area">
+          <div class="profile-container">
+            <div class="profile-info" style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+              <h2 style="margin-bottom: 1rem; color: #333;"><%= current_user.full_name %></h2>
+              <p style="margin: 0.5rem 0; color: #666;"><strong>Email:</strong> <%= current_user.email %></p>
+              <p style="margin: 0.5rem 0; color: #666;">
+                <strong>Personal Email:</strong>
+                <% if current_user.personal_email.present? %>
+                  <%= current_user.personal_email %>
+                <% else %>
+                  No personal email set.
+                <% end %>
+              </p>
+              <p style="margin: 0.5rem 0; color: #666;">
+                <strong>LeetCode Username:</strong>
+                <% if current_user.leetcode_username.present? %>
+                  <%= current_user.leetcode_username %>
+                <% else %>
+                  No LeetCode username set.
+                <% end %>
+              </p>
+            </div>
+
+            <div class="focus-time-container">
+              <p class="focus-time-label">Update your profile information</p>
+              <div class="focus-time-controls">
+                <%= form_with model: current_user, url: profile_path, method: :patch do |form| %>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :first_name, "First Name" %>
+                    <%= form.text_field :first_name, class: "focus-time-input", placeholder: "Enter first name" %>
+                  </div>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :last_name, "Last Name" %>
+                    <%= form.text_field :last_name, class: "focus-time-input", placeholder: "Enter last name" %>
+                  </div>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :personal_email, "Personal Email" %>
+                    <%= form.email_field :personal_email, class: "focus-time-input", placeholder: "Enter personal email" %>
+                  </div>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :leetcode_username, "LeetCode Username" %>
+                    <%= form.text_field :leetcode_username, class: "focus-time-input", placeholder: "Enter username" %>
+                  </div>
+                  <%= form.submit "Update Profile", class: "btn set" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+</div>

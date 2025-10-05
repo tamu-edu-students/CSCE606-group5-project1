@@ -1,0 +1,116 @@
+<div class="app-container">
+    <%= render 'shared/navbar' %>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Leetcode Page -->
+        <div id="leetcodePage" class="page">
+
+            <div class="page-header align">
+                <div>
+                    <h1 class="page-title">Leetcode</h1>
+                    <p class="page-subtitle">Add leetcode problems to your existing calendar events</p>
+                </div>
+                
+                <% if session[:google_token] %>
+                    <div class="align-end">
+                        <%= button_to "Sync Calendar", 
+                                    sync_calendar_path, 
+                                    method: :post,
+                                    class: "btn btn-primary",
+                                    data: { 
+                                        confirm: "This will sync your Google Calendar events. Continue?",
+                                        disable_with: "Syncing..." 
+                                    } %>
+                        
+                        <% if session[:last_calendar_sync] %>
+                        <small class="text-muted">
+                            Last synced: <%= time_ago_in_words(Time.at(session[:last_calendar_sync])) %> ago
+                        </small>
+                        <% end %>
+                    </div>
+                <% end %>
+            </div>
+
+            <div class="content-area">
+                <div class="leet-container">
+                    <div class="leet-header">
+                        <div class="leet-filters">
+                            <%= form_with url: leetcode_path, method: :get, local: true, html: { class: "filters-form" } do %>
+                                <div class="filter-item">
+                                    <label for="difficulty">Difficulty</label>
+                                    <%= select_tag :difficulty, options_for_select([['All', ''], 'Easy', 'Medium', 'Hard'], params[:difficulty]), id: 'difficulty' %>
+                                </div>
+
+                                <div class="filter-item">
+                                    <label for="tags">Tags (Hold <kbd>Ctrl</kbd> (or  <kbd>Cmd</kbd> on Mac) to select multiple)</label>
+                                    <%= select_tag :tags, options_for_select(@available_tags, params[:tags]&.is_a?(Array) ? params[:tags] : params[:tags]&.split(',')), multiple: true, id: 'tags', size: 2 %>
+                                </div>
+
+                                <button type="submit" class="icon-button align-center" title="Apply Filters">
+                                    <h4>Filter</h4>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M10 18h4v-2h-4v2zm-7-7h18v-2H3v2zm3-7v2h12V4H6z"/>
+                                    </svg>
+                                </button>
+
+                            <% end %>
+                        </div>
+                    </div>
+                    
+                    <div class="leet-content">
+                        <% if @events.any? %>
+                            <% @events.each do |event| %>
+                            <div class="event-card align">
+                                <div>
+                                    <h3><%= event.title %></h3>
+                                    <p>Difficulty: <%= event.difficulty %></p>
+                                    <p><strong>Tags:</strong> <%= event.tags %></p>
+                                </div>
+                                <div class="align-end">
+                                    <a href="<%= event.url %>" target="_blank">View on Leetcode</a>
+                                    <%= form_with url: add_problem_leet_code_sessions_path, method: :post, local: true do %>
+                                        <div class="align" style="gap:10px">
+                                            <div class="form-field">
+                                                <%= select_tag :session_id,
+                                                    options_from_collection_for_select(
+                                                    current_user.leet_code_sessions.order(:scheduled_time),
+                                                    :id,
+                                                    ->(session) {
+                                                        label = session.scheduled_time.strftime("%b %d, %Y at %I:%M %p")
+                                                        label += " · #{session.duration_minutes} min" if session.duration_minutes.present?
+                                                        label += " – #{truncate(session.description, length: 30)}" if session.description.present?
+                                                        label
+                                                    }
+                                                    ),
+                                                    prompt: "Select a session (e.g., Oct 10 at 03:00 PM · 60 min – Practice)",
+                                                    required: true,
+                                                    class: "select-input" %>
+                                            </div>
+                                            <%= hidden_field_tag :problem_id, event.id %>
+
+                                            <div>
+                                            <%= submit_tag "Add", class: "btn btn-secondary" %>
+                                            </div>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            </div>
+                            <% end %>
+                            <div class="pagination-container">
+                                <%= paginate @events, params: {
+                                    solved: params[:solved],
+                                    difficulty: params[:difficulty],
+                                    tags: params[:tags]
+                                } %>
+                            </div>
+                        <% else %>
+                            <p>No problems found.</p>
+                        <% end %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>

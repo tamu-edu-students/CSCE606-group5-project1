@@ -4,8 +4,10 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+ENV["ALLOWED_EMAIL_DOMAINS"] = "test.com,tamu.edu"
 
 require 'cucumber/rails'
+require 'rake'
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how

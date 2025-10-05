@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default from: ENV.fetch("MAIL_FROM", "LeetRecorder <postmaster@sandbox6b070e52c6b54f729bdadf263ae5111.mailgun.org>")
   layout "mailer"
 end

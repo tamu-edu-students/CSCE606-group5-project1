@@ -1,6 +1,6 @@
 .sidebar {
     width: 260px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--tamu-red);
     color: white;
     display: flex;
     flex-direction: column;
@@ -16,6 +16,7 @@
 }
 
 .logo {
+    width: 85px;
     font-size: 1.5rem;
     font-weight: bold;
     display: flex;

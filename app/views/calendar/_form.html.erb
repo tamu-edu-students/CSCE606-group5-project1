@@ -1,0 +1,59 @@
+ <%= form_with model: false, url: form_url, method: form_method, scope: :event, local: true do |f| %>
+    
+    <div class="form-row">
+        <div class="form-field">
+            <%= f.label :summary, "Title" %>
+            <%= f.text_field :summary, value: event[:summary] %>
+        </div>
+
+        <div class="form-field">
+            <%= f.label :start_date, "Date" %>
+            <%= f.date_field :start_date, value: event[:start]&.to_date %>
+        </div>
+
+        <div class="form-field">
+            <%= f.label :location %>
+            <%= f.text_field :location, value: event[:location] %>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <% if action=="edit" %>
+            <div class="form-field">
+                <%= f.label :start_time, "Start" %>
+                <%= f.datetime_field :start_time, value: (@event[:start] unless @event[:is_all_day]) %>
+            </div>
+            <div class="form-field">
+                <%= f.label :end_time, "End" %>
+                <%= f.datetime_field :end_time, value: (@event[:end] unless @event[:is_all_day]) %>
+            </div>
+        <%else%>
+            <div class="form-field">
+                <%= f.label :start_time, "Start" %>
+                <%= f.datetime_field :start_time, value: "" %>
+            </div>
+            <div class="form-field">
+                <%= f.label :end_time, "End" %>
+                <%= f.datetime_field :end_time, value: "" %>
+            </div>
+        <% end %>
+
+        <div class="form-field checkbox-inline">
+            <label>
+                All Day Event
+                <%= f.check_box :all_day, { checked: event[:is_all_day] }, "true", "false" %>
+            </label>
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <div class="form-field" style="grid-column: span 3;">
+            <%= f.label :description %>
+            <%= f.text_area :description, value: event[:description] %>
+        </div>
+    </div>
+
+    <%= f.submit submit_text || "Save Event", class: "btn btn-primary", style: "margin-right: 1rem" %>
+    <%= link_to "Back to Calendar", calendar_path %>
+  <% end %>

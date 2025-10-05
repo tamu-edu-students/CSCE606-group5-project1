@@ -11,66 +11,66 @@
         </div>
         
         <div class="content-area">
+          <div class="timer-container" data-controller="timer" 
+               data-timer-initial-time-hms-value="<%= @time_remaining_hms || '00:00:00' %>"
+               data-timer-start-on-load-value="<%= @current_event.present?.to_s %>">
 
-        <% if @current_event.present? %>
-          <div class="event-banner">
-            <h2 class="event-title">Now: <%= @current_event.summary.presence || "Current Event" %></h2>
-            <p class="event-time">
-              <% if @current_event.start.respond_to?(:date_time) && @current_event.start.date_time.present? %>
-                <%# For events with a specific time %>
-                <%= @current_event.start.date_time.strftime("%d %B %Y, %H:%M:%S") %> — <%= @current_event.end.date_time.strftime("%d %B %Y, %H:%M:%S") %>
-              <% else %>
-                <%# For all-day events %>
-                <%= @current_event.start.date.strftime("%d %B %Y") %> — <%= @current_event.end.date.strftime("%d %B %Y") %>
-              <% end %>
-            </p>
-          </div>
-          
-        <% else %>
-          <%# --- NO CURRENT EVENT IS RUNNING (Show the form) --- %>            
-            <div class="timer-container" data-controller="timer">
-              <h2>Focus Timer</h2>
-              <div class="timer-display" id="timerDisplay">
-                <%= @time_remaining_hms || '00:00:00' %>
-              </div>
-              
-              <div class="timer-controls">
-                <button class="timer-btn start js-only" data-action="click->timer#start" data-timer-target="startBtn">Start</button>
-                <button class="timer-btn pause js-only" data-action="click->timer#pause" data-timer-target="pauseBtn" style="display: none;">Pause</button>
-                <button class="timer-btn reset js-only" data-action="click->timer#reset">Reset</button>
-              <noscript>
-                  <%= link_to "Refresh Timer", dashboard_path, class: "timer-btn start" %>
-                </noscript>
-              </div>
-              
-              <div class="focus-time-container">                
-                <p class="focus-time-label">Set focus time</p>
-                <div class="focus-time-controls js-only">
-                    <input
-                    type="number"
-                    id="customTimerInput"
-                    min="1"
-                    max="240"
-                    placeholder="Minutes"
-                    class="focus-time-input"
-                    />
-                <button class="timer-btn set js-only" data-action="click->timer#setCustom">Set Timer</button>
-                </div>
-                <noscript>
-                  <%= form_with url: create_timer_path, method: :post, class: "focus-time-controls" do |form| %>
-                    <%= form.number_field :minutes,
-                                          min: 1,
-                                          max: 240,
-                                          placeholder: "Minutes",
-                                          class: "focus-time-input",
-                                          required: true %>
-
-                    <%= form.submit "Set Timer", class: "timer-btn set" %>
-                  <% end %>
-                </noscript>
-              </div>
+          <% if @current_event.present? %>
+            <div class="event-banner">
+              <h2 class="event-title">Now: <%= @current_event.summary.presence || "Current Event" %></h2>
+              <p class="event-time">
+                <% if @current_event.start.respond_to?(:date_time) && @current_event.start.date_time.present? %>
+                  <%# For events with a specific time %>
+                  <%= @current_event.start.date_time.strftime("%d %B %Y, %H:%M:%S") %> — <%= @current_event.end.date_time.strftime("%d %B %Y, %H:%M:%S") %>
+                <% else %>
+                  <%# For all-day events %>
+                  <%= @current_event.start.date.strftime("%d %B %Y") %> — <%= @current_event.end.date.strftime("%d %B %Y") %>
+                <% end %>
+              </p>
             </div>
-        <% end %>
+            
+          <% else %>
+            <%# --- NO CURRENT EVENT IS RUNNING (Show the form) --- %>            
+            <h2>Focus Timer</h2>
+            <div class="focus-time-container">                
+              <div class="focus-time-controls js-only">
+                  <input
+                  type="number"
+                  id="customTimerInput"
+                  min="1"
+                  max="240"
+                  placeholder="Minutes"
+                  class="focus-time-input"
+                  data-timer-target="input"
+                  />
+              <button class="btn set js-only" data-action="click->timer#setCustom">Start</button>
+              </div>
+              <noscript>
+                <%= form_with url: create_timer_path, method: :post, class: "focus-time-controls" do |form| %>
+                  <%= form.number_field :minutes,
+                                        min: 1,
+                                        max: 240,
+                                        placeholder: "Minutes",
+                                        class: "focus-time-input",
+                                        required: true %>
+
+                  <%= form.submit "Start", class: "btn set" %>
+                <% end %>
+              </noscript>
+              <div class="timer-controls">
+                <button class="btn start js-only" data-action="click->timer#start" data-timer-target="startBtn">Start</button>
+                <button class="btn pause js-only" data-action="click->timer#pause" data-timer-target="pauseBtn" style="display: none;">Pause</button>
+                <button class="btn reset js-only" data-action="click->timer#reset">Reset</button>
+              </div>    
+            </div>
+          <% end %>
+        <div class="timer-display" id="timerDisplay" data-timer-target="display">
+            <%= @time_remaining_hms || '00:00:00' %>
+          <div class="timer-controls">
+            <noscript>
+              <%= link_to "Refresh Timer", dashboard_path, class: "btn start" %>
+            </noscript>
+          </div>
         </div>
       </div>
     </main>

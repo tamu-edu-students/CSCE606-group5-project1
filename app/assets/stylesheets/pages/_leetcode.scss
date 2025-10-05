@@ -1,0 +1,126 @@
+.leet-container {
+    padding: 1rem 0;
+}
+
+.leet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.leet-header {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 2rem;
+    gap: 20px;
+}
+
+.leet-filters {
+  margin-bottom: 0px;
+}
+
+.filters-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+}
+
+.filter-item label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filter-item select {
+  padding: 6px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.icon-button:hover {
+  color: var(--tamu-red);
+}
+
+.align-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.align-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.select-input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 20 20' fill='gray' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 1em;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: var(--tamu-red, #500000);
+  box-shadow: 0 0 0 2px rgba(80, 0, 0, 0.1);
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  list-style: none;
+}
+
+.pagination li {
+  display: inline;
+  margin: 0 5px;
+}
+
+.pagination a,
+.pagination span {
+  padding: 6px 9px;
+  text-decoration: none;
+  color: var(--tamu-red);
+  border-radius: 4px;
+}
+
+.pagination .current {
+  background-color: var(--tamu-red);
+  color: white;
+  border-color: var(--tamu-red);
+}
+
+.pagination .disabled {
+  color: #aaa;
+}

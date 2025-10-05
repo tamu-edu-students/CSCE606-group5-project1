@@ -1,0 +1,20 @@
+Weekly LeetCode Progress Summary
+
+Hello <%= @user.first_name %>,
+
+Your Progress This Week:
+- Problems Solved This Week: <%= @stats[:weekly_solved_count] %>
+- Current Streak: <%= @stats[:current_streak_days] %> days
+- Total Problems Solved: <%= @stats[:total_solved_all_time] %>
+
+<% if @stats[:highlight].present? %>
+Highlights:
+<%= @stats[:highlight] %>
+<% end %>
+
+Keep up the great work!
+
+Best,
+The LeetCode Team
+
+[Open my dashboard](dashboard_url)
