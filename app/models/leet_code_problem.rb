@@ -6,4 +6,8 @@ class LeetCodeProblem < ApplicationRecord
 
   has_many :leet_code_session_problems
   has_many :leet_code_sessions, through: :leet_code_session_problems
+
+  def difficulty
+    super.humanize
+  end
 end

@@ -4,8 +4,8 @@ class WeeklyReportMailer < ApplicationMailer
     @stats = stats
 
     mail(
-      to: @user.email,
-      subject: "Your Weekly LeetCode Progress Summary"
+      to: @user.personal_email,
+      subject: "🌟 Weekly LeetCode Report — #{user.first_name}'s Progress Summary"
     )
   end
 end

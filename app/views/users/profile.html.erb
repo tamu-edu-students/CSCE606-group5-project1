@@ -22,6 +22,14 @@
               <h2 style="margin-bottom: 1rem; color: #333;"><%= current_user.full_name %></h2>
               <p style="margin: 0.5rem 0; color: #666;"><strong>Email:</strong> <%= current_user.email %></p>
               <p style="margin: 0.5rem 0; color: #666;">
+                <strong>Personal Email:</strong>
+                <% if current_user.personal_email.present? %>
+                  <%= current_user.personal_email %>
+                <% else %>
+                  No personal email set.
+                <% end %>
+              </p>
+              <p style="margin: 0.5rem 0; color: #666;">
                 <strong>LeetCode Username:</strong>
                 <% if current_user.leetcode_username.present? %>
                   <%= current_user.leetcode_username %>
@@ -42,6 +50,10 @@
                   <div style="margin-bottom: 1rem;">
                     <%= form.label :last_name, "Last Name" %>
                     <%= form.text_field :last_name, class: "focus-time-input", placeholder: "Enter last name" %>
+                  </div>
+                  <div style="margin-bottom: 1rem;">
+                    <%= form.label :personal_email, "Personal Email" %>
+                    <%= form.email_field :personal_email, class: "focus-time-input", placeholder: "Enter personal email" %>
                   </div>
                   <div style="margin-bottom: 1rem;">
                     <%= form.label :leetcode_username, "LeetCode Username" %>
