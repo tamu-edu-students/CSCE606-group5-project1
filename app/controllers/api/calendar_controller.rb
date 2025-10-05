@@ -3,7 +3,7 @@ require "googleauth"
 
 module Api
   class CalendarController < ApplicationController
-    before_action :ensure_event_name_present, only: [:create, :update]
+    before_action :ensure_event_name_present, only: [ :create, :update ]
     def events
       unless session[:google_token]
         redirect_to login_google_path, alert: "Not authenticated with Google."
