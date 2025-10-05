@@ -43,7 +43,6 @@
                   class="focus-time-input"
                   data-timer-target="input"
                   />
-              <button class="btn set js-only" data-action="click->timer#setCustom">Start</button>
               </div>
               <noscript>
                 <%= form_with url: create_timer_path, method: :post, class: "focus-time-controls" do |form| %>
@@ -58,7 +57,7 @@
                 <% end %>
               </noscript>
               <div class="timer-controls">
-                <button class="btn start js-only" data-action="click->timer#start" data-timer-target="startBtn">Start</button>
+                <button class="btn set js-only" data-action="click->timer#setCustom">Start</button>
                 <button class="btn pause js-only" data-action="click->timer#pause" data-timer-target="pauseBtn" style="display: none;">Pause</button>
                 <button class="btn reset js-only" data-action="click->timer#reset">Reset</button>
               </div>    

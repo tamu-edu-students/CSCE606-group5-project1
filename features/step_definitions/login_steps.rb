@@ -17,7 +17,7 @@ end
 
 # This step establishes a logged-in state
 Given('I am logged in as a student') do
-  step %(a student with the email "testuser@tamu.edu" can be authenticated by Google)
+step %(a student with the email "testuser@tamu.edu" can be authenticated by Google)
   visit root_path
   login_element = find(:link_or_button, 'Sign in with Google')
   execute_script("arguments[0].click();", login_element)

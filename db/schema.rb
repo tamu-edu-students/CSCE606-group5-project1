@@ -24,7 +24,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_225611) do
     t.datetime "updated_at", null: false
     t.text "title_slug"
     t.text "description"
-    t.index ["leetcode_id"], name: "index_leet_code_problems_on_leetcode_id", unique: true
+    t.index [ "leetcode_id" ], name: "index_leet_code_problems_on_leetcode_id", unique: true
   end
 
   create_table "leet_code_session_problems", force: :cascade do |t|
@@ -34,8 +34,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_225611) do
     t.datetime "solved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["leet_code_problem_id"], name: "index_leet_code_session_problems_on_leet_code_problem_id"
-    t.index ["leet_code_session_id"], name: "index_leet_code_session_problems_on_leet_code_session_id"
+    t.index [ "leet_code_problem_id" ], name: "index_leet_code_session_problems_on_leet_code_problem_id"
+    t.index [ "leet_code_session_id" ], name: "index_leet_code_session_problems_on_leet_code_session_id"
   end
 
   create_table "leet_code_sessions", force: :cascade do |t|
@@ -48,7 +48,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_225611) do
     t.string "google_event_id"
     t.text "description"
     t.string "title"
-    t.index ["user_id"], name: "index_leet_code_sessions_on_user_id"
+    t.index [ "user_id" ], name: "index_leet_code_sessions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

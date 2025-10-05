@@ -41,7 +41,7 @@
                                     </div>
                                     
                                     <div class="align" style="gap:20px">
-                                        <%= link_to "Edit Event", edit_calendar_event_path(event[:id]), class: "edit-button" %>
+                                        <%= button_to "Edit Event", edit_calendar_event_path(event[:id]), method: :get, class: "btn btn-secondary" %>
                                     
                                         <%= button_to "Delete", 
                                             api_calendar_event_path(event[:id]), 

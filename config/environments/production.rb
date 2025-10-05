@@ -36,7 +36,7 @@ Rails.application.configure do
 
   # Mailer
   config.action_mailer.default_url_options = {
-    host: "leetrecorder-staging-9448a75c94bd.herokuapp.com"
+    host: "leetplanner-staging-9448a75c94bd.herokuapp.com"
   }
   config.action_mailer.smtp_settings = {
     user_name: ENV["MAILGUN_SMTP_LOGIN"],
