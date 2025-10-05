@@ -3,6 +3,7 @@ require "googleauth"
 
 module Api
   class CalendarController < ApplicationController
+    before_action :ensure_event_name_present, only: [ :create, :update ]
     def events
       unless session[:google_token]
         redirect_to login_google_path, alert: "Not authenticated with Google."
@@ -199,6 +200,17 @@ module Api
     end
 
     private
+    def ensure_event_name_present
+      # Works whether your form posts under params[:event] or flat params
+      name = params.dig(:event, :summary).presence || params[:summary].presence
+      return if name.to_s.strip.present?
+
+      msg = "Event name is required."
+      respond_to do |format|
+        format.html { redirect_back fallback_location: calendar_path, alert: msg }
+        format.json { render json: { error: msg }, status: :unprocessable_entity }
+      end
+    end
 
     # Shared: build authorized Calendar service or render 401
     def calendar_service_or_unauthorized
