@@ -3,6 +3,7 @@ require "googleauth"
 
 module Api
   class CalendarController < ApplicationController
+    before_action :ensure_event_name_present, only: [:create, :update]
     def events
       unless session[:google_token]
         return render json: { error: "Not authenticated" }, status: :unauthorized
@@ -63,6 +64,17 @@ module Api
       rescue => e
         Rails.logger.error("Calendar error: #{e.message}")
         render json: { error: "Failed to load events" }, status: :internal_server_error
+      end
+    end
+    private
+    def ensure_event_name_present
+      name = params.dig(:event, :summary).presence || params[:summary].presence
+      return if name.to_s.strip.present?
+
+      msg = "Event name is required."
+      respond_to do |format|
+        format.html { redirect_back fallback_location: calendar_path, alert: msg }
+        format.json { render json: { error: msg }, status: :unprocessable_entity }
       end
     end
   end
