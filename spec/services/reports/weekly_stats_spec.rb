@@ -1,12 +1,16 @@
 require "rails_helper"
 
+# Tests Reports::WeeklyStats service for generating user progress statistics
 RSpec.describe Reports::WeeklyStats do
   let(:user) { User.create!(netid: "test_user", email: "test@example.com", first_name: "Test", last_name: "User", active: true) }
   let(:week_start) { Time.zone.parse("2023-09-24 00:00:00") } # Sunday
   let(:service) { described_class.new(user, week_start: week_start) }
 
+  # Tests main service method that generates complete statistics report
   describe "#call" do
+    # Tests behavior when user has no solved problems
     context "with no solved problems" do
+      # Tests that service returns zero values for all metrics when no problems solved
       it "returns zero stats" do
         result = service.call
         expect(result[:weekly_solved_count]).to eq(0)
@@ -16,6 +20,7 @@ RSpec.describe Reports::WeeklyStats do
       end
     end
 
+    # Tests behavior when user has solved problems within the target week
     context "with solved problems" do
       let!(:session) { LeetCodeSession.create!(user: user, scheduled_time: Time.zone.now, duration_minutes: 60) }
       let!(:problem) { LeetCodeProblem.create!(leetcode_id: "1", title: "Test Problem", difficulty: "hard") }
@@ -28,11 +33,13 @@ RSpec.describe Reports::WeeklyStats do
         )
       end
 
+      # Tests that weekly problem count is calculated correctly
       it "counts weekly solved problems" do
         result = service.call
         expect(result[:weekly_solved_count]).to eq(1)
       end
 
+      # Tests streak calculation logic
       it "calculates current streak" do
         # Create a solved problem today
         LeetCodeSessionProblem.create!(
@@ -46,11 +53,13 @@ RSpec.describe Reports::WeeklyStats do
         expect(result[:current_streak_days]).to eq(1)
       end
 
+      # Tests that hardest problem is identified and included in highlights
       it "includes hardest problem in highlight" do
         result = service.call
         expect(result[:highlight]).to include("Hardest problem this week: #{problem.title} (hard)")
       end
 
+      # Tests that historical longest streak is included in highlights
       it "includes longest streak in highlight" do
         user.update(longest_streak: 5)
         result = service.call
@@ -58,6 +67,7 @@ RSpec.describe Reports::WeeklyStats do
       end
     end
 
+    # Tests that problems outside the target week are handled correctly
     context "with problems outside the week" do
       let!(:session) { LeetCodeSession.create!(user: user, scheduled_time: Time.zone.now, duration_minutes: 60) }
       let!(:problem) { LeetCodeProblem.create!(leetcode_id: "3", title: "Old Problem", difficulty: "easy") }
@@ -70,6 +80,7 @@ RSpec.describe Reports::WeeklyStats do
         )
       end
 
+      # Tests that problems solved outside target week don't affect weekly count but do affect total
       it "does not count problems outside the week" do
         result = service.call
         expect(result[:weekly_solved_count]).to eq(0)

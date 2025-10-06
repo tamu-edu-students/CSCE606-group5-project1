@@ -1,3 +1,8 @@
+# Task: LeetCode Problem Seeder
+# Fetches LeetCode problems from external API and populates local database
+# Input: External LeetCode API (leetcode-api-pied.vercel.app)
+# Output: Up to 200 LeetCode problems with full metadata in local database
+# Side effects: Creates/updates LeetCodeProblem records
 namespace :leet_code do
   desc "Seed LeetCode problems with description and tags using external API"
   task seed: :environment do

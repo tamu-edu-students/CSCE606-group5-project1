@@ -1,3 +1,7 @@
+# Feature: User profile viewing and LeetCode username management
+# Given: User is logged in to the application
+# When: User accesses profile page and updates LeetCode username
+# Then: Profile information is displayed and username is saved for API integration
 Feature: User Profile Management
   As a user
   I want to access my profile and set my LeetCode username
