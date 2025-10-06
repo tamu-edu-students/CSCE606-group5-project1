@@ -3,7 +3,7 @@
 class LoginController < ApplicationController
   # Skip authentication requirement for login page access
   skip_before_action :authenticate_user!
-  
+
   # GET /login
   # Display login page or redirect if user is already authenticated
   def index

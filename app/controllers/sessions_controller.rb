@@ -99,7 +99,7 @@ class SessionsController < ApplicationController
 
     # Reset entire session to clear all stored data
     reset_session
-    
+
     # Respond with appropriate format
     respond_to do |format|
       format.html { redirect_to root_path, notice: "You have been signed out successfully." }

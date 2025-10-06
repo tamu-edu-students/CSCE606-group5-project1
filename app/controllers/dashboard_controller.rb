@@ -75,19 +75,19 @@ class DashboardController < ApplicationController
           @event_ends_at_formatted = @event_ends_at.strftime("%d-%b-%Y %H:%M:%S")
           rem = (@event_ends_at - Time.now.utc).to_i
           rem = 0 if rem.negative?  # Don't show negative time
-          
+
           # Convert seconds to hours, minutes, seconds
           h = rem / 3600
           m = (rem % 3600) / 60
           s = rem % 60
-          
+
           @time_remaining_seconds = rem
           @time_remaining_hms = format("%02d:%02d:%02d", h, m, s)
         end
       elsif session[:timer_ends_at]
         # If no current calendar event, check for manual timer
         @timer_ends_at = Time.parse(session[:timer_ends_at])
-        
+
         if @timer_ends_at <= Time.now.utc
           # Timer has expired, clean up session
           session.delete(:timer_ends_at)

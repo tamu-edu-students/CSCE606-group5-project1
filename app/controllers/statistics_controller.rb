@@ -20,7 +20,7 @@ class StatisticsController < ApplicationController
       medium: 0, # We don't track difficulty breakdown in our local stats
       hard: 0    # We don't track difficulty breakdown in our local stats
     }
-    
+
     # Create recent stats hash for time-based progress tracking
     @recent_stats = {
       week: @weekly_stats[:weekly_solved_count],  # Problems solved this week

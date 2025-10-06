@@ -9,7 +9,7 @@ module Api
   class CalendarController < ApplicationController
     # Ensure event has a name before creating or updating
     before_action :ensure_event_name_present, only: [ :create, :update ]
-    
+
     # GET /api/calendar/events
     # Fetch calendar events from Google Calendar for a specified date range
     def events
@@ -18,7 +18,7 @@ module Api
         redirect_to login_google_path, alert: "Not authenticated with Google."
         return
       end
-      
+
       # Get authenticated calendar service or return early if unauthorized
       service = calendar_service_or_unauthorized or return
 
@@ -68,7 +68,7 @@ module Api
     def create
       # Get authenticated calendar service or return early if unauthorized
       service = calendar_service_or_unauthorized or return
-      
+
       # Parse all_day flag from parameters
       all_day = ActiveModel::Type::Boolean.new.cast(params.dig(:event, :all_day))
 
@@ -113,7 +113,7 @@ module Api
           time_zone: "America/Chicago"
         )
       end
-      
+
       # Create Google Calendar event object
       ev = Google::Apis::CalendarV3::Event.new(
         summary:     params.dig(:event, :summary),
@@ -126,7 +126,7 @@ module Api
       begin
         # Create event in Google Calendar
         created = service.insert_event("primary", ev)
-        
+
         # === CREATE CORRESPONDING LEETCODE SESSION ===
         # Calculate start and end times for LeetCode session
         start_time = if all_day
@@ -159,7 +159,7 @@ module Api
                   end
         )
         # === END LEETCODE SESSION CREATION ===
-        
+
         # Respond with success
         respond_to do |format|
           format.html { redirect_to calendar_path, notice: "Event successfully created." }
@@ -246,7 +246,7 @@ module Api
 
       # Update the event in Google Calendar
       updated = service.update_event("primary", params[:id], patch)
-      
+
       # Respond with success
       respond_to do |format|
         format.html { redirect_to calendar_path, notice: "Event successfully updated." }
@@ -266,10 +266,10 @@ module Api
     def destroy
       # Get authenticated calendar service or return early if unauthorized
       service = calendar_service_or_unauthorized or return
-      
+
       # Delete the event from Google Calendar
       service.delete_event("primary", params[:id])
-      
+
       # Respond with success
       respond_to do |format|
         format.html { redirect_to calendar_path(anchor: "calendar"), notice: "Event deleted." }
@@ -283,7 +283,7 @@ module Api
     end
 
     private
-    
+
     # Validation method to ensure event has a name/summary
     def ensure_event_name_present
       # Check for event name in both nested and flat parameter formats

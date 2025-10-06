@@ -97,7 +97,7 @@ class GoogleCalendarSync
     begin
       # Attempt to refresh the access token
       client.refresh!
-      
+
       # Update session with new token information
       @session[:google_token] = client.access_token
       @session[:google_refresh_token] ||= client.refresh_token  # Keep existing if not returned
@@ -181,7 +181,7 @@ class GoogleCalendarSync
         status: determine_status(start_time, end_time)
       )
       session.save!
-      
+
       # Return appropriate result based on whether this was a new record
       session.previously_new_record? ? :created : :updated
     else
@@ -235,7 +235,7 @@ class GoogleCalendarSync
       .where(user_id: @user.id)                    # Only this user's sessions
       .where.not(google_event_id: nil)             # Only sessions with Google event IDs
       .where.not(google_event_id: google_event_ids) # Not in current Google events
-    
+
     # Delete the sessions and return count
     deleted_count = deleted_sessions.destroy_all.size
     deleted_count

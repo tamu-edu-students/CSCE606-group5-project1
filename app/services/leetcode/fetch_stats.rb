@@ -22,7 +22,7 @@ module Leetcode
     # @return [Hash] Calendar data with submission information
     def calendar(username)
       data = fetch_json("#{username}/calendar")
-      
+
       # submissionCalendar is returned as a JSON string, need to parse it into a hash
       if data["submissionCalendar"].is_a?(String)
         data["submissionCalendar"] = JSON.parse(data["submissionCalendar"])
@@ -77,15 +77,15 @@ module Leetcode
       Rails.cache.fetch([ "lc", path ], expires_in: 10.minutes) do
         # Build full URI from base URL and path
         uri = URI.join(BASE, path)
-        
+
         # Make HTTP request with timeouts for reliability
         res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 2, read_timeout: 3) do |http|
           http.request(Net::HTTP::Get.new(uri))
         end
-        
+
         # Check for successful HTTP response
         raise "HTTP #{res.code}" unless res.is_a?(Net::HTTPSuccess)
-        
+
         # Parse JSON response
         JSON.parse(res.body)
       end

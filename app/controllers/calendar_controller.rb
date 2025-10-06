@@ -34,7 +34,7 @@ class CalendarController < ApplicationController
       @events = response.items.map do |event|
         # Determine if event is all-day (no specific time)
         is_all_day = event.start.date_time.nil?
-        
+
         if is_all_day
           # All-day events use date only
           start_date = parse_date(event.start.date)

@@ -1,7 +1,6 @@
 # Mailer for sending weekly progress reports to users
 # Sends personalized emails with LeetCode statistics and progress summaries
 class WeeklyReportMailer < ApplicationMailer
-  
   # Send weekly summary email to user with their coding statistics
   # @param user [User] The user to send the report to
   # @param stats [Hash] Hash containing weekly statistics data

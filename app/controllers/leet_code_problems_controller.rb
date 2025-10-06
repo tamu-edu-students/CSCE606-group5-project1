@@ -1,7 +1,6 @@
 # Controller for displaying and filtering LeetCode problems
 # Provides browsing functionality with difficulty and tag-based filtering
 class LeetCodeProblemsController < ApplicationController
-  
   # GET /leetcode
   # Display paginated list of LeetCode problems with optional filtering
   def show
@@ -13,7 +12,7 @@ class LeetCodeProblemsController < ApplicationController
                               .map(&:strip)                   # Remove whitespace
                               .uniq                          # Remove duplicates
                               .sort                          # Sort alphabetically
-      
+
       # Start with all problems
       @events = LeetCodeProblem.all
 
