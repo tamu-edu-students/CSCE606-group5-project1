@@ -6,8 +6,16 @@
 
 ENV["ALLOWED_EMAIL_DOMAINS"] = "test.com,tamu.edu"
 
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter 'channels'
+  add_filter 'mailers'
+  add_filter 'jobs'
+end
+
 require 'cucumber/rails'
 require 'rake'
+require 'google/apis/calendar_v3'
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how

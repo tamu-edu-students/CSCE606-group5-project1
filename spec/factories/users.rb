@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :user do
+    sequence(:netid) { |n| "testuser#{n}" }
     sequence(:email) { |n| "testuser#{n}@example.com" }
 
     first_name { "Test" }
     last_name  { "User" }
     leetcode_username { nil }
-    netid { "testuser" }
 
     google_access_token { "test_access_token" }
     google_refresh_token { "test_refresh_token" }

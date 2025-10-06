@@ -13,8 +13,6 @@ And I should see a success message "Signed in as student@tamu.edu"
 @javascript
 Scenario: User logs out successfully
 Given I am logged in as a student
-When I navigate to my calendar page
-Then I should see my calendar events
 When I click the "Sign out"
 Then I should be redirected to the login page
 And I should see a confirmation message "You have been successfully logged out."

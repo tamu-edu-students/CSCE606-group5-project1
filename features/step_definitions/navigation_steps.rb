@@ -36,11 +36,7 @@ Given('I am a logged-in user') do
   visit '/auth/google_oauth2/callback'
 end
 
-Given('I am on the dashboard page') do
-  visit dashboard_path
-end
-
-Given('I am on the {string} page') do |page_name|
+Given('I am on the "{string}" page') do |page_name|
   visit path_for(page_name)
 end
 

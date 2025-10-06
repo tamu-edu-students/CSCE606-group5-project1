@@ -1,4 +1,4 @@
-Given("I am on the LeetCode entries page") { visit leet_code_entries_path }
+Given("I am on the LeetCode entries page") { visit leetcode_path }
 
 When('I follow {string}') do |string|
   click_link string

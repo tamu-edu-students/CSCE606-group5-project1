@@ -1,6 +1,12 @@
-ENV["RAILS_ENV"] ||= "test"
-require_relative "../config/environment"
-require "rails/test_help"
+require 'simplecov'
+SimpleCov.start 'rails' do
+  command_name 'Minitest'
+  merge_timeout 3600 # 1 hour
+end
+
+ENV['RAILS_ENV'] ||= 'test'
+require_relative '../config/environment'
+require 'rails/test_help'
 
 module ActiveSupport
   class TestCase

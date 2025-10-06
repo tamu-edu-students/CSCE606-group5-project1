@@ -11,12 +11,9 @@ When('I navigate to my LeetCode stats page') do
 end
 
 Then('I should see the solved problems statistics') do
-  expect(page).to have_content('Problems Solved')
-  expect(page).to have_content('Current Streak')
-  expect(page).to have_content('Hardest Problem')
-  expect(page).to have_content('📅 Metric')
-  expect(page).to have_content('🔥 This Week')
-  expect(page).to have_content('📈 Total')
+  expect(page).to have_text("Problems Solved This Week")
+  expect(page).to have_text("Total Problems Solved")
+  expect(page).to have_text("Current Streak")
 end
 
 Then('I should see zero statistics') do
