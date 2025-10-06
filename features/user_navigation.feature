@@ -1,3 +1,7 @@
+# Feature: Navigation bar functionality across application pages
+# Given: User is logged in and on any application page
+# When: User clicks navigation links
+# Then: User can navigate between Dashboard, Calendar, and Statistics pages
 Feature: Application Navigation
   As a user
   I want a clear and consistent navigation bar

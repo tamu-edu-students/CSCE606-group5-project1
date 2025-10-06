@@ -1,3 +1,7 @@
+# Feature: Google Calendar integration for study session planning
+# Given: User is authenticated with Google Calendar access
+# When: User creates, updates, or deletes calendar events
+# Then: Events are synchronized between Google Calendar and local sessions
 Feature: Calendar
   As a user, I want to manage my Google Calendar events through the application
   so that I can plan my study sessions effectively.

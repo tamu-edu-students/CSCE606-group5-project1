@@ -1,3 +1,7 @@
+# Feature: User can view weekly stats report
+# Given: User has LeetCode username configured and solved problems
+# When: User navigates to statistics page
+# Then: User sees personalized progress metrics and achievements
 @timecop
 Feature: LeetCode Statistics
 As a user tracking my coding skills
