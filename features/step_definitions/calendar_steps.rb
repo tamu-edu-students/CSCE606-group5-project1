@@ -60,9 +60,8 @@ end
 Given('my Google Calendar has an event titled {string} with id {string}') do |title, event_id|
   mock_event = mock_google_event(event_id, title)
   allow(@service_double).to receive(:list_events).and_return(
-    instance_double(Google::Apis::CalendarV3::Events, items: [mock_event])
+    instance_double(Google::Apis::CalendarV3::Events, items: [ mock_event ])
   )
-  
   allow(@service_double).to receive(:get_event).with('primary', event_id).and_return(mock_event)
   allow(@service_double).to receive(:update_event).with('primary', event_id, an_instance_of(Google::Apis::CalendarV3::Event))
                                                .and_return(mock_google_event(event_id, 'New Updated Title'))

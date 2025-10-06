@@ -51,7 +51,6 @@ RSpec.describe GoogleCalendarSyncJob, type: :job do
 
   it 'raises an error if the user_id is not found' do
     invalid_user_id = -1
-    
     # This test verifies the job fails as expected if the user has been deleted
     expect {
       described_class.perform_now(invalid_user_id, session_data)

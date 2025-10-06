@@ -15,7 +15,6 @@ RSpec.describe Api::CalendarController, type: :controller do
     allow(Google::Apis::CalendarV3::CalendarService).to receive(:new).and_return(google_service)
     allow(google_service).to receive(:authorization=)
     session[:user_id] = user.id
-    
     session[:user_id] = user.id # Simulate a logged-in user
   end
 
@@ -31,14 +30,11 @@ RSpec.describe Api::CalendarController, type: :controller do
       before do
         session[:google_token] = 'stale-token'
         session[:google_token_expires_at] = Time.current.to_i - 3600
-        
         # Use allow_any_instance_of to stub refresh! on any instance of the client
         allow_any_instance_of(Signet::OAuth2::Client).to receive(:refresh!).and_raise(Signet::AuthorizationError.new('Refresh failed'))
       end
-
       it 'resets session and redirects to login' do
         post :create, params: { event: { summary: 'Test' } }
-        
         expect(session[:google_token]).to be_nil
         expect(response).to redirect_to(login_google_path)
         expect(flash[:alert]).to match(/Your session expired/)

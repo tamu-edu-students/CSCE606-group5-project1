@@ -6,16 +6,16 @@
 
 ENV["ALLOWED_EMAIL_DOMAINS"] = "test.com,tamu.edu"
 
-require 'simplecov'
-SimpleCov.start 'rails' do
-  add_filter 'channels'
-  add_filter 'mailers'
-  add_filter 'jobs'
+require "simplecov"
+SimpleCov.start "rails" do
+  add_filter "channels"
+  add_filter "mailers"
+  add_filter "jobs"
 end
 
-require 'cucumber/rails'
-require 'rake'
-require 'google/apis/calendar_v3'
+require "cucumber/rails"
+require "rake"
+require "google/apis/calendar_v3"
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -34,7 +34,7 @@ require 'google/apis/calendar_v3'
 #
 ActionController::Base.allow_rescue = false
 
-# Remove/comment out the lines below if your app doesn't have a database.
+# Remove/comment out the lines below if your app doesn"t have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
   DatabaseCleaner.strategy = :transaction
@@ -45,14 +45,14 @@ end
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 #
-#   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
+#   Before("@no-txn,@selenium,@culerity,@celerity,@javascript") do
 #     # { except: [:widgets] } may not do what you expect here
 #     # as Cucumber::Rails::Database.javascript_strategy overrides
 #     # this setting.
 #     DatabaseCleaner.strategy = :truncation
 #   end
 #
-#   Before('not @no-txn', 'not @selenium', 'not @culerity', 'not @celerity', 'not @javascript') do
+#   Before("not @no-txn", "not @selenium", "not @culerity", "not @celerity", "not @javascript") do
 #     DatabaseCleaner.strategy = :transaction
 #   end
 #

@@ -28,7 +28,6 @@ end
 
 Then('the JSON response should contain my user details') do
   json_response = JSON.parse(page.body)
-  
   expect(json_response['id']).to eq(@current_user.id)
   expect(json_response['name']).to eq(@current_user.full_name)
   expect(json_response['email']).to eq(@current_user.email)
