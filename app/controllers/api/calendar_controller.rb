@@ -101,17 +101,17 @@ module Api
         # === ADD LeetCodeSession creation ===
         start_time = if all_day
                       Date.parse(start_date).beginning_of_day.in_time_zone("America/Chicago")
-                    else
+        else
                       Time.zone.parse("#{start_date} #{start_time_param}")
-                    end
+        end
 
         end_time = if all_day
                     Date.parse(start_date).end_of_day.in_time_zone("America/Chicago")
-                  else
+        else
                     Time.zone.parse(end_et.date_time || (start_time + 30.minutes).iso8601)
-                  end
+        end
 
-        duration_minutes = [(end_time - start_time) / 60, 1].max.to_i
+        duration_minutes = [ (end_time - start_time) / 60, 1 ].max.to_i
 
         LeetCodeSession.create!(
           user_id: current_user.id,

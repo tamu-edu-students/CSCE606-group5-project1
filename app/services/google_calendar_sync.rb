@@ -187,5 +187,4 @@ class GoogleCalendarSync
     deleted_count = deleted_sessions.destroy_all.size
     deleted_count
   end
-
 end
