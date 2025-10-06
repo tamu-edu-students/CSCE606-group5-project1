@@ -173,8 +173,6 @@ class GoogleCalendarSync
     now = Time.current
     if end_time < now
       "completed"
-    elsif start_time <= now && end_time >= now
-      "in_progress"
     else
       "scheduled"
     end
@@ -182,12 +180,12 @@ class GoogleCalendarSync
 
   def delete_removed_events(google_event_ids)
     # Delete sessions that no longer exist in Google Calendar
-    deleted_count = LeetCodeSession
+    deleted_sessions = LeetCodeSession
       .where(user_id: @user.id)
       .where.not(google_event_id: nil)
       .where.not(google_event_id: google_event_ids)
-      .delete_all
-
+    deleted_count = deleted_sessions.destroy_all.size
     deleted_count
   end
+
 end

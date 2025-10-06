@@ -59,6 +59,7 @@ module Api
       current_date = current_time.to_date.to_s  # Always get current date
       start_date = params.dig(:event, :start_date).presence || current_date
       start_time = params.dig(:event, :start_time).presence || current_time.strftime("%H:%M")
+      start_time_param = params.dig(:event, :start_time).presence || current_time.strftime("%H:%M")
 
       if all_day
         start_et = Google::Apis::CalendarV3::EventDateTime.new(
@@ -97,6 +98,35 @@ module Api
 
       begin
         created = service.insert_event("primary", ev)
+        # === ADD LeetCodeSession creation ===
+        start_time = if all_day
+                      Date.parse(start_date).beginning_of_day.in_time_zone("America/Chicago")
+                    else
+                      Time.zone.parse("#{start_date} #{start_time_param}")
+                    end
+
+        end_time = if all_day
+                    Date.parse(start_date).end_of_day.in_time_zone("America/Chicago")
+                  else
+                    Time.zone.parse(end_et.date_time || (start_time + 30.minutes).iso8601)
+                  end
+
+        duration_minutes = [(end_time - start_time) / 60, 1].max.to_i
+
+        LeetCodeSession.create!(
+          user_id: current_user.id,
+          google_event_id: created.id,
+          title: params.dig(:event, :summary).presence || "Untitled Session",
+          description: params.dig(:event, :description),
+          scheduled_time: start_time,
+          duration_minutes: duration_minutes,
+          status: if end_time < Time.current
+                    "completed"
+                  else
+                    "scheduled"
+                  end
+        )
+        # === END LeetCodeSession creation ===
         respond_to do |format|
           format.html { redirect_to calendar_path, notice: "Event successfully created." }
           format.json { render json: serialize_event(created), status: :created }
