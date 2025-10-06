@@ -25,38 +25,44 @@ class DashboardController < ApplicationController
 
       # fetch a short window of events including current/ongoing ones
       now = Time.now.utc
+
       response = service.list_events(
         "primary",
         max_results: 20,
         single_events: true,
         order_by: "startTime",
-        time_min: (now - 7 * 24 * 3600).iso8601,
-        time_max: (now + 7 * 24 * 3600).iso8601
+        time_min: (now - 7.days).iso8601,
+        time_max: (now + 7.days).iso8601
       )
 
       # find an event that contains `now`
       event = response.items.find do |e|
-        start_time = e.start&.date_time || (e.start&.date && Time.parse(e.start.date))
-        end_time = e.end&.date_time || (e.end&.date && Time.parse(e.end.date))
+        start_time = e.start&.date_time&.to_time&.utc ||
+                     (e.start&.date && Time.parse(e.start.date).utc)
+
+        end_time = e.end&.date_time&.to_time&.utc ||
+                   (e.end&.date && (Time.parse(e.end.date).utc - 1)) # Inclusive for all-day
+
         start_time && end_time && now.between?(start_time, end_time)
       end
 
       if event
         @current_event = event
+
         if event.end&.date_time
           @event_ends_at = event.end.date_time.to_time.utc
         elsif event.end&.date
-          @event_ends_at = Date.parse(event.end.date).to_time.utc
+          @event_ends_at = (Time.parse(event.end.date).utc - 1) # Inclusive for all-day
         end
 
         if @event_ends_at
           @event_ends_at_formatted = @event_ends_at.strftime("%d-%b-%Y %H:%M:%S")
           rem = (@event_ends_at - Time.now.utc).to_i
           rem = 0 if rem.negative?
-          @time_remaining_seconds = rem
           h = rem / 3600
           m = (rem % 3600) / 60
           s = rem % 60
+          @time_remaining_seconds = rem
           @time_remaining_hms = format("%02d:%02d:%02d", h, m, s)
         end
       elsif session[:timer_ends_at]
@@ -77,7 +83,7 @@ class DashboardController < ApplicationController
     end
   end
 
-   def create_timer
+  def create_timer
     minutes = params[:minutes].to_i
     if minutes > 0
       session[:timer_ends_at] = (Time.now.utc + minutes.minutes).iso8601
