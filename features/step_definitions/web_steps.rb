@@ -1,9 +1,6 @@
 When('I click the {string} button') do |link_or_button_text|
-  begin
-    click_link(link_or_button_text)
-  rescue Capybara::ElementNotFound
-    click_button(link_or_button_text)
-  end
+  element = find(:link_or_button, link_or_button_text)
+  execute_script("arguments[0].click();", element)
 end
 
 When('I press {string}') do |link_or_button_text|

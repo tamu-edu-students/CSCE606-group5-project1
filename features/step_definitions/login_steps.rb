@@ -29,6 +29,10 @@ Given('I am on the login page') do
   visit root_path
 end
 
+Then('I should be redirected to the login page') do
+  expect(page).to have_current_path(root_path)
+end
+
 When('I click {string}') do |link_or_button_text|
   click_link_or_button(link_or_button_text)
 end
