@@ -1,0 +1,53 @@
+.timer-container {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.timer-display {
+    font-size: 7rem;
+    font-weight: 300;
+    color: #1d1d1f;
+    margin: 2rem 0;
+    font-family: 'SF Mono', Monaco, monospace;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.event-countdown {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.countdown-label {
+  color: #86868b;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+#eventCountdown {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 1.6rem;
+  padding: 0.5rem 0.85rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e6e6ea;
+  color: #111;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
+}
+
+@media (max-width: 768px) {
+    .event-countdown {
+        justify-content: center;
+    }
+    #eventCountdown {
+        font-size: 1.25rem;
+        padding: 0.4rem 0.6rem;
+    }
+}

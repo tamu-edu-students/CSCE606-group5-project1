@@ -1,0 +1,56 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="calendarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4c0000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6a0000;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- White outline for visibility on red backgrounds -->
+  <rect x="24" y="29" width="72" height="72" rx="13" fill="#ffffff" opacity="0.15"/>
+  
+  <!-- Main calendar card with shadow -->
+  <rect x="26" y="31" width="68" height="68" rx="12" fill="url(#calendarGrad)" filter="url(#shadow)"/>
+  
+  <!-- Top binding strip with white outline -->
+  <rect x="26" y="31" width="68" height="17" rx="12" fill="#1a1a1a"/>
+  <rect x="26" y="40" width="68" height="8" fill="#1a1a1a"/>
+  
+  <!-- Decorative binding holes with contrast -->
+  <circle cx="41" cy="39.5" r="4" fill="#ffffff" opacity="0.2"/>
+  <circle cx="41" cy="39.5" r="3" fill="#4c0000"/>
+  <circle cx="60" cy="39.5" r="4" fill="#ffffff" opacity="0.2"/>
+  <circle cx="60" cy="39.5" r="3" fill="#4c0000"/>
+  <circle cx="79" cy="39.5" r="4" fill="#ffffff" opacity="0.2"/>
+  <circle cx="79" cy="39.5" r="3" fill="#4c0000"/>
+  
+  <!-- Week day indicators -->
+  <rect x="33" y="56" width="8" height="2" rx="1" fill="#ffffff" opacity="0.5"/>
+  <rect x="44" y="56" width="8" height="2" rx="1" fill="#ffffff" opacity="0.5"/>
+  <rect x="56" y="56" width="8" height="2" rx="1" fill="#ffffff" opacity="0.5"/>
+  <rect x="68" y="56" width="8" height="2" rx="1" fill="#ffffff" opacity="0.5"/>
+  <rect x="80" y="56" width="8" height="2" rx="1" fill="#ffffff" opacity="0.5"/>
+  
+  <!-- Calendar dates with better contrast -->
+  <rect x="34" y="64" width="10" height="10" rx="2" fill="#ffffff" opacity="0.15"/>
+  <rect x="47" y="64" width="10" height="10" rx="2" fill="#ffffff" opacity="0.15"/>
+  <rect x="60" y="64" width="10" height="10" rx="2" fill="#ffffff" opacity="0.15"/>
+  <rect x="73" y="64" width="10" height="10" rx="2" fill="#ffffff" opacity="0.15"/>
+  
+  <rect x="34" y="77" width="10" height="10" rx="2" fill="#ffffff" opacity="0.1"/>
+  <rect x="47" y="77" width="10" height="10" rx="2" fill="#ffffff" opacity="0.1"/>
+  <rect x="60" y="77" width="10" height="10" rx="2" fill="#ffffff" opacity="0.25"/>
+  <rect x="73" y="77" width="10" height="10" rx="2" fill="#ffffff" opacity="0.1"/>
+  
+  <!-- Checkmark badge with strong contrast -->
+  <circle cx="84" cy="84" r="18" fill="#1a1a1a" opacity="0.2"/>
+  <circle cx="84" cy="82" r="17" fill="#1a1a1a"/>
+  <circle cx="84" cy="82" r="14.5" fill="#ffffff"/>
+  <circle cx="84" cy="82" r="13" fill="#4c0000"/>
+  
+  <!-- Checkmark -->
+  <path d="M77 82l5 5 10-10" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

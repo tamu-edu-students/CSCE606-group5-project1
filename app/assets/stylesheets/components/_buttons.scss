@@ -1,0 +1,63 @@
+.btn{
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+  min-width: 120px;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: var(--tamu-red) !important;
+}
+
+.btn-secondary {
+  border: 1px solid var(--tamu-red);
+  color: var(--tamu-red);
+  background-color: transparent;
+}
+
+.btn-danger {
+  background-color: var(--tamu-red) !important;
+}
+
+.btn-logout {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    width: 100% !important;
+    background: transparent;
+    font-size: 0.8rem;
+}
+
+.start, .set { 
+  @extend .btn;
+  background: var(--tamu-red); 
+  color: white; 
+}
+
+.pause, .reset { 
+  @extend .btn;
+  background: grey; 
+  color: white; 
+}
+
+.calendar-nav button {
+    background: var(--tamu-red);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.event-card form .btn {
+  min-width: 120px;
+  text-align: center;
+  box-sizing: border-box;
+}

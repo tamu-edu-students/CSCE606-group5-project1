@@ -1,0 +1,13 @@
+one:
+  leetcode_id: "1"
+  title: "Two Sum"
+  difficulty: "easy"
+  url: "https://leetcode.com/problems/two-sum/"
+  tags: "array,hash-table"
+
+two:
+  leetcode_id: "2"
+  title: "Add Two Numbers"
+  difficulty: "medium"
+  url: "https://leetcode.com/problems/add-two-numbers/"
+  tags: "linked-list,math"

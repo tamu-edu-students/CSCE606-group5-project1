@@ -1,0 +1,55 @@
+<div class="app-container">
+  <%= render 'shared/navbar' %>
+
+  <main class="main-content">
+    <div id="statisticsPage" class="page">
+
+      <div class="page-header">
+        <h1 class="page-title">LeetPlanner Statistics</h1>
+        <p class="page-subtitle">User: <strong><%= current_user.first_name %></strong></p>
+      </div>
+
+      <div class="content-area">
+        <%# Converted the table into the card-based grid layout %>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3 class="stat-title">Problems Solved This Week</h3>
+            <p class="stat-value"><%= @weekly_stats[:weekly_solved_count] %></p>
+          </div>
+          <div class="stat-card">
+            <h3 class="stat-title">Total Problems Solved</h3>
+            <p class="stat-value"><%= @weekly_stats[:total_solved_all_time] %></p>
+          </div>
+          <div class="stat-card">
+            <h3 class="stat-title">Current Streak</h3>
+            <p class="stat-value"><%= @weekly_stats[:current_streak_days] %> <span class="stat-unit">days</span></p>
+          </div>
+        </div>
+
+        <%# Used the highlights container for the hardest problem section %>
+        <% if @weekly_stats[:highlight].present? && @weekly_stats[:highlight].include?("Hardest problem this week:") %>
+          <div class="highlights-container">
+            <h2 class="highlights-title">Highlight of the Week</h2>
+            <p class="highlights-text">
+              🏆 <%= @weekly_stats[:highlight].gsub("Hardest problem this week: ", "").gsub("; Longest streak: 12 days", "") %>
+            </p>
+          </div>
+        <% end %>
+
+        <%# Added the new motivational text and profile link %>
+        <div class="actions-container" style="text-align: center; margin-top: 2rem;">
+          <p class="motivational-text" style="font-size: 1rem; color: #6b7280;">Keep up the great work! Every problem you solve brings you closer to mastery 💪</p>
+          <% if current_user.leetcode_username.present? %>
+            <%= link_to "View My LeetCode Profile", "https://leetcode.com/#{current_user.leetcode_username}", class: "btn btn-primary", target: "_blank", style: "margin-top: 1rem;" %>
+          <% end %>
+        </div>
+
+        <hr style="margin-top:24px; border:none; border-top:1px solid #e5e7eb;">
+        <div class="footer-text" style="font-size:12px; color:#9ca3af; text-align:center;">
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

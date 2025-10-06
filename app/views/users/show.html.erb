@@ -1,0 +1,26 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= @user.full_name %></h1>
+
+<% if @user.leetcode_username.present? %>
+  <p><strong>LeetCode Username:</strong> <%= @user.leetcode_username %></p>
+<% else %>
+  <p>No LeetCode username set.</p>
+<% end %>
+
+<%= form_with model: @user, url: user_path(@user), method: :patch do |form| %>
+  <div>
+    <%= form.label :leetcode_username, "LeetCode Username" %>
+    <%= form.text_field :leetcode_username %>
+  </div>
+  <div>
+    <%= form.submit "Update Profile" %>
+  </div>
+<% end %>
+
+<div>
+  <%= link_to "Edit this user", edit_user_path(@user) %> |
+  <%= link_to "Back to users", users_path %>
+
+  <%= button_to "Destroy this user", @user, method: :delete %>
+</div>
