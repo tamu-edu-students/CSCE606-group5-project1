@@ -15,6 +15,9 @@ Before do
   allow(@service_double).to receive(:list_events).and_return(
     instance_double(Google::Apis::CalendarV3::Events, items: [])
   )
+
+  allow_any_instance_of(Api::CalendarController).to receive(:calendar_service_or_unauthorized).and_return(@service_double)
+  allow_any_instance_of(Signet::OAuth2::Client).to receive(:refresh!)
 end
 
 Given('I am on the new event page') do
@@ -77,7 +80,9 @@ When('I visit the edit page for the event {string}') do |event_id|
 end
 
 When('I click the {string} button for {string}') do |button_text, title|
-  find('.event-card', text: title).click_button(button_text)
+  accept_confirm do
+    find('.event-card', text: title).click_button(button_text)
+  end
 end
 
 Then('I should see the success message {string}') do |message|

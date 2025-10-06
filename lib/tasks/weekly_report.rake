@@ -1,3 +1,8 @@
+# Task: Weekly Report Email Sender
+# Generates and sends weekly progress summary emails to eligible users
+# Input: Active users with personal email addresses and solved problems
+# Output: Personalized weekly progress emails sent via mailer
+# Side effects: Sends emails, logs activity
 namespace :weekly_report do
   desc "Send weekly progress summary emails to active users with personal email addresses"
   task send: :environment do

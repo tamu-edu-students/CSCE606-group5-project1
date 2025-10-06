@@ -1,3 +1,7 @@
+# Feature: Automated weekly progress email delivery
+# Given: User has personal email configured and solved problems during the week
+# When: Weekly report task is executed
+# Then: User receives personalized email with statistics and achievements
 Feature: Weekly Progress Summary Email
   As a student
   I want to receive a weekly summary email of my problem-solving activity
