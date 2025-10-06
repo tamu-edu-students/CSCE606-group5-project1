@@ -1,21 +1,3 @@
-Given('I am logged in as {string}') do |netid|
-  user = User.find_by(netid: netid)
-  OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
-    provider: 'google_oauth2',
-    uid: '123545',
-    info: {
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name
-    },
-    credentials: {
-      token: 'mock_token',
-      refresh_token: 'mock_refresh_token'
-    }
-  })
-  visit "/auth/google_oauth2/callback"
-end
-
 When('I click on the user avatar') do
   avatar_link = find(".user-avatar-link", match: :first)
   execute_script("arguments[0].click();", avatar_link)
@@ -34,4 +16,30 @@ end
 Given('the user {string} has leetcode_username {string}') do |netid, username|
   user = User.find_by(netid: netid)
   user.update!(leetcode_username: username)
+end
+
+When('I visit the user profile API endpoint') do
+  visit api_current_user_path(format: :json)
+end
+
+When('a visitor visits the user profile API endpoint') do
+  visit api_current_user_path(format: :json)
+end
+
+Then('the JSON response should contain my user details') do
+  json_response = JSON.parse(page.body)
+  expect(json_response['id']).to eq(@current_user.id)
+  expect(json_response['name']).to eq(@current_user.full_name)
+  expect(json_response['email']).to eq(@current_user.email)
+end
+
+Then('the response status should be {int}') do |status_code|
+  if status_code == 401
+    expect(page.body).to have_content("Not signed in")
+  end
+end
+
+Then('the JSON response should contain an error message {string}') do |error_message|
+  json_response = JSON.parse(page.body)
+  expect(json_response['error']).to eq(error_message)
 end

@@ -69,9 +69,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_225611) do
     t.string "google_refresh_token"
     t.datetime "google_token_expires_at"
     t.string "personal_email"
-    t.index ["active"], name: "index_users_on_active"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["netid"], name: "index_users_on_netid", unique: true
+    t.index [ "active" ], name: "index_users_on_active"
+    t.index [ "email" ], name: "index_users_on_email", unique: true
+    t.index [ "netid" ], name: "index_users_on_netid", unique: true
   end
 
   add_foreign_key "leet_code_session_problems", "leet_code_problems"

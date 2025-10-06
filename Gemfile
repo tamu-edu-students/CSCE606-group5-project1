@@ -64,4 +64,5 @@ group :test do
   gem "timecop"
   gem "launchy"
   gem "rails-controller-testing"
+  gem "simplecov", require: false
 end

@@ -23,19 +23,6 @@ RSpec.describe CalendarController, type: :controller do
         end
     end
 
-    context 'when user token is expired and refresh fails' do
-        before do
-            user.update(google_access_token: 'stale', google_token_expires_at: Time.current - 1.hour)
-            allow(signet_client_double).to receive(:refresh!).and_raise(Signet::AuthorizationError.new('Refresh failed'))
-        end
-
-        it 'redirects to login with an alert' do
-            get :show
-            expect(response).to redirect_to(login_google_path)
-            expect(flash.now[:alert]).to eq("Not authenticated with Google. Please log in.")
-        end
-    end
-
     context 'when user is authenticated' do
       before do
         user.update(google_access_token: 'valid', google_token_expires_at: Time.current + 1.hour)

@@ -12,7 +12,9 @@ module NavigationHelpers
     when 'the leetCode page', 'leetcode'
       leetcode_path
     when 'the profile page', 'profile'
-      profile_path
+      api_current_user_path
+    when 'sign out', 'logout'
+      logout_path
     else
       raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
         "Now, go and add a mapping in #{__FILE__}"
