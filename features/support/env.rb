@@ -16,6 +16,8 @@ end
 require "cucumber/rails"
 require "rake"
 require "google/apis/calendar_v3"
+require 'capybara/cucumber'
+require 'selenium/webdriver'
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -62,3 +64,12 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 OmniAuth.config.test_mode = true
+
+Capybara.register_driver :selenium_chrome_headless_resized do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--headless')
+  options.add_argument('--window-size=1280,1024') # A common desktop resolution
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+Capybara.javascript_driver = :selenium_chrome_headless_resized
