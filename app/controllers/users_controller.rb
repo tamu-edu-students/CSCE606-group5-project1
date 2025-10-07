@@ -1,14 +1,11 @@
 # Controller handling user management operations
 # Provides CRUD operations for users and profile management functionality
 class UsersController < ApplicationController
-  # Set up user instance for actions that need a specific user
-  before_action :set_user, only: %i[ show edit update destroy ]
+  # Ensure user is authenticated before accessing any action
+  before_action :authenticate_user!
 
-  # GET /users or /users.json
-  # Display list of all users in the system
-  def index
-    @users = User.all
-  end
+  # Set up user instance for actions that need a specific user
+  before_action :set_user, only: %i[ show update ]
 
   # GET /users/1 or /users/1.json
   # Display details of a specific user
@@ -25,39 +22,10 @@ class UsersController < ApplicationController
         redirect_to profile_path, notice: "Profile updated successfully"
       else
         # Re-render profile form with validation errors
-        render :profile
+        render :profile, status: :unprocessable_entity
       end
     end
     # For GET requests, just render the profile view
-  end
-
-  # GET /users/new
-  # Display form for creating a new user
-  def new
-    @user = User.new
-  end
-
-  # GET /users/1/edit
-  # Display form for editing an existing user
-  def edit
-  end
-
-  # POST /users or /users.json
-  # Create a new user with provided parameters
-  def create
-    @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        # Success: redirect to user page with success message
-        format.html { redirect_to @user, notice: "User was successfully created." }
-        format.json { render :show, status: :created, location: @user }
-      else
-        # Failure: re-render form with validation errors
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /users/1 or /users/1.json
@@ -73,18 +41,6 @@ class UsersController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /users/1 or /users/1.json
-  # Delete a user from the system
-  def destroy
-    @user.destroy!
-
-    respond_to do |format|
-      # Success: redirect to users index with confirmation message
-      format.html { redirect_to users_path, notice: "User was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
     end
   end
 

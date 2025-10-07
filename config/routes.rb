@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   # -------------------------------
   # LeetCode Features
   # -------------------------------
-  get "/leetcode",              to: "leet_code_problems#show"
+  get "/leetcode",              to: "leet_code_problems#index"
 
   resources :leet_code_problems, except: [ :new, :edit ]
   resources :leet_code_sessions, except: [ :new, :edit ] do
