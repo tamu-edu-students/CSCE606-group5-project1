@@ -27,6 +27,11 @@
                   <%= @current_event.start.date.strftime("%d %B %Y") %> — <%= @current_event.end.date.strftime("%d %B %Y") %>
                 <% end %>
               </p>
+              <% if @current_event.description.present? %>
+                <p class="event-time">
+                  <%= @current_event.description %>
+                </p>
+              <% end %>
             </div>
             
           <% else %>

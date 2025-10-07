@@ -1,3 +1,8 @@
+# Task: LeetCode Problem Seeder
+# Fetches LeetCode problems from external API and populates local database
+# Input: External LeetCode API (leetcode-api-pied.vercel.app)
+# Output: Up to 200 LeetCode problems with full metadata in local database
+# Side effects: Creates/updates LeetCodeProblem records
 namespace :leet_code do
   desc "Seed LeetCode problems with description and tags using external API"
   task seed: :environment do
@@ -11,7 +16,7 @@ namespace :leet_code do
 
     unless response.is_a?(Net::HTTPSuccess)
       puts "Failed to fetch problems list"
-      return
+      next
     end
 
     problems = JSON.parse(response.body)
@@ -32,23 +37,23 @@ namespace :leet_code do
         detail = JSON.parse(detail_response.body)
 
         # Extract and sanitize data
-        leetcode_id = p["frontend_id"]
+        leetcode_id = p["frontend_id"].to_s
         title = p["title"]
         title_slug = p["title_slug"]
-        difficulty = p["difficulty"].downcase
+        difficulty = (p["difficulty"] || "medium").to_s.downcase
         url = p["url"]
         description = detail["content"]
-        tags = detail["topicTags"].map { |tag| tag["name"] }.join(", ")
+        tags = detail["topicTags"]&.map { |tag| tag["name"] }&.join(", ")
 
         # Save to DB
-        problem = LeetCodeProblem.find_or_initialize_by(leetcode_id: leetcode_id.to_s)
+        problem = LeetCodeProblem.find_or_initialize_by(leetcode_id: leetcode_id)
         problem.update!(
           title: title,
           title_slug: title_slug,
           difficulty: difficulty,
           url: url,
-          tags: tags,
-          description: description
+          description: description,
+          tags: tags
         )
 
         puts "Saved ##{leetcode_id}: #{title} (#{difficulty.capitalize})"

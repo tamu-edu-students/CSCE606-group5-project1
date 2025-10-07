@@ -1,3 +1,7 @@
+# Feature: User authentication via Google OAuth
+# Given: User has valid TAMU email address
+# When: User attempts to sign in with Google
+# Then: User is authenticated and can access protected features
 @javascript
 Feature: User Authentication
 As a student
