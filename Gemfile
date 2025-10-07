@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # --- Rails Framework ---
-gem "rails", "~> 8.0.2"
+gem "rails", "~> 8.0.3"
 
 # --- Assets & JavaScript ---
 gem "propshaft"
