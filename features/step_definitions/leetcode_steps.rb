@@ -1,83 +1,134 @@
-Given("I am on the LeetCode entries page") { visit leetcode_path }
-
-When('I follow {string}') do |string|
-  click_link string
+Given('there are some LeetCode problems with tags and difficulties') do
+  LeetCodeProblem.create!(
+    title: "Two Sum",
+    difficulty: "Easy",
+    tags: "Array, Hash Table",
+    url: "https://leetcode.com/problems/two-sum",
+    leetcode_id: 1,
+  )
+  LeetCodeProblem.create!(
+    title: "Longest Substring",
+    difficulty: "Medium",
+    tags: "Hash Table, Sliding Window",
+    url: "https://leetcode.com/problems/longest-substring",
+    leetcode_id: 2,
+  )
 end
 
-When('I select {string} from {string}') do |option, field|
-  select option, from: field
+Given('I am a logged-in user and successfully authenticated with Google for leetcode') do
+  @current_user = create(:user, email: 'testuser@tamu.edu', first_name: 'Test', last_name: 'User')
+  OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
+    provider: "google_oauth2",
+    uid: "123456789",
+    info: {
+      name: @current_user.full_name,
+      email: @current_user.email,
+      first_name: @current_user.first_name,
+      last_name: @current_user.last_name
+    },
+    credentials: {
+      token: "mock_google_token",
+      refresh_token: "mock_google_refresh_token",
+      expires_at: Time.now.to_i + 3600
+    }
+  })
+
+  visit "/auth/google_oauth2/callback"
 end
 
-Given("the following users exist:") do |table|
-  table.hashes.each do |user_attrs|
-    User.create!(user_attrs.merge(netid: user_attrs["netid"] || SecureRandom.hex(4)))
+When('I visit the LeetCode problems page') do
+  visit leetcode_path
+end
+
+Then('I should see a list of problems') do
+  within ".leet-content" do
+    expect(page).to have_css(".event-card", minimum: 1)
   end
 end
 
-Given("the following LeetCode problems exist:") do |table|
-  table.hashes.each do |problem_attrs|
-    LeetCodeProblem.create!(problem_attrs)
+Then('I should see the filter form') do
+  expect(page).to have_selector("form.filters-form")
+  expect(page).to have_field("difficulty")
+  expect(page).to have_field("tags[]")
+end
+
+When('I select {string} from the difficulty filter') do |difficulty|
+  within ".filters-form" do
+    select difficulty, from: "difficulty"
   end
 end
 
-Given("the following LeetCode sessions exist for user {string}:") do |netid, table|
-  user = User.find_by(netid: netid)
-  table.hashes.each do |session_attrs|
-    LeetCodeSession.create!(session_attrs.merge(user: user))
+When('I select {string} from the tag filter') do |tag|
+  within ".filters-form" do
+    select tag, from: "tags[]"
   end
 end
 
-Given("the following solved problems exist for user {string} in week starting {string}:") do |netid, week_start, table|
-  user = User.find_by(netid: netid)
-  table.hashes.each do |problem_attrs|
-    session = user.leet_code_sessions.first # Assuming one session per user for simplicity
-    problem = LeetCodeProblem.find_by(leetcode_id: problem_attrs["problem_id"])
-    LeetCodeSessionProblem.create!(
-      leet_code_session: session,
-      leet_code_problem: problem,
-      solved: true,
-      solved_at: problem_attrs["solved_at"]
+When('I select {string} and {string} from the tag filter') do |tag1, tag2|
+  within ".filters-form" do
+    select tag1, from: "tags[]"
+    select tag2, from: "tags[]"
+  end
+end
+
+When('I submit the filter form') do
+  within ".filters-form" do
+    click_button "Filter"
+  end
+end
+
+Then('I should only see problems with {string} difficulty') do |difficulty|
+  within ".leet-content" do
+    all('.event-card').each do |card|
+      expect(card).to have_text("Difficulty: #{difficulty}")
+    end
+  end
+end
+
+Then('I should only see problems with the tag {string}') do |tag|
+  within ".leet-content" do
+    all('.event-card').each do |card|
+      expect(card).to have_text(tag)
+    end
+  end
+end
+
+Then('I should only see problems that include all of {string} and {string}') do |tag1, tag2|
+  within ".leet-content" do
+    all('.event-card').each do |card|
+      expect(card).to have_text(tag1)
+      expect(card).to have_text(tag2)
+    end
+  end
+end
+
+Given('there are more than 10 LeetCode problems') do
+  15.times do |i|
+    LeetCodeProblem.create!(
+      title: "Problem #{i + 1}",
+      difficulty: "Easy",
+      tags: "Array",
+      url: "https://leetcode.com/problems/#{i + 1}",
+      leetcode_id: i + 5,
     )
   end
 end
 
-Given("the following solved problems exist for user {string} before week starting {string}:") do |netid, week_start, table|
-  user = User.find_by(netid: netid)
-  table.hashes.each do |problem_attrs|
-    session = user.leet_code_sessions.first
-    problem = LeetCodeProblem.find_by(leetcode_id: problem_attrs["problem_id"])
-    LeetCodeSessionProblem.create!(
-      leet_code_session: session,
-      leet_code_problem: problem,
-      solved: true,
-      solved_at: problem_attrs["solved_at"]
-    )
+Then('I should see the pagination controls') do
+  within '.pagination-container' do
+    expect(page).to have_css('.pagination')
   end
 end
 
-When("the weekly report email task is run for week starting {string}") do |week_start|
-  Rails.application.load_tasks
-  ENV['WEEK_START'] = week_start
-  ENV['FORCE_SEND'] = 'true'  # Force send even if not Monday
-  Rake::Task["weekly_report:send"].reenable
-  Rake::Task["weekly_report:send"].invoke
-  ENV.delete('WEEK_START')
-  ENV.delete('FORCE_SEND')
-end
-
-Then("{string} should receive an email with subject {string}") do |email, subject|
-  mail = ActionMailer::Base.deliveries.find { |m| m.to.include?(email) && m.subject == subject }
-  expect(mail).to be_present
-  @last_email = mail
-end
-
-Then("the email should contain:") do |table|
-  table.hashes.each do |row|
-    expect(@last_email.body.encoded).to include(row["content"])
+When('I select a difficulty and tag that don\'t match any problems') do
+  within ".filters-form" do
+    select "Hard", from: "difficulty"
+    select 'Array', from: "tags[]"
   end
 end
 
-Then("{string} should not receive any email") do |email|
-  mail = ActionMailer::Base.deliveries.find { |m| m.to.include?(email) }
-  expect(mail).to be_nil
+Then('I should see the no problems found message') do
+  within ".leet-content" do
+    expect(page).to have_content("No problems found.")
+  end
 end

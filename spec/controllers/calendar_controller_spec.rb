@@ -6,62 +6,128 @@ RSpec.describe CalendarController, type: :controller do
   let(:signet_client_double) { instance_double(Signet::OAuth2::Client) }
 
   before do
+    allow(controller).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:authenticate_user!).and_return(true)
     session[:user_id] = user.id
-    # Mock the service instantiation chain
+
     allow(Signet::OAuth2::Client).to receive(:new).and_return(signet_client_double)
     allow(Google::Apis::CalendarV3::CalendarService).to receive(:new).and_return(service_double)
     allow(service_double).to receive(:authorization=)
   end
 
-  describe 'GET #show' do
-    context 'when user is not authenticated with Google' do
-        it 'redirects to the Google login path' do
-            user.update(google_access_token: nil)
-
-            get :show
-            expect(response).to redirect_to(login_google_path)
-        end
+  describe 'authentication requirements' do
+    before do
+      allow(controller).to receive(:current_user).and_return(nil)
+      session[:user_id] = nil
     end
 
-    context 'when user is authenticated' do
+    it 'redirects to login for unauthenticated users' do
+      get :show
+      expect(response).to redirect_to(login_google_path)
+      expect(flash[:alert]).to eq('Please log in with Google to continue.')
+    end
+  end
+
+  describe 'GET #show' do
+    context 'when user is not authenticated with Google' do
+      before { user.update(google_access_token: nil) }
+
+      it 'redirects to Google login' do
+        get :show
+        expect(response).to redirect_to(login_google_path)
+        expect(flash[:alert]).to eq('Please log in with Google to continue.')
+      end
+    end
+
+    context 'when user has expired token' do
       before do
-        user.update(google_access_token: 'valid', google_token_expires_at: Time.current + 1.hour)
+        user.update(
+          google_access_token: 'expired_token',
+          google_refresh_token: 'refresh_token',
+          google_token_expires_at: Time.current - 1.hour
+        )
+
+        allow(signet_client_double).to receive(:refresh!)
+        allow(signet_client_double).to receive(:access_token).and_return('new_token')
+        allow(signet_client_double).to receive(:refresh_token).and_return('new_refresh_token')
+        allow(signet_client_double).to receive(:expires_in).and_return(3600)
+
+        allow(service_double).to receive(:list_events).and_return(
+          double('response', items: [])
+        )
+      end
+
+      it 'refreshes the token and continues' do
+        get :show
+        expect(user.reload.google_access_token).to eq('new_token')
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when user is authenticated with valid token' do
+      before do
+        user.update(
+          google_access_token: 'valid_token',
+          google_token_expires_at: Time.current + 1.hour
+        )
       end
 
       it 'fetches and maps events successfully' do
         event_item = instance_double(Google::Apis::CalendarV3::Event,
-          id: '123', summary: 'Test Event',
+          id: '123',
+          summary: 'Test Event',
           start: double('start', date_time: Time.current, date: nil),
           end: double('end', date_time: Time.current + 1.hour, date: nil)
         )
-        response_items = double('response_items', items: [ event_item ])
+        response_items = double('response_items', items: [event_item])
         allow(service_double).to receive(:list_events).and_return(response_items)
 
         get :show
         expect(assigns(:events).first[:summary]).to eq('Test Event')
+        expect(assigns(:events).first[:is_all_day]).to be false
         expect(response).to render_template(:show)
+      end
+
+      it 'handles API errors gracefully' do
+        allow(service_double).to receive(:list_events).and_raise(StandardError.new('API Error'))
+
+        get :show
+        expect(flash.now[:alert]).to eq('Failed to load calendar events.')
+        expect(assigns(:events)).to eq([])
       end
     end
   end
 
   describe 'POST #sync' do
     let(:sync_result) { { success: true, synced: 5, updated: 2, deleted: 1 } }
+
     before do
       allow(GoogleCalendarSync).to receive(:sync_for_user).and_return(sync_result)
-      # for redirect_back
       request.env['HTTP_REFERER'] = calendar_path
     end
 
-    it 'calls the sync service and sets a notice on success' do
+    it 'calls the sync service and displays success message' do
       post :sync
-      expect(flash[:notice]).to match(/Calendar synced successfully!/)
+      expect(flash[:notice]).to include('Calendar synced successfully!')
       expect(response).to redirect_to(calendar_path)
     end
 
-    it 'sets an alert on failure' do
-      allow(GoogleCalendarSync).to receive(:sync_for_user).and_return({ success: false, error: 'API limit reached' })
+    it 'displays an error message if sync fails' do
+      allow(GoogleCalendarSync).to receive(:sync_for_user).and_return(
+        { success: false, error: 'API limit reached' }
+      )
+
       post :sync
       expect(flash[:alert]).to eq('Sync failed: API limit reached')
+      expect(response).to redirect_to(calendar_path)
+    end
+  end
+
+  describe 'GET #new' do
+    it 'creates a new event object and renders the new template' do
+      get :new
+      expect(assigns(:event)).to be_a(Google::Apis::CalendarV3::Event)
+      expect(response).to render_template(:new)
     end
   end
 
@@ -69,11 +135,18 @@ RSpec.describe CalendarController, type: :controller do
     let(:event_id) { 'event123' }
 
     before do
-      user.update(google_access_token: 'valid', google_token_expires_at: Time.current + 1.hour)
+      user.update(
+        google_access_token: 'valid_token',
+        google_token_expires_at: Time.current + 1.hour
+      )
     end
-    it 'fetches an event and assigns it for the view' do
+
+    it 'fetches and assigns the event for editing' do
       google_event = instance_double(Google::Apis::CalendarV3::Event,
-        id: event_id, summary: 'Editable Event', description: 'Details', location: 'Office',
+        id: event_id,
+        summary: 'Editable Event',
+        description: 'Details',
+        location: 'Office',
         start: double('start', date_time: Time.current, date: nil),
         end: double('end', date_time: Time.current + 1.hour, date: nil)
       )
@@ -82,6 +155,16 @@ RSpec.describe CalendarController, type: :controller do
       get :edit, params: { id: event_id }
       expect(assigns(:event)[:summary]).to eq('Editable Event')
       expect(response).to render_template(:edit)
+    end
+
+    it 'redirects to calendar with an alert if event does not exist' do
+      allow(service_double).to receive(:get_event).and_raise(
+        Google::Apis::ClientError.new('Not found', status_code: 404)
+      )
+
+      get :edit, params: { id: 'nonexistent' }
+      expect(response).to redirect_to(calendar_path)
+      expect(flash[:alert]).to eq('Failed to load event.')
     end
   end
 end

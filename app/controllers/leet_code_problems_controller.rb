@@ -3,7 +3,7 @@
 class LeetCodeProblemsController < ApplicationController
   # GET /leetcode
   # Display paginated list of LeetCode problems with optional filtering
-  def show
+  def index
     begin
       # Extract all available tags from problems for filter dropdown
       # Split comma-separated tags, clean whitespace, remove duplicates, and sort
@@ -41,6 +41,7 @@ class LeetCodeProblemsController < ApplicationController
       Rails.logger.error("Leetcode error: #{e.message}")
       flash.now[:alert] = "Failed to load leet problems."
       @events = []  # Return empty array to prevent view errors
+      @available_tags = []
     end
   end
 end
