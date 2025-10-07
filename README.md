@@ -1,6 +1,6 @@
 # LeetPlanner
 
-## Your Personal Productivity Companion
+ Your Personal Productivity Companion
 --------------------------
 
 This project is a group web application developed for CSCE 606 (Software Engineering) at Texas A&M University.\
@@ -125,12 +125,19 @@ Repository Structure (planned)
 [](https://github.com/tamu-edu-students/CSCE606-group5-project1#-repository-structure-planned)
 
 CSCE606-group5-project1/
+
 │── app/ # Rails app code (models, controllers, views)
+
 │── features/ # Cucumber acceptance tests
+
 │── spec/ # RSpec unit tests
+
 │── docs/ # Technical docs, architecture diagrams
+
 │── config/ # Configurations & routes
+
 │── db/ # Migrations & schema
+
 │── README.md # Project overview & setup
 
 * * * * *
