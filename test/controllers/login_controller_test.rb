@@ -1,4 +1,5 @@
 require "test_helper"
+require "devise"
 
 class LoginControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers

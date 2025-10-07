@@ -65,4 +65,5 @@ group :test do
   gem "launchy"
   gem "rails-controller-testing"
   gem "simplecov", require: false
+  gem "devise"
 end
