@@ -22,12 +22,6 @@
                                         confirm: "This will sync your Google Calendar events. Continue?",
                                         disable_with: "Syncing..." 
                                     } %>
-                        
-                        <% if session[:last_calendar_sync] %>
-                        <small class="text-muted">
-                            Last synced: <%= time_ago_in_words(Time.at(session[:last_calendar_sync])) %> ago
-                        </small>
-                        <% end %>
                     </div>
                 <% end %>
             </div>
@@ -79,7 +73,7 @@
                                                     ->(session) {
                                                         label = session.scheduled_time.strftime("%b %d, %Y at %I:%M %p")
                                                         label += " · #{session.duration_minutes} min" if session.duration_minutes.present?
-                                                        label += " – #{truncate(session.description, length: 30)}" if session.description.present?
+                                                        label += " – #{truncate(session.title, length: 30)}" if session.title.present?
                                                         label
                                                     }
                                                     ),

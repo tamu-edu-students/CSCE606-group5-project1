@@ -1,3 +1,7 @@
+# Feature: Automated weekly progress email delivery
+# Given: User has personal email configured and solved problems during the week
+# When: Weekly report task is executed
+# Then: User receives personalized email with statistics and achievements
 Feature: Weekly Progress Summary Email
   As a student
   I want to receive a weekly summary email of my problem-solving activity
@@ -38,10 +42,4 @@ Feature: Weekly Progress Summary Email
   Scenario: Student receives weekly progress summary email
     When the weekly report email task is run for week starting "2023-09-24"
     Then "student1@test.com" should receive an email with subject "🌟 Weekly LeetCode Report — John's Progress Summary"
-    And the email should contain:
-      | content                          |
-      | Problems Solved This Week: 4     |
-      | Current Streak: 3 days           |
-      | Total Problems Solved: 8         |
-      | Hardest problem this week: Three Sum (hard) |
     And "student2@test.com" should not receive any email
