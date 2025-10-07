@@ -72,6 +72,7 @@ Deliverables:
 -   Documentation completed in `README.md` / `docs/`
 -   All commits & PRs following standards
 
+Note: Scrum Events can be found [here](docs/scrum_events.md) 
 * * * * *
 
 User Stories (SMART & INVEST)
@@ -124,7 +125,14 @@ Repository Structure (planned)
 
 [](https://github.com/tamu-edu-students/CSCE606-group5-project1#-repository-structure-planned)
 
-CSCE606-group5-project1/ │── app/ # Rails app code (models, controllers, views) │── features/ # Cucumber acceptance tests │── spec/ # RSpec unit tests │── docs/ # Technical docs, architecture diagrams │── config/ # Configurations & routes │── db/ # Migrations & schema │── README.md # Project overview & setup
+CSCE606-group5-project1/
+│── app/ # Rails app code (models, controllers, views)
+│── features/ # Cucumber acceptance tests
+│── spec/ # RSpec unit tests
+│── docs/ # Technical docs, architecture diagrams
+│── config/ # Configurations & routes
+│── db/ # Migrations & schema
+│── README.md # Project overview & setup
 
 * * * * *
 
@@ -147,9 +155,9 @@ Documentation
 [](https://github.com/tamu-edu-students/CSCE606-group5-project1#-documentation)
 
 ```
--	Technical Guide -- setup & deployment steps
--	User Guide -- how to use the calendar and LeetCode tracker
--	Architecture Diagram -- models, controllers, DB schema
+-	[Technical Documentation](docs/technical_documentation.md) -- setup & deployment steps
+-	[User Guide](docs/user_guide.md) -- how to use the calendar and LeetCode tracker
+-	[Architecture Diagram](docs/architecture_records.md) -- models, controllers, DB schema
 
 ```
 
