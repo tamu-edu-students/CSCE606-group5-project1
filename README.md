@@ -1,11 +1,12 @@
 # LeetPlanner
 
- Your Personal Productivity Companion
+Your Personal Productivity Companion
 --------------------------
 
 This project is a group web application developed for CSCE 606 (Software Engineering) at Texas A&M University.\
 It aims to help students organize their daily study routines with a special focus on integrating LeetCode problem solving into their schedule.
 
+Deployed application - https://leetrecorder-staging-9448a75c94bd.herokuapp.com/
 * * * * *
 
 Core Features (Planned)
