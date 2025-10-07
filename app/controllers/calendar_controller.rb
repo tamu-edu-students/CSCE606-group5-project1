@@ -11,15 +11,14 @@ class CalendarController < ApplicationController
   # GET /calendar
   # Display calendar view with events for the specified month
   def show
-    # Parse date parameter or default to today
-    @current_date = params[:date] ? Date.parse(params[:date]) : Date.today
-
-    # Get authenticated Google Calendar service or redirect if unauthorized
     service = calendar_service_or_unauthorized
-    unless service
-      flash.now[:alert] = "Not authenticated with Google. Please log in."
-      @events = []
-      return
+    return unless service
+
+    # Parse date parameter with error handling
+    begin
+      @current_date = params[:date] ? Date.parse(params[:date]) : Date.today
+    rescue Date::Error
+      @current_date = Date.today
     end
 
     # Define time range for fetching events (entire month)
@@ -138,7 +137,7 @@ class CalendarController < ApplicationController
   # Returns nil and redirects if user is not properly authenticated
   def calendar_service_or_unauthorized
     # Check if user has Google access token
-    unless current_user.google_access_token.present?
+    unless current_user&.google_access_token.present?
       redirect_to login_google_path, alert: "Please log in with Google to continue."
       return nil
     end

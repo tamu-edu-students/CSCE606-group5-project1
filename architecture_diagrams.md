@@ -6,7 +6,7 @@
 flowchart TD
     U[User] --> B[Browser]
     B --> R[Rails Application]
-    R --> V[Views<br/>ERB Templates<br/>Bootstrap/Propshaft]
+    R --> V[Views<br/>ERB Templates]
     R --> C[Controllers<br/>Handles Requests]
     C --> M[Models<br/>Business Logic]
     M --> DB[(PostgreSQL<br/>Database)]
@@ -87,7 +87,7 @@ erDiagram
 
 ```mermaid
 flowchart TD
-    V[Views<br/>ERB Templates<br/>Bootstrap UI] --> C[Controllers<br/>UsersController<br/>SessionsController<br/>etc.]
+    V[Views<br/>ERB Templates] --> C[Controllers<br/>UsersController<br/>SessionsController<br/>etc.]
     C --> M[Models<br/>User<br/>Event<br/>LeetCodeSession<br/>etc.]
     M --> DB[(PostgreSQL<br/>Database)]
     DB --> M

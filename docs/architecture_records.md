@@ -33,3 +33,5 @@ ADR-001: User Authentication via Google OAuth
 -   Pro: It is well-supported by Heroku, our intended deployment platform.
 
 -   Con: Requires developers to have PostgreSQL installed on their local machines, which is a reasonable prerequisite.
+
+![Architecture Diagram](architecture_diagram.png)
