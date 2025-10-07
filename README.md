@@ -162,8 +162,10 @@ Documentation
 
 -	[Technical Documentation](docs/technical_documentation.md) -- setup & deployment steps
 -	[User Guide](docs/user_guide.md) -- how to use the calendar and LeetCode tracker
--	[Architecture Diagram](docs/architecture_records.md) -- models, controllers, DB schema
-
+-	[Architecture Decision Records](docs/architecture_records.md)
+-   [Architecture Diagram](docs/architecture_records.md)
+-   [Database Diagram](https://dbdiagram.io/d/Leet-Planner-68cac63d5779bb7265eabfe3)
+-   [Presentation](https://www.canva.com/design/DAG095ZKo98/n4TI6UGwLIhXS8fFRR_DZw/view)
 
 * * * * *
 
