@@ -7,7 +7,7 @@ RSpec.describe SessionsController, type: :controller do
     it 'returns session data as plain text' do
       session[:test_key] = 'test_value'
       get :debug
-      
+
       expect(response.content_type).to include('text/plain')
       expect(response.body).to include('test_key')
       expect(response.body).to include('test_value')
@@ -52,9 +52,9 @@ RSpec.describe SessionsController, type: :controller do
 
       it 'updates existing user without changing netid' do
         existing_user = create(:user, email: 'user@tamu.edu', netid: 'original_netid')
-        
+
         post :create
-        
+
         existing_user.reload
         expect(existing_user.netid).to eq('original_netid')
         expect(existing_user.first_name).to eq('John')
@@ -62,15 +62,15 @@ RSpec.describe SessionsController, type: :controller do
       end
 
       it 'preserves refresh token when not provided in new auth' do
-        existing_user = create(:user, 
-          email: 'user@tamu.edu', 
+        existing_user = create(:user,
+          email: 'user@tamu.edu',
           google_refresh_token: 'old_refresh_token'
         )
         auth_hash['credentials'].delete('refresh_token')
         request.env['omniauth.auth'] = auth_hash
-        
+
         post :create
-        
+
         existing_user.reload
         expect(existing_user.google_refresh_token).to eq('old_refresh_token')
       end
@@ -86,7 +86,7 @@ RSpec.describe SessionsController, type: :controller do
         expect {
           post :create
         }.not_to change(User, :count)
-        
+
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq('Login restricted to TAMU emails')
       end
@@ -95,9 +95,9 @@ RSpec.describe SessionsController, type: :controller do
     context 'with missing auth data' do
       it 'handles missing auth gracefully' do
         request.env['omniauth.auth'] = nil
-        
+
         post :create
-        
+
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq('No auth returned from Google')
       end
@@ -110,9 +110,9 @@ RSpec.describe SessionsController, type: :controller do
 
       it 'handles errors gracefully' do
         expect(Rails.logger).to receive(:error).with(/Google login error/)
-        
+
         post :create
-        
+
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to eq('Login failed.')
       end
@@ -122,14 +122,14 @@ RSpec.describe SessionsController, type: :controller do
   describe 'GET #failure' do
     it 'redirects to root with error message from params' do
       get :failure, params: { message: 'Access denied' }
-      
+
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('Access denied')
     end
 
     it 'uses default message when no message provided' do
       get :failure
-      
+
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('Login failed')
     end
@@ -146,9 +146,9 @@ RSpec.describe SessionsController, type: :controller do
         google_access_token: 'token',
         google_refresh_token: 'refresh_token'
       )
-      
+
       delete :destroy
-      
+
       user.reload
       expect(user.google_access_token).to be_nil
       expect(user.google_refresh_token).to be_nil
@@ -159,14 +159,14 @@ RSpec.describe SessionsController, type: :controller do
 
     it 'returns JSON response for API requests' do
       delete :destroy, format: :json
-      
+
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)['message']).to eq('Signed out successfully.')
     end
 
     it 'handles logout when current_user is nil' do
       allow(controller).to receive(:current_user).and_return(nil)
-      
+
       expect { delete :destroy }.not_to raise_error
       expect(response).to redirect_to(root_path)
     end

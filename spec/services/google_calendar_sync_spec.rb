@@ -45,7 +45,7 @@ RSpec.describe GoogleCalendarSync do
     end
 
     let(:events_response) do
-      double('Events', items: [google_event_1])
+      double('Events', items: [ google_event_1 ])
     end
 
     before do
@@ -103,7 +103,7 @@ RSpec.describe GoogleCalendarSync do
     end
 
     let(:events_response) do
-      double('Events', items: [google_event_1, google_event_2, cancelled_event, all_day_event])
+      double('Events', items: [ google_event_1, google_event_2, cancelled_event, all_day_event ])
     end
 
     before do
@@ -119,7 +119,7 @@ RSpec.describe GoogleCalendarSync do
 
       it 'saves session details correctly' do
         sync_service.sync(session_hash)
-        
+
         session = LeetCodeSession.find_by(google_event_id: 'google_event_1')
         expect(session.title).to eq('Team Meeting')
         expect(session.description).to eq('Weekly team sync')
@@ -129,13 +129,13 @@ RSpec.describe GoogleCalendarSync do
 
       it 'skips cancelled events' do
         sync_service.sync(session_hash)
-        
+
         expect(LeetCodeSession.find_by(google_event_id: 'cancelled_event')).to be_nil
       end
 
       it 'skips all-day events' do
         sync_service.sync(session_hash)
-        
+
         expect(LeetCodeSession.find_by(google_event_id: 'all_day_event')).to be_nil
       end
 
@@ -171,7 +171,7 @@ RSpec.describe GoogleCalendarSync do
           status: 'confirmed'
         )
 
-        allow(events_response).to receive(:items).and_return([past_event])
+        allow(events_response).to receive(:items).and_return([ past_event ])
         sync_service.sync(session_hash)
 
         session = LeetCodeSession.find_by(google_event_id: 'past_event')
@@ -198,7 +198,7 @@ RSpec.describe GoogleCalendarSync do
 
       it 'updates session details' do
         sync_service.sync(session_hash)
-        
+
         existing_session.reload
         expect(existing_session.title).to eq('Team Meeting')
         expect(existing_session.description).to eq('Weekly team sync')
@@ -214,7 +214,7 @@ RSpec.describe GoogleCalendarSync do
 
     context 'when session attributes have not changed' do
       let(:start_time) { 1.day.from_now }
-      
+
       let!(:existing_session) do
         create(:leet_code_session,
           user: user,
@@ -358,11 +358,11 @@ RSpec.describe GoogleCalendarSync do
 
     context 'when processing an individual event fails' do
       let(:failed_session) { instance_double(LeetCodeSession) }
-      
+
       before do
         # Allow normal processing for google_event_2
         allow(LeetCodeSession).to receive(:find_or_initialize_by).and_call_original
-        
+
         # Make google_event_1 raise an error during processing
         allow(LeetCodeSession).to receive(:find_or_initialize_by)
           .with(user_id: user.id, google_event_id: 'google_event_1')
@@ -394,7 +394,7 @@ RSpec.describe GoogleCalendarSync do
       it 'calculates duration correctly in minutes' do
         start_time = Time.current
         end_time = start_time + 90.minutes
-        
+
         duration = sync_service.send(:calculate_duration, start_time, end_time)
         expect(duration).to eq(90)
       end
@@ -402,7 +402,7 @@ RSpec.describe GoogleCalendarSync do
       it 'handles DateTime objects' do
         start_time = 1.day.from_now
         end_time = start_time + 45.minutes
-        
+
         duration = sync_service.send(:calculate_duration, start_time, end_time)
         expect(duration).to eq(45)
       end
@@ -410,7 +410,7 @@ RSpec.describe GoogleCalendarSync do
       it 'returns minimum 1 minute for very short durations' do
         start_time = Time.current
         end_time = start_time + 30.seconds
-        
+
         duration = sync_service.send(:calculate_duration, start_time, end_time)
         expect(duration).to eq(1)
       end
@@ -420,7 +420,7 @@ RSpec.describe GoogleCalendarSync do
       it 'returns completed for past events' do
         start_time = 2.days.ago
         end_time = 2.days.ago + 1.hour
-        
+
         status = sync_service.send(:determine_status, start_time, end_time)
         expect(status).to eq('completed')
       end
@@ -428,7 +428,7 @@ RSpec.describe GoogleCalendarSync do
       it 'returns scheduled for future events' do
         start_time = 2.days.from_now
         end_time = 2.days.from_now + 1.hour
-        
+
         status = sync_service.send(:determine_status, start_time, end_time)
         expect(status).to eq('scheduled')
       end
@@ -436,7 +436,7 @@ RSpec.describe GoogleCalendarSync do
       it 'returns scheduled for ongoing events' do
         start_time = 10.minutes.ago
         end_time = 50.minutes.from_now
-        
+
         status = sync_service.send(:determine_status, start_time, end_time)
         expect(status).to eq('scheduled')
       end
@@ -451,7 +451,7 @@ RSpec.describe GoogleCalendarSync do
 
       it 'builds client with correct parameters' do
         sync_service.instance_variable_set(:@session, session_hash)
-        
+
         expect(Signet::OAuth2::Client).to receive(:new).with(
           hash_including(
             access_token: 'access_token',
@@ -460,7 +460,7 @@ RSpec.describe GoogleCalendarSync do
             client_secret: ENV['GOOGLE_CLIENT_SECRET']
           )
         )
-        
+
         sync_service.send(:build_oauth_client)
       end
     end

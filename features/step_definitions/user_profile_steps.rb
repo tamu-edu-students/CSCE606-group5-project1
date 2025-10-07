@@ -40,7 +40,7 @@ end
 
 Then('I should see the profile form') do
   expect(page).to have_field('First Name')
-  expect(page).to have_field('Last Name') 
+  expect(page).to have_field('Last Name')
   expect(page).to have_field('Personal Email')
   expect(page).to have_field('LeetCode Username')
   expect(page).to have_button('Update Profile')

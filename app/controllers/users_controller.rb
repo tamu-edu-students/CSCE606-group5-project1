@@ -3,7 +3,7 @@
 class UsersController < ApplicationController
   # Ensure user is authenticated before accessing any action
   before_action :authenticate_user!
-  
+
   # Set up user instance for actions that need a specific user
   before_action :set_user, only: %i[ show update ]
 

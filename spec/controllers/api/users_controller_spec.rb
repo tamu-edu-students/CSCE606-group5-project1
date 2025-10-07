@@ -15,7 +15,7 @@ RSpec.describe Api::UsersController, type: :controller do
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to include('application/json')
-        
+
         json_response = JSON.parse(response.body)
         expect(json_response).to include(
           'id' => user.id,
@@ -76,9 +76,9 @@ RSpec.describe Api::UsersController, type: :controller do
 
       it 'handles nil current_user when user_signed_in? is true' do
         expect { get :profile }.not_to raise_error
-        
+
         # This might cause an error or redirect depending on implementation
-        expect(response.status).to be_in([302, 500])
+        expect(response.status).to be_in([ 302, 500 ])
       end
     end
   end

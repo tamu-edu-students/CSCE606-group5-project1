@@ -24,7 +24,7 @@ RSpec.describe Api::CalendarController, type: :controller do
     allow(signet_client).to receive(:expires_at).and_return(Time.current.to_i + 3600)
     allow(Google::Apis::CalendarV3::CalendarService).to receive(:new).and_return(google_service)
     allow(google_service).to receive(:authorization=)
-    
+
     session[:user_id] = user.id
   end
 
@@ -64,7 +64,7 @@ RSpec.describe Api::CalendarController, type: :controller do
     end
 
     describe 'GET #events' do
-      let(:events_response) { double(items: [mock_event]) }
+      let(:events_response) { double(items: [ mock_event ]) }
 
       before do
         allow(google_service).to receive(:list_events).and_return(events_response)
@@ -122,7 +122,7 @@ RSpec.describe Api::CalendarController, type: :controller do
       context 'with valid parameters' do
         it 'creates timed event and LeetCode session' do
           post :create, params: { event: valid_params }
-          
+
           expect(google_service).to have_received(:insert_event)
           expect(LeetCodeSession).to have_received(:create!).with(
             hash_including(
@@ -205,7 +205,7 @@ RSpec.describe Api::CalendarController, type: :controller do
       context 'with valid parameters' do
         it 'updates the event successfully' do
           patch :update, params: { id: event_id, event: update_params }
-          
+
           expect(google_service).to have_received(:get_event).with('primary', event_id)
           expect(google_service).to have_received(:update_event).with('primary', event_id, anything)
           expect(response).to redirect_to(calendar_path)
@@ -272,7 +272,7 @@ RSpec.describe Api::CalendarController, type: :controller do
         it 'refreshes token when near expiry' do
           session[:google_token_expires_at] = (Time.current + 2.minutes).to_i
           allow(controller).to receive(:redirect_to)
-          
+
           controller.send(:calendar_service_or_unauthorized)
           expect(signet_client).to have_received(:refresh!)
         end
@@ -280,7 +280,7 @@ RSpec.describe Api::CalendarController, type: :controller do
         it 'refreshes token when no expiry time stored' do
           session.delete(:google_token_expires_at)
           allow(controller).to receive(:redirect_to)
-          
+
           controller.send(:calendar_service_or_unauthorized)
           expect(signet_client).to have_received(:refresh!)
         end

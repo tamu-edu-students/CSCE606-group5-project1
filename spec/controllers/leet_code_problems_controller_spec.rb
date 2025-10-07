@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe LeetCodeProblemsController, type: :controller do
   describe 'GET #index' do
     let(:user) { create(:user) }
-    
+
     before do
       # Simulate user login by mocking current_user
       allow(controller).to receive(:current_user).and_return(user)
@@ -24,11 +24,11 @@ RSpec.describe LeetCodeProblemsController, type: :controller do
     it 'filters by difficulty' do
       get :index, params: { difficulty: 'easy' }
       expect(response).to be_successful
-      expect(assigns(:events).pluck(:difficulty).map(&:downcase).uniq).to eq(['easy'])
+      expect(assigns(:events).pluck(:difficulty).map(&:downcase).uniq).to eq([ 'easy' ])
     end
 
     it 'filters by tags (array format)' do
-      get :index, params: { tags: ['array', 'math'] }
+      get :index, params: { tags: [ 'array', 'math' ] }
       expect(response).to be_successful
       assigns(:events).each do |problem|
         expect(problem.tags).to include('array').and include('math')
@@ -46,7 +46,7 @@ RSpec.describe LeetCodeProblemsController, type: :controller do
     it 'filters by difficulty and tags' do
       get :index, params: { difficulty: 'hard', tags: 'graph' }
       expect(response).to be_successful
-      expect(assigns(:events).pluck(:difficulty).map(&:downcase).uniq).to eq(['hard'])
+      expect(assigns(:events).pluck(:difficulty).map(&:downcase).uniq).to eq([ 'hard' ])
       assigns(:events).each do |problem|
         expect(problem.tags).to include('graph')
       end

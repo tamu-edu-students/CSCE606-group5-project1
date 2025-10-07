@@ -8,7 +8,7 @@ RSpec.describe 'leet_code:seed', type: :task do
   end
 
   let(:task) { Rake::Task['leet_code:seed'] }
-  
+
   before do
     task.reenable
     LeetCodeProblem.delete_all
@@ -61,7 +61,7 @@ RSpec.describe 'leet_code:seed', type: :task do
       expect {
         capture_stdout { task.invoke }
       }.to change(LeetCodeProblem, :count).by(2)
-      
+
       problem = LeetCodeProblem.find_by(leetcode_id: '1')
       expect(problem.title).to eq('Two Sum')
       expect(problem.title_slug).to eq('two-sum')
@@ -73,7 +73,7 @@ RSpec.describe 'leet_code:seed', type: :task do
 
     it 'outputs progress messages' do
       output = capture_stdout { task.invoke }
-      
+
       expect(output).to include('Retrieved 2 problems')
       expect(output).to include('Saved #1: Two Sum (Easy)')
       expect(output).to include('Seeded 2 LeetCode problems')
@@ -82,7 +82,7 @@ RSpec.describe 'leet_code:seed', type: :task do
 
   describe 'updating existing problems' do
     let!(:existing_problem) do
-      create(:leet_code_problem, 
+      create(:leet_code_problem,
         leetcode_id: '1',
         title: 'Old Title',
         difficulty: 'hard'
@@ -91,7 +91,7 @@ RSpec.describe 'leet_code:seed', type: :task do
 
     before do
       stub_request(:get, 'https://leetcode-api-pied.vercel.app/problems')
-        .to_return(status: 200, body: [problems_list_response.first].to_json)
+        .to_return(status: 200, body: [ problems_list_response.first ].to_json)
 
       stub_request(:get, 'https://leetcode-api-pied.vercel.app/problem/1')
         .to_return(status: 200, body: problem_detail_response.to_json)
@@ -101,7 +101,7 @@ RSpec.describe 'leet_code:seed', type: :task do
       expect {
         capture_stdout { task.invoke }
       }.not_to change(LeetCodeProblem, :count)
-      
+
       existing_problem.reload
       expect(existing_problem.title).to eq('Two Sum')
       expect(existing_problem.difficulty).to eq('Easy')
@@ -127,7 +127,7 @@ RSpec.describe 'leet_code:seed', type: :task do
       end
 
       output = capture_stdout { task.invoke }
-      
+
       expect(output).to include('Retrieved 250 problems. Seeding up to 200')
       expect(LeetCodeProblem.count).to eq(200)
     end
@@ -137,20 +137,20 @@ RSpec.describe 'leet_code:seed', type: :task do
         .to_return(status: 500)
 
       output = capture_stdout { task.invoke }
-      
+
       expect(output).to include('Failed to fetch problems list')
       expect(LeetCodeProblem.count).to eq(0)
     end
 
     it 'skips individual problem failures and continues' do
       stub_request(:get, 'https://leetcode-api-pied.vercel.app/problems')
-        .to_return(status: 200, body: [problems_list_response.first].to_json)
+        .to_return(status: 200, body: [ problems_list_response.first ].to_json)
 
       stub_request(:get, 'https://leetcode-api-pied.vercel.app/problem/1')
         .to_return(status: 404)
 
       output = capture_stdout { task.invoke }
-      
+
       expect(output).to include('Failed to fetch details for problem ID 1')
       expect(LeetCodeProblem.count).to eq(0)
     end

@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
         render json: { error: "Authentication required" }, status: :unauthorized
       else
         # For regular requests, redirect to home page
-        flash[:alert] = 'You must be logged in to access this page.'
+        flash[:alert] = "You must be logged in to access this page."
         redirect_to root_path
       end
     end

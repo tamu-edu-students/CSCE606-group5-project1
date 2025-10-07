@@ -79,7 +79,7 @@ RSpec.describe CalendarController, type: :controller do
           start: double('start', date_time: Time.current, date: nil),
           end: double('end', date_time: Time.current + 1.hour, date: nil)
         )
-        response_items = double('response_items', items: [event_item])
+        response_items = double('response_items', items: [ event_item ])
         allow(service_double).to receive(:list_events).and_return(response_items)
 
         get :show
