@@ -77,6 +77,8 @@ This application uses dartsass-rails to compile CSS. The standard way to run the
 
 Bash
 
+-   touch app/assets/stylesheets/application.css
+
 -   bin/rails dartsass:build
 
 -   bin/dev
