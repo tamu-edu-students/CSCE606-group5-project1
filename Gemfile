@@ -18,6 +18,7 @@ gem "puma", ">= 5.0"
 gem "jbuilder"
 gem "google-api-client", "~> 0.53.0"
 gem "httparty"
+gem "nokogiri"
 
 # --- Authentication ---
 gem "omniauth"
@@ -44,6 +45,8 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "webmock", "~> 3.25"
   gem "vcr", "~> 6.3"
+  gem "rack_session_access"
+  gem "faker"
 end
 
 # Gems used only for development
